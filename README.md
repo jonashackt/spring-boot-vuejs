@@ -1,5 +1,8 @@
 # spring-boot-vuejs
-Example project showing how to build a Spring Boot App providing a GUI with Vue.js
+=============================
+[![Build Status](https://travis-ci.org/codecentric/cxf-spring-boot-starter-maven-plugin.svg?branch=master)](https://travis-ci.org/codecentric/cxf-spring-boot-starter-maven-plugin)
+[![Dependency Status](https://www.versioneye.com/user/projects/5720e321fcd19a004544247d/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5720e321fcd19a004544247d)
+[![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/jonashackt/spring-boot-vuejs/blob/master/LICENSE)
 
 
 ## In Search of a new Webfrontend-Framework after 2 Years of absence...
@@ -22,7 +25,7 @@ So I think, it could be a good idea to invest a day or so into Vue.js. Let´s ha
 
 ### Prerequisites
 
-###### MacOSX
+##### MacOSX
 
 `brew install node`
 
@@ -45,7 +48,7 @@ This will initialize an project sceleton for Vue.JS in /frontend directory - it 
 
 ![vuejs-cli-init](https://github.com/jonashackt/spring-boot-vuejs/blob/master/vuejs-cli-init.png)
 
-###### tell Webpack to output the dist/ contents to target/
+### tell Webpack to output the dist/ contents to target/
 
 Commonly, node projects will create a dist/ directory for final builds which contains the minified source code of the web app - but we want it all in `/target`. Therefore go to `frontend/config/index.js` and replace the following lines:
 
@@ -62,15 +65,26 @@ assetsRoot: path.resolve(__dirname, '../target/dist'),
 ```
 
 
+## First App run
+
+```
+mvn clean install
+```
+
+Run our complete Spring Boot App:
+
+```
+mvn --projects backend spring-boot:run
+```
+
+Now go to http://localhost:8080/ and have a look at your first Vue.js Spring Boot App:
+
+![localhost-first-run](https://github.com/jonashackt/spring-boot-vuejs/blob/master/localhost-first-run.png)
 
 
-cd frontend
 
-#Install all dependencies
-npm install
 
-#Run front end app on node server localhost:8080
-npm run dev
+
 
 
 

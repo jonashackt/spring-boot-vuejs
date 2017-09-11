@@ -15,3 +15,36 @@ Key points are:
 ![comparison-angular-react-vuejs](https://github.com/jonashackt/spring-boot-vuejs/blob/master/comparison-angular-react-vuejs.png)
 
 So I think, it could be a good idea to invest a day or so into Vue.js. Let´s have a look here!
+
+## Setup Vue.js & Spring Boot
+
+### Prerequisites
+
+###### MacOSX El Capitan
+
+`brew install node`
+`brew install npm`
+`npm install --global vue-cli`
+
+## Frontend
+
+```
+vue init webpack frontend
+```
+
+This will initialize an project sceleton for Vue.JS in /frontend directory - it therefore asks some questions in the cli:
+
+![vuejs-cli-init](https://github.com/jonashackt/spring-boot-vuejs/blob/master/vuejs-cli-init.png)
+
+
+
+cd frontend
+
+#Install all dependencies
+npm install
+
+#Run front end app on node server localhost:8080
+npm run dev
+
+
+

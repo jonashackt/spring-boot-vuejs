@@ -16,6 +16,10 @@ Key points are:
 
 ![comparison-angular-react-vuejs](https://github.com/jonashackt/spring-boot-vuejs/blob/master/comparison-angular-react-vuejs.png)
 
+And the [introduction phrase](https://vuejs.org/v2/guide/index.html) sounds really great:
+
+> Vue (pronounced /vjuː/, like view) is a progressive framework for building user interfaces. Unlike other monolithic frameworks, Vue is designed from the ground up to be incrementally adoptable. The core library is focused on the view layer only, and is very easy to pick up and integrate with other libraries or existing projects. On the other hand, Vue is also perfectly capable of powering sophisticated Single-Page Applications when used in combination with modern tooling and supporting libraries.
+
 So I think, it could be a good idea to invest a day or so into Vue.js. Let´s have a look here!
 
 
@@ -32,6 +36,19 @@ So I think, it could be a good idea to invest a day or so into Vue.js. Let´s ha
 
 `npm install --global vue-cli`
 
+## Project setup
+
+```
+spring-boot-vuejs
+├── backend  		--> backend module with Spring Boot stuff
+│	├── src
+│	├── pom.xml
+├── frontend		--> frontend module with Vue.js stuff
+│	├── pom.xml
+├── pom.xml  		--> Maven parent pom with modules
+```
+
+
 ## Backend
 
 Go to https://start.spring.io/ and initialize an Spring Boot app with `Web` and `Actuator`. Place the zip´s contents in the backend folder.
@@ -46,6 +63,83 @@ vue init webpack frontend
 This will initialize an project sceleton for Vue.JS in /frontend directory - it therefore asks some questions in the cli:
 
 ![vuejs-cli-init](https://github.com/jonashackt/spring-boot-vuejs/blob/master/vuejs-cli-init.png)
+
+If you want to learn more about installing Vue.js, head over to the docs: https://vuejs.org/v2/guide/installation.html
+
+### Use frontend-maven-plugin to handle NPM, Node, Bower, Grunt, Gulp, Webpack and so on :)
+
+If you´re a backend dev like me, this Maven plugin here https://github.com/eirslett/frontend-maven-plugin is a great help for you - because, if you know Maven, that´s everything you need! Just add this plugin to the frontend´s `pom.xml`:
+
+```
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<!-- Install our node and npm version to run npm/node scripts-->
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>v6.11.3</nodeVersion>
+							<npmVersion>5.4.1</npmVersion>
+							<nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
+							<npmDownloadRoot>http://registry.npmjs.org/npm/-/</npmDownloadRoot>
+						</configuration>
+					</execution>
+					<!-- Set NPM Registry -->
+					<execution>
+						<id>npm set registry</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>config set registry https://registry.npmjs.org</arguments>
+						</configuration>
+					</execution>
+					<!-- Set SSL privilege -->
+					<execution>
+						<id>npm set non-strict ssl</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<!-- Optional configuration which provides for running any npm command -->
+						<configuration>
+							<arguments>config set strict-ssl false</arguments>
+						</configuration>
+					</execution>
+					<!-- Install all project dependencies -->
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<!-- optional: default phase is "generate-resources" -->
+						<phase>generate-resources</phase>
+						<!-- Optional configuration which provides for running any npm command -->
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+					<!-- Build and minify static files -->
+					<execution>
+						<id>npm run build</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>run build</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+```
 
 ### tell Webpack to output the dist/ contents to target/
 

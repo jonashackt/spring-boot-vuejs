@@ -3,6 +3,7 @@ spring-boot-vuejs
 [![Build Status](https://travis-ci.org/codecentric/cxf-spring-boot-starter-maven-plugin.svg?branch=master)](https://travis-ci.org/codecentric/cxf-spring-boot-starter-maven-plugin)
 [![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/jonashackt/spring-boot-vuejs/blob/master/LICENSE)
 
+![localhost-first-run](https://github.com/jonashackt/spring-boot-vuejs/blob/master/localhost-first-run.png)
 
 ## In Search of a new Webfrontend-Framework after 2 Years of absence...
 
@@ -170,9 +171,7 @@ Run our complete Spring Boot App:
 mvn --projects backend spring-boot:run
 ```
 
-Now go to http://localhost:8080/ and have a look at your first Vue.js Spring Boot App:
-
-![localhost-first-run](https://github.com/jonashackt/spring-boot-vuejs/blob/master/localhost-first-run.png)
+Now go to http://localhost:8080/ and have a look at your first Vue.js Spring Boot App.
 
 
 

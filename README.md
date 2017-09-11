@@ -12,6 +12,6 @@ Key points are:
 * Angular 2 isn´t the way to go, if you know version 1 (complete re-write, only with Typescript, loss of many of 1´s advantages, Angular 4 is coming)
 * React  (facebook´ish problems (licence), need to choose btw. Redux & MObX, harder learning curve, slower coding speed)
 
-![comparison-angular-react-vuejs](https://github.com/jonashackt/spring-boot-vuejs/blob/master/comparison-angular-react-vuejs)
+![comparison-angular-react-vuejs](https://github.com/jonashackt/spring-boot-vuejs/blob/master/comparison-angular-react-vuejs.png)
 
 So I think, it could be a good idea to invest a day or so into Vue.js. Let´s have a look here!

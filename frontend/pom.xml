@@ -29,8 +29,8 @@
 							<goal>install-node-and-npm</goal>
 						</goals>
 						<configuration>
-							<nodeVersion>v6.9.1</nodeVersion>
-							<npmVersion>3.10.9</npmVersion>
+							<nodeVersion>v6.11.3</nodeVersion>
+							<npmVersion>5.4.1</npmVersion>
 							<nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
 							<npmDownloadRoot>http://registry.npmjs.org/npm/-/</npmDownloadRoot>
 						</configuration>

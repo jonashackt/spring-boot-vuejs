@@ -16,15 +16,24 @@ Key points are:
 
 So I think, it could be a good idea to invest a day or so into Vue.js. Let´s have a look here!
 
+
+
 ## Setup Vue.js & Spring Boot
 
 ### Prerequisites
 
-###### MacOSX El Capitan
+###### MacOSX
 
 `brew install node`
+
 `brew install npm`
+
 `npm install --global vue-cli`
+
+## Backend
+
+Go to https://start.spring.io/ and initialize an Spring Boot app with `Web` and `Actuator`. Place the zip´s contents in the backend folder.
+
 
 ## Frontend
 
@@ -35,6 +44,23 @@ vue init webpack frontend
 This will initialize an project sceleton for Vue.JS in /frontend directory - it therefore asks some questions in the cli:
 
 ![vuejs-cli-init](https://github.com/jonashackt/spring-boot-vuejs/blob/master/vuejs-cli-init.png)
+
+###### tell Webpack to output the dist/ contents to target/
+
+Commonly, node projects will create a dist/ directory for final builds which contains the minified source code of the web app - but we want it all in `/target`. Therefore go to `frontend/config/index.js` and replace the following lines:
+
+```
+index: path.resolve(__dirname, '../dist/index.html'),
+assetsRoot: path.resolve(__dirname, '../dist'),
+```
+
+with
+
+```
+index: path.resolve(__dirname, '../target/dist/index.html'),
+assetsRoot: path.resolve(__dirname, '../target/dist'),
+```
+
 
 
 

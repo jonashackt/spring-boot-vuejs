@@ -213,6 +213,15 @@ Now go to http://localhost:8080/ and have a look at your first Vue.js Spring Boo
 
 
 
+## fast feedback with webpack-dev-server
+
+The webpack-dev-server, which will update and build every change through all the parts of the JavaScript build-chain, is pre-configured in Vue.js out-of-the-box! So the only thing needed to get fast feedback development-cycle is to cd into `frontend` and run:
+
+```
+npm run dev
+```
+
+That´s it! 
 
 
 

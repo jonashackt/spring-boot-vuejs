@@ -224,6 +224,132 @@ npm run dev
 That´s it! 
 
 
+## HTTP calls from Vue.js to (Spring Boot) REST backend
+
+Prior to Vue 2.0, there was a build in soultion (vue-resource). But from 2.0 on, 3rd party libraries are necessary. One of them is [Axios](https://github.com/mzabriskie/axios) - also see blog post https://alligator.io/vuejs/rest-api-axios/
+
+```
+npm install axios --save
+```
+
+Calling a REST service with Axios is simple. Go into the script area of your component, e.g. Hello.vue and add:
+
+```
+import axios from 'axios'
+
+data () {
+  return {
+	response: [],
+	errors: []
+  }
+},
+
+callRestService () {
+  axios.get(`api/hello`)
+    .then(response => {
+      // JSON responses are automatically parsed.
+      this.response = response.data
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })
+}
+}
+```
+
+In your template area you can now request a service call via calling `callRestService()` method and access `response` data:
+
+```
+<button class=”Search__button” @click="callRestService()">CALL Spring Boot REST backend service</button>
+
+<h3>{{ response }}</h3>
+```
+
+### The problem with SOP
+
+Single-Origin Policy (SOP) could be a problem, if we want to develop our app. Because the webpack-dev-server runs on http://localhost:8080 and our Spring Boot REST backend on http://localhost:8088.
+
+We need to use Cross Origin Resource Sharing Protocol (CORS) to handle that (read more background info about CORS here https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)
+
+#### Enabling Axios CORS support
+
+Create a central Axios configuration file called `http-commons.js`:
+
+```
+import axios from 'axios'
+
+export const AXIOS = axios.create({
+  baseURL: `http://localhost:8088`,
+  headers: {
+    'Access-Control-Allow-Origin': 'http://localhost:8080'
+  }
+})
+```
+
+Here we allow requests to the base URL of our Spring Boot App on port 8088 to be accessable from 8080.
+
+Now we could use this configuration inside our Components, e.g. in `Hello.vue`:
+```
+import {AXIOS} from './http-common'
+
+export default {
+  name: 'hello',
+
+  data () {
+    return {
+      posts: [],
+      errors: []
+    }
+  },
+  methods: {
+    // Fetches posts when the component is created.
+    callRestService () {
+      AXIOS.get(`hello`)
+        .then(response => {
+          // JSON responses are automatically parsed.
+          this.posts = response.data
+        })
+        .catch(e => {
+          this.errors.push(e)
+        })
+    }
+  }
+```
+
+#### Enabling Spring Boot CORS support
+
+Additionally, we need to configure our Spring Boot backend to answer with the appropriate CORS HTTP Headers in it´s responses (theres a good tutorial here: https://spring.io/guides/gs/rest-service-cors/). Therefore we add the annotation `@CrossOrigin` to our BackendController:
+
+```
+@CrossOrigin(origins = "http://localhost:8080")
+@RequestMapping(path = "/hello")
+public @ResponseBody String sayHello() {
+    LOG.info("GET called on /hello resource");
+    return HELLO_TEXT;
+}
+```
+
+Now our Backend will responde CORS-enabled and accepts requests from 8080. But as this only enables CORS on one method, we have to repeatately add this annotation to all of our REST endpoints, which isn´t a nice style. We should use a global solution to allow access with CORS enabled to all of our REST resources. This could be done in the `SpringBootVuejsApplication.class`:
+
+```
+// Enable CORS globally
+@Bean
+public WebMvcConfigurer corsConfigurer() {
+	return new WebMvcConfigurerAdapter() {
+		@Override
+		public void addCorsMappings(CorsRegistry registry) {
+			registry.addMapping("/api/*").allowedOrigins("http://localhost:8080");
+		}
+	};
+}
+```
+
+Now all calls to resources behind `api/` will return the correct CORS headers. 
+
+
+# Links
+
+Easy to use web-based Editor: https://vuejs.org/v2/examples/
 
 
 

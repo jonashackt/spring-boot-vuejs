@@ -375,13 +375,24 @@ instead of
 
 The docs contain all the possible components: https://bootstrap-vue.js.org/docs/components/alert/
 
+See some elements, when you go to http://localhost:8080/#/bootstrap/ - this should look like this:
+
+![bootstrap-styled-vuejs](https://github.com/jonashackt/spring-boot-vuejs/blob/master/bootstrap-styled-vuejs.png)
+
+A good discussion about various UI component frameworks: http://vuetips.com/bootstrap
 
 
 # Links
 
 Nice introdutory video: https://www.youtube.com/watch?v=z6hQqgvGI4Y
 
+Examples: https://vuejs.org/v2/examples/
+
 Easy to use web-based Editor: https://vuejs.org/v2/examples/
 
 http://vuetips.com/
+
+
+
+
 

@@ -37,8 +37,6 @@ So I think, it could be a good idea to invest a day or so into Vue.js. Let´s ha
 
 `npm install --global vue-cli`
 
-Install vue-devtools Browser extension https://github.com/vuejs/vue-devtools
-
 ## Project setup
 
 ```
@@ -226,6 +224,14 @@ npm run dev
 That´s it! 
 
 
+## Browser developer tools extension
+
+Install vue-devtools Browser extension https://github.com/vuejs/vue-devtools and get better feedback, e.g. in Chrome:
+
+![vue-devtools-chrome](https://github.com/jonashackt/spring-boot-vuejs/blob/master/vue-devtools-chrome.png)
+
+
+
 ## HTTP calls from Vue.js to (Spring Boot) REST backend
 
 Prior to Vue 2.0, there was a build in soultion (vue-resource). But from 2.0 on, 3rd party libraries are necessary. One of them is [Axios](https://github.com/mzabriskie/axios) - also see blog post https://alligator.io/vuejs/rest-api-axios/
@@ -349,11 +355,33 @@ public WebMvcConfigurer corsConfigurer() {
 Now all calls to resources behind `api/` will return the correct CORS headers. 
 
 
+## Bootstrap & Vue.js
+
+There´s a nice integration of Bootstrap in Vue.js: https://bootstrap-vue.js.org/
+
+```
+npm install bootstrap-vue
+```
+
+Now you can use all the pretty Bootstrap stuff with ease like:
+
+```
+<b-btn @click="callRestService()">CALL Spring Boot REST backend service</b-btn>
+
+instead of
+
+<button type="button" class=”btn” @click="callRestService()">CALL Spring Boot REST backend service</button>
+```
+
+The docs contain all the possible components: https://bootstrap-vue.js.org/docs/components/alert/
+
+
+
 # Links
 
 Nice introdutory video: https://www.youtube.com/watch?v=z6hQqgvGI4Y
 
 Easy to use web-based Editor: https://vuejs.org/v2/examples/
 
-
+http://vuetips.com/
 

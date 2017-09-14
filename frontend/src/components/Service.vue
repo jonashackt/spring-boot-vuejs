@@ -3,13 +3,13 @@
     <h1>{{ msg }}</h1>
     <h2>REST service call results</h2>
 
-    <button class=”Search__button” @click="callRestService()">CALL Spring Boot REST backend service</button>
+    <b-btn @click="callRestService()">CALL Spring Boot REST backend service</b-btn>
 
-    <h3>{{ response }}</h3>
+    <h4>Backend response: {{ response }}</h4>
 
-    <button class=”Search__button” @click="callRestServiceAsync()">Make an ASYNC Call to Spring Boot REST backend service</button>
-
-    <h3>{{ asyncresponse }}</h3>
+    <b-btn @click="showAlert" variant="info" class="m-1">
+      Show alert with count-down timer
+    </b-btn>
 
   </div>
 </template>
@@ -25,8 +25,7 @@ export default {
     return {
       msg: 'HowTo call REST-Services:',
       response: [],
-      errors: [],
-      asyncresponse: []
+      errors: []
     }
   },
   methods: {
@@ -36,20 +35,11 @@ export default {
         .then(response => {
           // JSON responses are automatically parsed.
           this.response = response.data
+          console.log(response.data)
         })
         .catch(e => {
           this.errors.push(e)
         })
-    },
-    // async / await version (created() becomes async created())
-    callRestServiceAsync: async function () {
-      // JSON responses are automatically parsed.
-      try {
-        const response = await AXIOS.get(`api/hello`)
-        this.asyncresponse = response.data
-      } catch (e) {
-        this.errors.push(e)
-      }
     }
   }
 }

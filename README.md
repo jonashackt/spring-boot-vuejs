@@ -37,6 +37,8 @@ So I think, it could be a good idea to invest a day or so into Vue.js. Let´s ha
 
 `npm install --global vue-cli`
 
+Install vue-devtools Browser extension https://github.com/vuejs/vue-devtools
+
 ## Project setup
 
 ```
@@ -348,6 +350,8 @@ Now all calls to resources behind `api/` will return the correct CORS headers.
 
 
 # Links
+
+Nice introdutory video: https://www.youtube.com/watch?v=z6hQqgvGI4Y
 
 Easy to use web-based Editor: https://vuejs.org/v2/examples/
 

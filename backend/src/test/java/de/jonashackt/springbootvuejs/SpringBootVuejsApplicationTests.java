@@ -8,12 +8,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
 		classes = SpringBootVuejsApplication.class,
 		webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-		properties = "server.port = 8088"
+		properties = "server.port = 8089"
 )
 public class SpringBootVuejsApplicationTests {
 
@@ -27,7 +29,7 @@ public class SpringBootVuejsApplicationTests {
 		.then()
 			.statusCode(HttpStatus.SC_OK)
 			.assertThat()
-				.equals(BackendController.HELLO_TEXT);
+				.body(is(equalTo(BackendController.HELLO_TEXT)));
 	}
 
 }

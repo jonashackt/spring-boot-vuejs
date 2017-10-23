@@ -30,7 +30,7 @@
 						</goals>
 						<configuration>
 							<nodeVersion>v6.11.3</nodeVersion>
-							<npmVersion>5.0.4</npmVersion>
+							<npmVersion>5.4.1</npmVersion>
 							<nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
 							<npmDownloadRoot>http://registry.npmjs.org/npm/-/</npmDownloadRoot>
 						</configuration>

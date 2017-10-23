@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.is;
 )
 public class SpringBootVuejsApplicationTests {
 
-	private static final String BASE_URL = "http://localhost:8088";
+	private static final String BASE_URL = "http://localhost:8089";
 
 	@Test
 	public void backendServiceSaysHello() {

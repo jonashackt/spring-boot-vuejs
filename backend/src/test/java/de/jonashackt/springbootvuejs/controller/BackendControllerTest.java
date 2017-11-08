@@ -43,7 +43,7 @@ public class BackendControllerTest {
                 .queryParam("firstName", "Norbert")
                 .queryParam("lastName", "Siegmund")
             .when()
-                .post(BASE_URL + "/add")
+                .post(BASE_URL + "/user")
             .then()
                 .statusCode(is(HttpStatus.SC_CREATED))
                 .extract()

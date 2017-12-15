@@ -114,7 +114,7 @@ Customize pom to copy content from Frontend for serving it later with the embedd
 vue init webpack frontend
 ```
 
-This will initialize an project sceleton for Vue.JS in /frontend directory - it therefore asks some questions in the cli:
+This will initialize a project skeleton for Vue.js in /frontend directory - it therefore asks some questions in the cli:
 
 ![vuejs-cli-init](https://github.com/jonashackt/spring-boot-vuejs/blob/master/vuejs-cli-init.png)
 

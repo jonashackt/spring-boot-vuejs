@@ -3,10 +3,7 @@ language: java
 jdk:
 - oraclejdk8
 
-script: mvn clean install
-
-after_success:
-- mvn clean test jacoco:report coveralls:report
+script: mvn clean install jacoco:report coveralls:report
 
 cache:
   directories:

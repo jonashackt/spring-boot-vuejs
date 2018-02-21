@@ -17,7 +17,7 @@ deploy:
     access_key_id: "AKIAIM732LS2YROGPSXQ"
     secret_access_key:
         secure: TbVB1O4aa9l3Gx1TaP0aOR4Kb2fUAqmouO2SenSPjQ7wnoylKQxHwWETwGCt1hSvm9JYE6D6KFEEHm2xM6mYvZ7Lu4fuShDllPWopeWQdyhnyIvgMyidTyyhS+dyjOpW2mOMtgJzR5j55QYUq+uTjenlM3//JpABJ9ol8e1G4y1/IdTYpReJPpcdQy5OckDaYvQylvGJjvzLG/Ai4+wqryPhQZwdnkhWvHIN6HnYl48Ghg1QNFcx6r0cUpOW1tvMRMUy6D3ckeiZOz/JfigSVQLJ9wuMX016f2KondWPaQB3S0XKUSgHeyNDgXBuA+483lcEHB+FaZP+0PHesUb57uf6k04p55jKtEe8ZiXauz8kK7jmTggHxjEPVROKqBHjrJMZUDtQNZvGZyfMugGzt1GqXFNRSsxRkNCdCtocEIpz3IZw2RXo3sHhevS9ET1YWYOfp8q1g9wM45x1Ia16srLC6XijAxobGYJHnZKJaBAqQMXeASo/TfElq6CbzDTXPaoD0Zr+3NwvhSyV83qbnUSy1d7wNhPs2r0TecWAE16WtJ8Dns4UgkJCV1I0fnFnjky7l29GIQiz9+LgHIcY8R7Z7uHf0QEhMUvhcNBFP0/X7H4av0uLI1Mevw/tOcI1jYvX5LelCpKR6o4Ee3Ix/qT65HDJ4BGm0wxRgiw/phw=
-    local_dir: backend/target/backend-0.0.1-SNAPSHOT.jar
+    local_dir: /home/travis/build/jonashackt/spring-boot-vuejs/backend/target
     skip_cleanup: true
     on: &1
       repo: jonashackt/spring-boot-vuejs

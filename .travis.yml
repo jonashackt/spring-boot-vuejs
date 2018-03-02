@@ -1,33 +1,11 @@
 language: java
-
 jdk:
 - oraclejdk8
-
 script: mvn clean install jacoco:report coveralls:report
-
 cache:
   directories:
-    - node_modules
-
+  - node_modules
 deploy:
-  - provider: s3
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
-    local_dir: /home/travis/build/jonashackt/spring-boot-vuejs/backend/target
-    skip_cleanup: true
-    on: &1
-      repo: jonashackt/spring-boot-vuejs
-    bucket: spring-boot-vuejs-bucket
-    region: eu-central-1
-  - provider: codedeploy
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
-    bucket: spring-boot-vuejs-bucket
-    key: backend-0.0.1-SNAPSHOT.jar
-    bundle_type: zip
-    application: spring-boot-vuejs
-    deployment_group: spring-boot-apps
-    region: eu-central-1
-    on: *1
-    wait-until-deployed: true
-
+  provider: heroku
+  api_key:
+    secure: Rz9Pl3bcMf4uEfQpdRIPjJ3uzhwIL1OEu6LTs8fk95kJYA90id+1mEzRPL1CXdiGLBUJilHgT5+ncwpblfkTCb/Ivru/OPLJpxZ1bGBd+sePm9/d/Eln7Feb2JE4THZq5i8fJ/zRQj7vYZaOqUJA5EPwy1H82AR1ZteCG9NR93tZcfJ1ZXjQRmD8aLWaxvi1oU62vH8TVp6Uxu8jSU5KP46hSvCcYJ/Nzu0X7AM89ezZRpqO/PARiMznN2aANGiOYv4eyay+xpWcMSwU0iWIe0gckQquL7nt6oBPt6RVAssFjpc40cDrXImVd+KQ9USXr1NQkgmZx2WIh/Zq9qGYmY2F9Lfs2evooFZNeMX0U5Dwwnq3W4Fhne5xxSJJtNO7XOWNMiZ9A7SS09cba7euiT4tEpb24btgEJDF2+tRLjOFnYTaXFNxvYAUGtmoAUMqCApS0dnrpy/wnbWJ76hu6PuKove+UWC7Wf5cOdCeM5wgcuIthGJ4COF/b0nU6xSzux1CELtXHesTWuMOqqsrAd5fBQ2RpTYMhlzrYZ3ea6h5/5KqvM+kB94D7KzCHe7MHlsj8jfSeNK4EisHG1c1MtB1Xy7KWhXOuDVeHN8/s6kYX4xuF5gay5ohDIu3edWViZa6XBvW9Yd2T8O65I0NDn+yWf5oKHM/HeuzHbxewbo=

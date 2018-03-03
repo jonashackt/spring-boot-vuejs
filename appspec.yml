@@ -1,9 +1,0 @@
-version: 0.0
-os: linux
-files:
-  - source: ./
-    destination: /home/ubuntu/spring-boot-vuejs
-hooks:
-  ApplicationStart:
-    - location: runapp.sh
-      runas: ubuntu

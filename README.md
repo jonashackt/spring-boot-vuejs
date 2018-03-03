@@ -6,6 +6,8 @@
 
 ![localhost-first-run](https://github.com/jonashackt/spring-boot-vuejs/blob/master/localhost-first-run.png)
 
+A live deployment is available on Heroku: https://spring-boot-vuejs.herokuapp.com
+
 ## In Search of a new Webfrontend-Framework after 2 Years of absence...
 
 Well I’am not a Frontend developer. I’am more like playing around with Spring Boot, Web- & Microservices & Docker, automating things with Ansible and Docker, Scaling things with Spring Cloud, Docker Compose and Traefik... And the only GUIs I’am building are the "new JS framework in town"-app every two years... :) So the last one was Angular 1 - and it felt, as it was a good choice! I loved the coding experience and after a day of training, I felt able to write awesome Frontends...

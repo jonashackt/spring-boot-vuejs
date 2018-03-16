@@ -24,15 +24,6 @@
         errors: []
       }
     },
-
-    created () {
-      this.callRestService()
-    },
-
-    watch: {
-      '$route': 'callRestService'
-    },
-
     methods: {
       // Fetches posts when the component is created.
       callRestService () {

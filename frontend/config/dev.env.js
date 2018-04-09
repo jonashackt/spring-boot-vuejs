@@ -3,5 +3,5 @@ var prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  API_PORT: '"process.env.PORT"'
+  API_PORT: JSON.stringify(process.env.PORT)
 })

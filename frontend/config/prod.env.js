@@ -1,4 +1,4 @@
 module.exports = {
   NODE_ENV: '"production"',
-  API_PORT: '"process.env.PORT"'
+  API_PORT: JSON.stringify(process.env.PORT)
 }

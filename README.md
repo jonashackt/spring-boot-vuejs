@@ -417,7 +417,7 @@ And with the help of super cool `Automatic deploys`, we have our TravisCI build 
 You only have to connect your Heroku app to GitHub, activate Automatic deploys and set the named checkbox. That´s everything!
 
 
-#### Accessing correct Heroku Port in Vue.js frontend
+#### Making Port in Vue.js frontend configurable
 
 Frontend needs to know the Port of our Spring Boot backend API, which is [automatically set by Heroku every time, we (re-)start our App](https://stackoverflow.com/a/12023039/4964553).
 
@@ -443,7 +443,13 @@ Now we can access this variable inside our Vue.js application. Just access the v
 
 If you want, have a look at [Service.vue](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/src/components/Service.vue), where this is implemented.
 
+#### Using dynamic Heroku port in Vue.js frontend
 
+Now as we need to dynamically configure the Port Heroku will set, we need to access this in the webpack build, which is our only chance to get to know the concrete port Heroku is using for our application. As []this great post states](https://codeburst.io/accessing-heroku-config-variables-in-your-vue-webpack-app-145afb32dd67) we need to configure our [package.json](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/package.json) to do a post install step with `"postinstall": "npm run build"` and let webpack override the enviroment variables in our configuration files like dev.env.js:
+
+```
+API_PORT: JSON.stringify(process.env.PORT)
+```
 
 
 # Links

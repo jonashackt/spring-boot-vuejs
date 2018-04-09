@@ -24,6 +24,9 @@
         errors: []
       }
     },
+    created () {
+      this.logPortEnvVariable()
+    },
     methods: {
       // Fetches posts when the component is created.
       callRestService () {
@@ -36,6 +39,10 @@
           .catch(e => {
             this.errors.push(e)
           })
+      },
+      logPortEnvVariable () {
+        console.log('Now what´s the port?')
+        console.log(process.env.API_PORT)
       }
     }
   }

@@ -402,6 +402,50 @@ See some elements, when you go to http://localhost:8080/#/bootstrap/ - this shou
 A good discussion about various UI component frameworks: http://vuetips.com/bootstrap
 
 
+## Heroku Deployment
+
+As you may already read, the app is automatically deployed to Heroku on https://spring-boot-vuejs.herokuapp.com/.
+
+The project makes use of the nice Heroku Pipelines feature, where we do get a full Continuous Delivery pipeline with nearly no effort:
+
+![heroku-pipeline](heroku-pipeline.png)
+
+And with the help of super cool `Automatic deploys`, we have our TravisCI build our app after every push to master - and with the checkbox set to `Wait for CI to pass before deploy` - the app gets also automatically deployed to Heroku - but only, if the TravisCI (and Coveralls...) build succeeded:
+
+![heroku-automatic-deploys](heroku-automatic-deploys.png)
+
+You only have to connect your Heroku app to GitHub, activate Automatic deploys and set the named checkbox. That´s everything!
+
+
+#### Accessing correct Heroku Port in Vue.js frontend
+
+Frontend needs to know the Port of our Spring Boot backend API, which is [automatically set by Heroku every time, we (re-)start our App](https://stackoverflow.com/a/12023039/4964553).
+
+> You can [try out your Heroku app locally](https://devcenter.heroku.com/articles/heroku-local)! Just create a .env-File with all your Environment variables and run `heroku local`! 
+
+To access the Heroku set port, we need to configure the used port inside our Vue.js application dynamically instead of hard-coded. This can be easily achieved with the help of enviroment variables, which can be added to the [dev.env.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/dev.env.js) and [prod.env.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/prod.env.js) files. Let´s do this with the variable `API_PORT`:
+
+```
+module.exports = {
+  NODE_ENV: '"production"',
+  API_PORT: '"8077"'
+}
+```
+
+Now we can access this variable inside our Vue.js application. Just access the variable inside the `<script>` area inside a method:
+
+```
+  logPortEnvVariable () {
+    console.log('Now what´s the port?')
+    console.log(process.env.API_PORT)
+  }
+```
+
+If you want, have a look at [Service.vue](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/src/components/Service.vue), where this is implemented.
+
+
+
+
 # Links
 
 Nice introdutory video: https://www.youtube.com/watch?v=z6hQqgvGI4Y

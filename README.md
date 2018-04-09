@@ -423,7 +423,7 @@ Frontend needs to know the Port of our Spring Boot backend API, which is [automa
 
 > You can [try out your Heroku app locally](https://devcenter.heroku.com/articles/heroku-local)! Just create a .env-File with all your Environment variables and run `heroku local`! 
 
-To access the Heroku set port, we need to configure the used port inside our Vue.js application dynamically instead of hard-coded. This can be easily achieved with the help of enviroment variables, which can be added to the [dev.env.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/dev.env.js) and [prod.env.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/prod.env.js) files. Let´s do this with the variable `API_PORT`:
+To access the Heroku set port, we need to configure the used port inside our Vue.js application dynamically instead of hard-coded. This can be easily achieved with the help of enviroment variables, which can be added to the [dev.env.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/dev.env.js), [test.env.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/test.env.js) and [prod.env.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/prod.env.js) files. Let´s do this with the variable `API_PORT`:
 
 ```
 module.exports = {
@@ -445,11 +445,60 @@ If you want, have a look at [Service.vue](https://github.com/jonashackt/spring-b
 
 #### Using dynamic Heroku port in Vue.js frontend
 
-Now as we need to dynamically configure the Port Heroku will set, we need to access this in the webpack build, which is our only chance to get to know the concrete port Heroku is using for our application. As []this great post states](https://codeburst.io/accessing-heroku-config-variables-in-your-vue-webpack-app-145afb32dd67) we need to configure our [package.json](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/package.json) to do a post install step with `"postinstall": "npm run build"` and let webpack override the enviroment variables in our configuration files like dev.env.js:
+Now as we need to dynamically configure the Port Heroku will set, we need to access this in the webpack build, which is our only chance to get to know the concrete port Heroku is using for our application. As we use the [frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin), we need to somehow pass the Heroku Port through this plugin to webpack, since we don´t run webpack or npm commands manually ourselfs somewhere.
+
+The possibilty to [configure Environment variables in the frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin/wiki#environment-variables) does the trick: In the `Build and minify static files` section, where `npm run build` is executed, we add the following configuration to the plugin:
 
 ```
-API_PORT: JSON.stringify(process.env.PORT)
+  <environmentVariables>
+    <SERVER_PORT>${server.port}</SERVER_PORT>
+  </environmentVariables>
 ```
+
+The variable `server.port` inherits the magic then.
+
+Because we locally don´t want to have extra hassles with setting and unsetting Environment variables for ports and want simply use port `8088` for accessing our backend, we need to be able to set a default value. This is done through the following property:
+
+```
+	<properties>
+    ...
+    <!-- default port, that will be replaced in the static Vue.js files for accessing the Spring Boot backend -->
+    <server.port>8088</server.port>
+	</properties>
+```
+
+Now, if the environment variable `PORT=7000` is defined for example (you can try this locally e.g. on a Mac with `export PORT=7000`), the variable `server.port` should instead change to 7000. Because we sadly don´t have the Spring Boot like `${VARIABLE:-default}` notation in Maven, we need to use the [<activation> feature of Maven profiles](https://stackoverflow.com/a/40756182/4964553). With this, we are able to check, if a Environment variable is set:
+
+```
+<profiles>
+    <profile>
+      <id>HerokuPort</id>
+      <activation>
+        <property>
+          <name>env.PORT</name>
+        </property>
+      </activation>
+      <properties>
+        <!-- Override the default SERVER_PORT, e.g. if PORT environment variable is set
+        - which is mostly the case on Heroku etc. -->
+        <server.port>${env.PORT}</server.port>
+      </properties>
+    </profile>
+  </profiles>
+```
+
+And as we can access environment variables in Maven through `${env.VARIABLE_NAME}` (see https://stackoverflow.com/a/10463133/4964553), we just use `${env.PORT}` in case the Maven profile activation feature found the `PORT` environment variable.
+
+Now we´re able to use our newly set Environment Variable SERVER_PORT inside our `dev.env.js`, `test.env.js` and `prod.env.js`:
+
+```
+API_PORT: JSON.stringify(process.env.SERVER_PORT)
+```
+
+Now our App is finally able to use the dynamically set port! You may have a look onto the Developer Console when accessing the [Service.vue](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/src/components/Service.vue) and see the output of the port:
+
+
+
 
 
 # Links

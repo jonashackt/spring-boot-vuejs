@@ -3,5 +3,5 @@ var devEnv = require('./dev.env')
 
 module.exports = merge(devEnv, {
   NODE_ENV: '"testing"',
-  API_PORT: JSON.stringify(process.env.PORT)
+  API_PORT: JSON.stringify(process.env.SERVER_PORT)
 })

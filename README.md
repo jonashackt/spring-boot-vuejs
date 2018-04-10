@@ -450,116 +450,20 @@ And with the help of super cool `Automatic deploys`, we have our TravisCI build 
 You only have to connect your Heroku app to GitHub, activate Automatic deploys and set the named checkbox. That´s everything!
 
 
-#### Making Port in Vue.js frontend configurable
+#### Accessing Spring Boot REST backend on Heroku from Vue.js frontend
 
 Frontend needs to know the Port of our Spring Boot backend API, which is [automatically set by Heroku every time, we (re-)start our App](https://stackoverflow.com/a/12023039/4964553).
 
 > You can [try out your Heroku app locally](https://devcenter.heroku.com/articles/heroku-local)! Just create a .env-File with all your Environment variables and run `heroku local`! 
 
-To access the Heroku set port, we need to configure the used port inside our Vue.js application dynamically instead of hard-coded. This can be easily achieved with the help of enviroment variables, which can be added to the [dev.env.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/dev.env.js), [test.env.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/test.env.js) and [prod.env.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/prod.env.js) files. Let´s do this with the variable `API_PORT`:
+To access the Heroku set port, we need to use relative paths inside our Vue.js application instead of hard-coded hosts and ports! 
+
+All we need to do, is to configure Axios in such a way inside our [frontend/src/components/http-common.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/src/components/http-common.js):
 
 ```
-module.exports = {
-  NODE_ENV: '"production"',
-  API_PORT: '"8077"'
-}
-```
-
-Now we can access this variable inside our Vue.js application. Just access the variable inside the `<script>` area inside a method:
-
-```
-  logPortEnvVariable () {
-    console.log('Now what´s the port?')
-    console.log(process.env.API_PORT)
-  }
-```
-
-If you want, have a look at [Service.vue](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/src/components/Service.vue), where this is implemented.
-
-#### Using dynamic port in Vue.js frontend
-
-Now as we need to dynamically configure the Port Heroku will set, we need to access this in the webpack build, which is our only chance to get to know the concrete port Heroku is using for our application. As we use the [frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin), we need to somehow pass the Heroku Port through this plugin to webpack, since we don´t run webpack or npm commands manually ourselfs somewhere.
-
-The possibilty to [configure Environment variables in the frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin/wiki#environment-variables) does the trick: In the `Build and minify static files` section, where `npm run build` is executed, we add the following configuration to the plugin:
-
-```
-  <environmentVariables>
-    <SERVER_PORT>${server.port}</SERVER_PORT>
-  </environmentVariables>
-```
-
-The variable `server.port` inherits the magic then.
-
-Because we locally don´t want to have extra hassles with setting and unsetting Environment variables for ports and want simply use port `8088` for accessing our backend, we need to be able to set a default value. This is done through the following property:
-
-```
-	<properties>
-    ...
-    <!-- default port, that will be replaced in the static Vue.js files for accessing the Spring Boot backend -->
-    <server.port>8088</server.port>
-	</properties>
-```
-
-Now, if the environment variable `PORT=7000` is defined for example (you can try this locally e.g. on a Mac with `export PORT=7000`), the variable `server.port` should instead change to 7000. Because we sadly don´t have the Spring Boot like `${VARIABLE:-default}` notation in Maven, we need to use the [<activation> feature of Maven profiles](https://stackoverflow.com/a/40756182/4964553). With this, we are able to check, if a Environment variable is set:
-
-```
-<profiles>
-    <profile>
-      <id>HerokuPort</id>
-      <activation>
-        <property>
-          <name>env.PORT</name>
-        </property>
-      </activation>
-      <properties>
-        <!-- Override the default SERVER_PORT, e.g. if PORT environment variable is set
-        - which is mostly the case on Heroku etc. -->
-        <server.port>${env.PORT}</server.port>
-      </properties>
-    </profile>
-  </profiles>
-```
-
-And as we can access environment variables in Maven through `${env.VARIABLE_NAME}` (see https://stackoverflow.com/a/10463133/4964553), we just use `${env.PORT}` in case the Maven profile activation feature found the `PORT` environment variable.
-
-Now we´re able to use our newly set Environment Variable SERVER_PORT inside our `test.env.js` and `prod.env.js`:
-
-```
-API_PORT: JSON.stringify(process.env.SERVER_PORT)
-```
-
-Now our App is finally able to use the dynamically set port! You may have a look onto the Developer Console when accessing the [Service.vue](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/src/components/Service.vue) and see the output of the port:
-
-> To retain the ability of using the webpack dev-server locally, we configure `API_PORT: '"8080"'` in `dev.env.js`, so that we have the right PORT setting for the webpack dev-server Proxy configuration
-
-
-### Using dynamic Heroku port in Vue.js frontend
-
-Slug -> no Port, [because no Config Variables present at that time!](https://devcenter.heroku.com/articles/how-heroku-works)
-
---> only Releases have config Vars, executed in Dynos!
-
-Need to somehow execute Maven build in Dyno - because we have the Port there.
-
-Therefore we need to fork Heroku Java buildpack, see https://github.com/heroku/heroku-buildpack-java#development and enhance the `bin/compile` file as described. See https://github.com/jonashackt/heroku-buildpack-java/commit/e8b0246c09968d8ec4c04983a9def431261a1b6c for example.
-
-Then we need to change buildpack of our app to the forked one:
-
-```
-heroku buildpacks:set https://github.com/jonashackt/heroku-buildpack-java -a spring-boot-vuejs
-```
-
-Create `startHeroku.sh` containing a Maven build and the original startup command from the `Procfile`:
-
-```
-mvn clean install -DskipTests=true
-java -Dserver.port=$PORT -jar backend/target/backend-0.0.1-SNAPSHOT.jar
-```
-
-Now change the `Procfile` to this:
-
-```
-web: sh ./startHeroku.sh
+export const AXIOS = axios.create({
+  baseURL: `/api`
+})
 ```
 
 

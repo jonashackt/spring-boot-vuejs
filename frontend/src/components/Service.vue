@@ -24,13 +24,10 @@
         errors: []
       }
     },
-    created () {
-      this.logPortEnvVariable()
-    },
     methods: {
       // Fetches posts when the component is created.
       callRestService () {
-        AXIOS.get(`api/hello`)
+        AXIOS.get(`/hello`)
           .then(response => {
             // JSON responses are automatically parsed.
             this.response = response.data
@@ -39,10 +36,6 @@
           .catch(e => {
             this.errors.push(e)
           })
-      },
-      logPortEnvVariable () {
-        console.log('Now what´s the port?')
-        console.log(process.env.API_PORT)
       }
     }
   }

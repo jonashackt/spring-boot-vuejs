@@ -70,7 +70,7 @@ export default {
   methods: {
     // Fetches posts when the component is created.
     callRestService () {
-      AXIOS.get(`api/hello`)
+      AXIOS.get(`/hello`)
         .then(response => {
           // JSON responses are automatically parsed.
           this.response = response.data

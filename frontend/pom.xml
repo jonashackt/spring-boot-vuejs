@@ -13,25 +13,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-    <!-- default port, that will be replaced in the static Vue.js files for accessing the Spring Boot backend -->
-    <server.port>8088</server.port>
 	</properties>
-
-  <profiles>
-    <profile>
-      <id>HerokuPort</id>
-      <activation>
-        <property>
-          <name>env.PORT</name>
-        </property>
-      </activation>
-      <properties>
-        <!-- Override the default SERVER_PORT, e.g. if PORT environment variable is set
-        - which is mostly the case on Heroku etc. -->
-        <server.port>${env.PORT}</server.port>
-      </properties>
-    </profile>
-  </profiles>
 
 	<build>
 		<plugins>
@@ -95,9 +77,6 @@
 						</goals>
 						<configuration>
 							<arguments>run build</arguments>
-              <environmentVariables>
-                <SERVER_PORT>${server.port}</SERVER_PORT>
-              </environmentVariables>
             </configuration>
 					</execution>
 				</executions>

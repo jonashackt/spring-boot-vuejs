@@ -372,6 +372,39 @@ public WebMvcConfigurer corsConfigurer() {
 
 Now all calls to resources behind `api/` will return the correct CORS headers. 
 
+#### But STOP! Webpack & Vue have something much smarter for us to help us with SOP!
+
+Thanks to my colleague [Daniel](https://www.codecentric.de/team/dre/) who pointed me to the nice proxying feature of Webpack dev-server, we don´t need to configure all the complex CORS stuff anymore!
+
+According to [Vue.js Webpack Template](https://vuejs-templates.github.io/webpack/) the only thing we need to [configure is a Proxy](https://vuejs-templates.github.io/webpack/proxy.html) for our webpack dev-server requests. This could be done easily in the [frontend/config/index.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/index.js) inside `dev.proxyTable`: 
+
+```
+dev: {
+    ...
+    proxyTable: {
+      // proxy all webpack dev-server requests starting with /api to our Spring Boot backend (localhost:8088)
+      '/api': {
+        target: 'http://localhost:8088',
+        changeOrigin: true
+      }
+    },
+```
+
+With this configuration in place, the webpack dev-server uses the [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware), which is a really handy component, to proxy all frontend-requests from http://localhost:8080 --> http://localhost:8088 - incl. Changing the Origin accordingly.
+
+This is used in the [frontend/build/dev-server.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/build/dev-server.js) to configure the proxyMiddleware (you don´t need to change something here!):
+
+```
+// proxy api requests
+Object.keys(proxyTable).forEach(function (context) {
+  var options = proxyTable[context]
+  if (typeof options === 'string') {
+    options = { target: options }
+  }
+  app.use(proxyMiddleware(options.filter || context, options))
+})
+```
+
 
 ## Bootstrap & Vue.js
 
@@ -489,7 +522,7 @@ Now, if the environment variable `PORT=7000` is defined for example (you can try
 
 And as we can access environment variables in Maven through `${env.VARIABLE_NAME}` (see https://stackoverflow.com/a/10463133/4964553), we just use `${env.PORT}` in case the Maven profile activation feature found the `PORT` environment variable.
 
-Now we´re able to use our newly set Environment Variable SERVER_PORT inside our `dev.env.js`, `test.env.js` and `prod.env.js`:
+Now we´re able to use our newly set Environment Variable SERVER_PORT inside our `test.env.js` and `prod.env.js`:
 
 ```
 API_PORT: JSON.stringify(process.env.SERVER_PORT)
@@ -497,6 +530,7 @@ API_PORT: JSON.stringify(process.env.SERVER_PORT)
 
 Now our App is finally able to use the dynamically set port! You may have a look onto the Developer Console when accessing the [Service.vue](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/src/components/Service.vue) and see the output of the port:
 
+> To retain the ability of using the webpack dev-server locally, we configure `API_PORT: '"8080"'` in `dev.env.js`, so that we have the right PORT setting for the webpack dev-server Proxy configuration
 
 
 

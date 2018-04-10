@@ -476,7 +476,7 @@ Now we can access this variable inside our Vue.js application. Just access the v
 
 If you want, have a look at [Service.vue](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/src/components/Service.vue), where this is implemented.
 
-#### Using dynamic Heroku port in Vue.js frontend
+#### Using dynamic port in Vue.js frontend
 
 Now as we need to dynamically configure the Port Heroku will set, we need to access this in the webpack build, which is our only chance to get to know the concrete port Heroku is using for our application. As we use the [frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin), we need to somehow pass the Heroku Port through this plugin to webpack, since we don´t run webpack or npm commands manually ourselfs somewhere.
 
@@ -532,6 +532,35 @@ Now our App is finally able to use the dynamically set port! You may have a look
 
 > To retain the ability of using the webpack dev-server locally, we configure `API_PORT: '"8080"'` in `dev.env.js`, so that we have the right PORT setting for the webpack dev-server Proxy configuration
 
+
+### Using dynamic Heroku port in Vue.js frontend
+
+Slug -> no Port, [because no Config Variables present at that time!](https://devcenter.heroku.com/articles/how-heroku-works)
+
+--> only Releases have config Vars, executed in Dynos!
+
+Need to somehow execute Maven build in Dyno - because we have the Port there.
+
+Therefore we need to fork Heroku Java buildpack, see https://github.com/heroku/heroku-buildpack-java#development and enhance the `bin/compile` file as described. See https://github.com/jonashackt/heroku-buildpack-java/commit/e8b0246c09968d8ec4c04983a9def431261a1b6c for example.
+
+Then we need to change buildpack of our app to the forked one:
+
+```
+heroku buildpacks:set https://github.com/jonashackt/heroku-buildpack-java -a spring-boot-vuejs
+```
+
+Create `startHeroku.sh` containing a Maven build and the original startup command from the `Procfile`:
+
+```
+mvn clean install -DskipTests=true
+java -Dserver.port=$PORT -jar backend/target/backend-0.0.1-SNAPSHOT.jar
+```
+
+Now change the `Procfile` to this:
+
+```
+web: sh ./startHeroku.sh
+```
 
 
 

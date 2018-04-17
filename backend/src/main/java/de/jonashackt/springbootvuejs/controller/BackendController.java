@@ -38,7 +38,7 @@ public class BackendController {
 
     @GetMapping(path="/user/{id}")
     public @ResponseBody User getUserById(@PathVariable("id") long id) {
-        return userRepository.findOne(id);
+        return userRepository.findById(id).get();
     }
 
 }

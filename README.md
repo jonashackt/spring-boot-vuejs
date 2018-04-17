@@ -64,6 +64,7 @@ spring-boot-vuejs
 │ ├── src
 │ └── pom.xml
 ├─┬ frontend    → frontend module with Vue.js stuff
+│ ├── src
 │ └── pom.xml
 └── pom.xml     → Maven parent pom with modules
 ```
@@ -129,72 +130,48 @@ If you’re a backend dev like me, this Maven plugin here https://github.com/eir
 
 ```
 <build>
-  <plugins>
-    <plugin>
-      <groupId>com.github.eirslett</groupId>
-      <artifactId>frontend-maven-plugin</artifactId>
-      <version>1.5</version>
-      <executions>
-        <!-- Install our node and npm version to run npm/node scripts-->
-        <execution>
-          <id>install node and npm</id>
-          <goals>
-            <goal>install-node-and-npm</goal>
-          </goals>
-          <configuration>
-            <nodeVersion>v6.11.3</nodeVersion>
-            <npmVersion>5.4.1</npmVersion>
-            <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
-            <npmDownloadRoot>http://registry.npmjs.org/npm/-/</npmDownloadRoot>
-          </configuration>
-        </execution>
-        <!-- Set NPM Registry -->
-        <execution>
-          <id>npm set registry</id>
-          <goals>
-            <goal>npm</goal>
-          </goals>
-          <configuration>
-            <arguments>config set registry https://registry.npmjs.org</arguments>
-          </configuration>
-        </execution>
-        <!-- Set SSL privilege -->
-        <execution>
-          <id>npm set non-strict ssl</id>
-          <goals>
-            <goal>npm</goal>
-          </goals>
-          <!-- Optional configuration which provides for running any npm command -->
-          <configuration>
-            <arguments>config set strict-ssl false</arguments>
-          </configuration>
-        </execution>
-        <!-- Install all project dependencies -->
-        <execution>
-          <id>npm install</id>
-          <goals>
-            <goal>npm</goal>
-          </goals>
-          <!-- optional: default phase is "generate-resources" -->
-          <phase>generate-resources</phase>
-          <!-- Optional configuration which provides for running any npm command -->
-          <configuration>
-            <arguments>install</arguments>
-          </configuration>
-        </execution>
-        <!-- Build and minify static files -->
-        <execution>
-          <id>npm run build</id>
-          <goals>
-            <goal>npm</goal>
-          </goals>
-          <configuration>
-            <arguments>run build</arguments>
-          </configuration>
-        </execution>
-      </executions>
-    </plugin>
-  </plugins>
+    <plugins>
+        <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>${frontend-maven-plugin.version}</version>
+            <executions>
+                <!-- Install our node and npm version to run npm/node scripts-->
+                <execution>
+                    <id>install node and npm</id>
+                    <goals>
+                        <goal>install-node-and-npm</goal>
+                    </goals>
+                    <configuration>
+                        <nodeVersion>v9.11.1</nodeVersion>
+                    </configuration>
+                </execution>
+                <!-- Install all project dependencies -->
+                <execution>
+                    <id>npm install</id>
+                    <goals>
+                        <goal>npm</goal>
+                    </goals>
+                    <!-- optional: default phase is "generate-resources" -->
+                    <phase>generate-resources</phase>
+                    <!-- Optional configuration which provides for running any npm command -->
+                    <configuration>
+                        <arguments>install</arguments>
+                    </configuration>
+                </execution>
+                <!-- Build and minify static files -->
+                <execution>
+                    <id>npm run build</id>
+                    <goals>
+                        <goal>npm</goal>
+                    </goals>
+                    <configuration>
+                        <arguments>run build</arguments>
+        </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
 </build>
 ```
 

@@ -33,27 +33,6 @@
 							<nodeVersion>v9.11.1</nodeVersion>
 						</configuration>
 					</execution>
-					<!-- Set NPM Registry -->
-					<execution>
-						<id>npm set registry</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<configuration>
-							<arguments>config set registry https://registry.npmjs.org</arguments>
-						</configuration>
-					</execution>
-					<!-- Set SSL privilege -->
-					<execution>
-						<id>npm set non-strict ssl</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<!-- Optional configuration which provides for running any npm command -->
-						<configuration>
-							<arguments>config set strict-ssl false</arguments>
-						</configuration>
-					</execution>
 					<!-- Install all project dependencies -->
 					<execution>
 						<id>npm install</id>

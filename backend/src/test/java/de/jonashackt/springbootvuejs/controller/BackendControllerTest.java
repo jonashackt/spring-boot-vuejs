@@ -6,9 +6,11 @@ import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -16,18 +18,17 @@ import static org.hamcrest.Matchers.is;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
 		classes = SpringBootVuejsApplication.class,
-		webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-		properties = "server.port = 8089"
+		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 public class BackendControllerTest {
 
-	private static final String BASE_URL = "http://localhost:8089/api";
+	@LocalServerPort
+	int port;
 
 	@Test
 	public void saysHello() {
-		given()
-		.when()
-			.get(BASE_URL + "/hello")
+		when()
+			.get("http://localhost:" + port + "/api/hello")
 		.then()
 			.statusCode(HttpStatus.SC_OK)
 			.assertThat()
@@ -43,7 +44,7 @@ public class BackendControllerTest {
                 .queryParam("firstName", "Norbert")
                 .queryParam("lastName", "Siegmund")
             .when()
-                .post(BASE_URL + "/user")
+                .post("http://localhost:" + port + "/api/user")
             .then()
                 .statusCode(is(HttpStatus.SC_CREATED))
                 .extract()
@@ -53,7 +54,7 @@ public class BackendControllerTest {
             given()
                     .pathParam("id", userId)
                 .when()
-                    .get(BASE_URL + "/user/{id}")
+                    .get("http://localhost:" + port + "/api/user/{id}")
                 .then()
                     .statusCode(HttpStatus.SC_OK)
                     .assertThat()

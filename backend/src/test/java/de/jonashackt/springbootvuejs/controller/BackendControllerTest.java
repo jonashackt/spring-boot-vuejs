@@ -2,7 +2,9 @@ package de.jonashackt.springbootvuejs.controller;
 
 import de.jonashackt.springbootvuejs.SpringBootVuejsApplication;
 import de.jonashackt.springbootvuejs.domain.User;
+import io.restassured.RestAssured;
 import org.apache.http.HttpStatus;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,12 +25,18 @@ import static org.hamcrest.Matchers.is;
 public class BackendControllerTest {
 
 	@LocalServerPort
-	int port;
+	private int port;
+
+	@Before
+    public void init() {
+        RestAssured.baseURI = "http://localhost";
+        RestAssured.port = port;
+    }
 
 	@Test
 	public void saysHello() {
 		when()
-			.get("http://localhost:" + port + "/api/hello")
+			.get("/api/hello")
 		.then()
 			.statusCode(HttpStatus.SC_OK)
 			.assertThat()
@@ -44,7 +52,7 @@ public class BackendControllerTest {
                 .queryParam("firstName", "Norbert")
                 .queryParam("lastName", "Siegmund")
             .when()
-                .post("http://localhost:" + port + "/api/user")
+                .post("/api/user")
             .then()
                 .statusCode(is(HttpStatus.SC_CREATED))
                 .extract()
@@ -54,7 +62,7 @@ public class BackendControllerTest {
             given()
                     .pathParam("id", userId)
                 .when()
-                    .get("http://localhost:" + port + "/api/user/{id}")
+                    .get("/api/user/{id}")
                 .then()
                     .statusCode(HttpStatus.SC_OK)
                     .assertThat()

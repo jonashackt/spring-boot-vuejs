@@ -12,6 +12,8 @@
       <li><a href="/#/callservice/" target="_blank">/callservice</a></li>
       <li>HowTo to play around with Bootstrap UI components:</li>
       <li><a href="/#/bootstrap/" target="_blank">/bootstrap</a></li>
+      <li>HowTo to interact with the Spring Boot database backend:</li>
+      <li><a href="/#/user/" target="_blank">/user</a></li>
     </ul>
   </div>
 </template>

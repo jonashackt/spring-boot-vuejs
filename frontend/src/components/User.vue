@@ -1,5 +1,5 @@
 <template>
-  <div class="service">
+  <div class="user">
     <h1>Create User</h1>
 
     <h3>Just some database interaction...</h3>
@@ -23,7 +23,7 @@
   import {AXIOS} from './http-common'
 
   export default {
-    name: 'service',
+    name: 'user',
 
     data () {
       return {

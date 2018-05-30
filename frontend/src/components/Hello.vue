@@ -9,11 +9,11 @@
     <h3>This site contains more stuff :)</h3>
     <ul>
       <li>HowTo call REST-Services:</li>
-      <li><a href="/#/callservice/" target="_blank">/callservice</a></li>
+      <li><router-link :to="{ name: 'Service' }" exact target="_blank">/callservice</router-link></li>
       <li>HowTo to play around with Bootstrap UI components:</li>
-      <li><a href="/#/bootstrap/" target="_blank">/bootstrap</a></li>
+      <li><router-link :to="{ name: 'Bootstrap' }" exact target="_blank">/bootstrap</router-link></li>
       <li>HowTo to interact with the Spring Boot database backend:</li>
-      <li><a href="/#/user/" target="_blank">/user</a></li>
+      <li><router-link :to="{ name: 'User' }" exact target="_blank">/user</router-link></li>
     </ul>
   </div>
 </template>

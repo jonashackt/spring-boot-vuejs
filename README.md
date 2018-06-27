@@ -446,6 +446,44 @@ export const AXIOS = axios.create({
 ```
 
 
+## NPM Security
+
+npm Security - npm@6
+
+https://medium.com/npm-inc/announcing-npm-6-5d0b1799a905
+
+`npm audit`
+
+https://blog.npmjs.org/post/173719309445/npm-audit-identify-and-fix-insecure
+
+Run `npm audit fix` to update the vulnerable packages. Only in situations, where nothing else helps, try `npm audit fix --force` (this will also install braking changes)
+
+https://nodejs.org/en/blog/vulnerability/june-2018-security-releases/
+
+---> __Update NPM regularly__
+
+https://docs.npmjs.com/troubleshooting/try-the-latest-stable-version-of-npm
+
+`npm install -g npm@latest`
+
+---> __Update Packages regularly__
+
+https://docs.npmjs.com/getting-started/updating-local-packages
+
+`npm outdated`
+
+`npm update`
+
+
+## Testing 
+
+#### E2E tests with Nightwatch
+
+http://nightwatchjs.org/
+
+Nightwatch controls Selenium standalone Server in own childprocess
+
+
 
 # Links
 

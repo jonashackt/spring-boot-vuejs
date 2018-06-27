@@ -46,17 +46,6 @@
 							<arguments>install</arguments>
 						</configuration>
 					</execution>
-          <!-- Run Unit tests -->
-          <execution>
-            <id>npm run test</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <!-- Optional configuration which provides for running any npm command -->
-            <configuration>
-              <arguments>run unit</arguments>
-            </configuration>
-          </execution>
 					<!-- Build and minify static files -->
 					<execution>
 						<id>npm run build</id>
@@ -67,6 +56,19 @@
 							<arguments>run build</arguments>
             </configuration>
 					</execution>
+          <!-- Run Unit tests -->
+          <execution>
+            <id>npm run test</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <!-- optional: default phase is "generate-resources" -->
+            <phase>test</phase>
+            <!-- Optional configuration which provides for running any npm command -->
+            <configuration>
+              <arguments>run unit</arguments>
+            </configuration>
+          </execution>
 				</executions>
 			</plugin>
 		</plugins>

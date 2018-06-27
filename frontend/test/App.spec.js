@@ -1,16 +1,11 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import VueRouter from 'vue-router'
 import App from '@/App';
 
-const localVue = createLocalVue()
-localVue.use(VueRouter)
-const router = new VueRouter()
-
+// see https://vue-test-utils.vuejs.org/guides/using-with-vue-router.html#testing-components-that-use-router-link-or-router-view
 describe('App component should', () => {
   it('render without crashing', () => {
     const wrapper = shallowMount(App, {
-      localVue,
-      router
+      stubs: ['router-link', 'router-view']
     });
     expect(wrapper.find('hello')).toBeDefined();
   });

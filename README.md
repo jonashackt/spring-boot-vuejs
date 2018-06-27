@@ -491,6 +491,9 @@ Intro-Blogpost: https://blog.codecentric.de/2017/06/javascript-unit-tests-sind-s
 
 https://github.com/vuejs/vue-test-utils-jest-example
 
+
+Vue.js Jest Docs: https://vue-test-utils.vuejs.org/guides/#testing-single-file-components-with-jest
+
 ###### Jest Configuration  
 
 * [package.json](frontend/package.json):

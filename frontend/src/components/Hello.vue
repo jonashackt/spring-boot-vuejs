@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <img src="./../assets/spring-boot-vuejs-logo.png">
-    <h1>{{ msg }}</h1>
+    <h1>{{ hellomsg }}</h1>
     <h2>See the sources here: </h2>
     <ul>
       <li><a href="https://github.com/jonashackt/spring-boot-vuejs" target="_blank">github.com/jonashackt/spring-boot-vuejs</a></li>
@@ -21,12 +21,7 @@
 <script>
 export default {
   name: 'hello',
-
-  data () {
-    return {
-      msg: 'Welcome to your Vue.js powered Spring Boot App'
-    }
-  }
+  props: { hellomsg: { type: String, required: true } }
 }
 
 </script>

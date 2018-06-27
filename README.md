@@ -477,11 +477,40 @@ https://docs.npmjs.com/getting-started/updating-local-packages
 
 ## Testing 
 
+#### Install vue-test-utils
+
+https://github.com/vuejs/vue-test-utils
+
+`npm install --save-dev @vue/test-utils`
+
 #### Jest
 
 https://facebook.github.io/jest/
 
 Intro-Blogpost: https://blog.codecentric.de/2017/06/javascript-unit-tests-sind-schwer-aufzusetzen-keep-calm-use-jest/
+
+https://github.com/vuejs/vue-test-utils-jest-example
+
+###### Jest Configuration  
+
+* [package.json](frontend/package.json):
+
+```
+"scripts": {
+    ...
+    "unit": "jest --config test/unit/jest.conf.js --coverage",
+    ....
+  },
+```
+
+* [frontend/test/unit/jest.conf.js](frontend/test/unit/jest.conf.js)
+
+###### Run Unit tests
+
+`npm run unit`
+
+Run all tests (incl. E2E): `npm test`
+
 
 #### E2E tests with Nightwatch
 

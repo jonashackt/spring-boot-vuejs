@@ -477,6 +477,12 @@ https://docs.npmjs.com/getting-started/updating-local-packages
 
 ## Testing 
 
+#### Jest
+
+https://facebook.github.io/jest/
+
+Intro-Blogpost: https://blog.codecentric.de/2017/06/javascript-unit-tests-sind-schwer-aufzusetzen-keep-calm-use-jest/
+
 #### E2E tests with Nightwatch
 
 http://nightwatchjs.org/

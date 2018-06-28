@@ -477,13 +477,13 @@ https://docs.npmjs.com/getting-started/updating-local-packages
 
 ## Testing 
 
-#### Install vue-test-utils
+### Install vue-test-utils
 
 https://github.com/vuejs/vue-test-utils
 
 `npm install --save-dev @vue/test-utils`
 
-#### Jest
+### Jest
 
 https://facebook.github.io/jest/
 
@@ -494,7 +494,7 @@ https://github.com/vuejs/vue-test-utils-jest-example
 
 Vue.js Jest Docs: https://vue-test-utils.vuejs.org/guides/#testing-single-file-components-with-jest
 
-###### Jest Configuration  
+##### Jest Configuration  
 
 * [package.json](frontend/package.json):
 
@@ -508,19 +508,22 @@ Vue.js Jest Docs: https://vue-test-utils.vuejs.org/guides/#testing-single-file-c
 
 * [frontend/test/unit/jest.conf.js](frontend/test/unit/jest.conf.js)
 
-###### Run Unit tests
+##### Run Unit tests
 
 `npm run unit`
 
 Run all tests (incl. E2E): `npm test`
 
 
-#### E2E tests with Nightwatch
+### E2E tests with Nightwatch
 
 http://nightwatchjs.org/
 
 Nightwatch controls Selenium standalone Server in own childprocess
 
+##### Run E2E Tests
+
+`npm run e2e`
 
 
 # Links

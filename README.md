@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/jonashackt/spring-boot-vuejs/badge.svg?branch=master)](https://coveralls.io/github/jonashackt/spring-boot-vuejs?branch=master)
 [![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/jonashackt/spring-boot-vuejs/blob/master/LICENSE)
 
-![localhost-first-run](https://github.com/jonashackt/spring-boot-vuejs/blob/master/localhost-first-run.png)
+![localhost-first-run](screenshots/localhost-first-run.png)
 
 A live deployment is available on Heroku: https://spring-boot-vuejs.herokuapp.com
 
@@ -20,7 +20,7 @@ Key points are:
 * Angular 2 isn’t the way to go, if you know version 1 (complete re-write, only with Typescript, loss of many of 1’s advantages, Angular 4 is coming)
 * React  (facebookish problems (licence), need to choose btw. Redux & MObX, harder learning curve, slower coding speed)
 
-![comparison-angular-react-vuejs](https://github.com/jonashackt/spring-boot-vuejs/blob/master/comparison-angular-react-vuejs.png)
+![comparison-angular-react-vuejs](screenshots/comparison-angular-react-vuejs.png)
 
 And the [introduction phrase](https://vuejs.org/v2/guide/index.html) sounds really great:
 
@@ -122,7 +122,7 @@ vue init webpack frontend
 
 This will initialize a project skeleton for Vue.js in /frontend directory - it therefore asks some questions in the cli:
 
-![vuejs-cli-init](https://github.com/jonashackt/spring-boot-vuejs/blob/master/vuejs-cli-init.png)
+![vuejs-cli-init](screenshots/vuejs-cli-init.png)
 
 If you want to learn more about installing Vue.js, head over to the docs: https://vuejs.org/v2/guide/installation.html
 
@@ -225,7 +225,7 @@ That’s it!
 
 Install vue-devtools Browser extension https://github.com/vuejs/vue-devtools and get better feedback, e.g. in Chrome:
 
-![vue-devtools-chrome](https://github.com/jonashackt/spring-boot-vuejs/blob/master/vue-devtools-chrome.png)
+![vue-devtools-chrome](screenshots/vue-devtools-chrome.png)
 
 
 
@@ -409,7 +409,7 @@ The docs contain all the possible components: https://bootstrap-vue.js.org/docs/
 
 See some elements, when you go to http://localhost:8080/#/bootstrap/ - this should look like this:
 
-![bootstrap-styled-vuejs](https://github.com/jonashackt/spring-boot-vuejs/blob/master/bootstrap-styled-vuejs.png)
+![bootstrap-styled-vuejs](screenshots/bootstrap-styled-vuejs.png)
 
 A good discussion about various UI component frameworks: http://vuetips.com/bootstrap
 
@@ -420,11 +420,11 @@ As you may already read, the app is automatically deployed to Heroku on https://
 
 The project makes use of the nice Heroku Pipelines feature, where we do get a full Continuous Delivery pipeline with nearly no effort:
 
-![heroku-pipeline](heroku-pipeline.png)
+![heroku-pipeline](screenshots/heroku-pipeline.png)
 
 And with the help of super cool `Automatic deploys`, we have our TravisCI build our app after every push to master - and with the checkbox set to `Wait for CI to pass before deploy` - the app gets also automatically deployed to Heroku - but only, if the TravisCI (and Coveralls...) build succeeded:
 
-![heroku-automatic-deploys](heroku-automatic-deploys.png)
+![heroku-automatic-deploys](screenshots/heroku-automatic-deploys.png)
 
 You only have to connect your Heroku app to GitHub, activate Automatic deploys and set the named checkbox. That´s everything!
 
@@ -512,8 +512,34 @@ Jest itself is configured inside [frontend/test/unit/jest.conf.js](frontend/test
 
 `npm run unit` - that´ll look like:
 
-![unittestrun-jest](unittestrun-jest.png)
+![unittestrun-jest](screenshots/unittestrun-jest.png)
 
+
+##### Integration in Maven build (via frontend-maven-plugin)
+
+Inside the [pom.xml](pom.xml) we always automatically run the Jest Unittests with the following configuration:
+
+```
+<!-- Run Unit tests -->
+  <execution>
+    <id>npm run test</id>
+    <goals>
+      <goal>npm</goal>
+    </goals>
+    <!-- optional: default phase is "generate-resources" -->
+    <phase>test</phase>
+    <!-- Optional configuration which provides for running any npm command -->
+    <configuration>
+      <arguments>run unit</arguments>
+    </configuration>
+  </execution>
+```
+
+This will integrate the Jest Unittests right after the npm run build command, just you are used to in Java-style projects:
+
+![maven-integration-jest-unittests](screenshots/maven-integration-jest-unittests.png)
+
+And don´t mind the depitction with `ERROR` - this is just a known bug: https://github.com/eirslett/frontend-maven-plugin/issues/584
 
 
 ## End-2-End (E2E) tests with Nightwatch
@@ -571,7 +597,7 @@ OK. 4 assertions passed. (8.625s)
 
 With the latest 0.9.21 of Nightwatch, this issue is gone. __BUT:__ the the `npm audit` command does find vulnerabilities: 
 
-![nightwatch-npmaudit-vulnerabilities](nightwatch-npmaudit-vulnerabilities.png)
+![nightwatch-npmaudit-vulnerabilities](screenshots/nightwatch-npmaudit-vulnerabilities.png)
 
 And thus the whole build process will brake. The problem are breaking changes in [Nightwatch 1.x](https://github.com/nightwatchjs/nightwatch#nightwatch-v10), that aren´t reflected inside the Vue.js Webpack template so far (they use the latest 0.9.x, which is vulnerable): https://github.com/nightwatchjs/nightwatch/wiki/Migrating-to-Nightwatch-1.0
 

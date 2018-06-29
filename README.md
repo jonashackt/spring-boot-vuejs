@@ -227,6 +227,12 @@ Install vue-devtools Browser extension https://github.com/vuejs/vue-devtools and
 
 ![vue-devtools-chrome](screenshots/vue-devtools-chrome.png)
 
+## IntelliJ integration
+
+There´s a blog post: https://blog.jetbrains.com/webstorm/2018/01/working-with-vue-js-in-webstorm/
+
+Escpecially the `New... Vue Component` looks quite cool :)
+
 
 
 ## HTTP calls from Vue.js to (Spring Boot) REST backend
@@ -541,6 +547,30 @@ This will integrate the Jest Unittests right after the npm run build command, ju
 
 And don´t mind the depitction with `ERROR` - this is just a known bug: https://github.com/eirslett/frontend-maven-plugin/issues/584
 
+
+##### Run Jest tests inside IntelliJ
+
+First we need to install the NodeJS IntelliJ plugin (https://www.jetbrains.com/help/idea/developing-node-js-applications.html), which isn´t bundled with IntelliJ by default:
+
+![nodejs-intellij-plugin](screenshots/nodejs-intellij-plugin.png)
+
+IntelliJ Jest integration docs: https://www.jetbrains.com/help/idea/running-unit-tests-on-jest.html
+
+The automatic search inside the [package.json](frontend/package.json) for the Jest configuration file [jest.conf.js](frontend/test/unit/jest.conf.js) doesn´t seem to work right now, so we have to manually configure the `scripts` part of:
+
+```
+"unit": "jest --config test/unit/jest.conf.js --coverage",
+```
+
+inside the Run Configuration under `Jest` and `All Tests`:
+
+![configure-jest-inside-intellij](screenshots/configure-jest-inside-intellij.png)
+
+Now, when running `All Tests`, this should look like you´re already used to Unittest IntelliJ-Integration:
+
+![run-jest-inside-intellij](screenshots/run-jest-inside-intellij.png)
+
+ 
 
 ## End-2-End (E2E) tests with Nightwatch
 

@@ -446,6 +446,142 @@ export const AXIOS = axios.create({
 ```
 
 
+
+## Testing 
+
+### Install vue-test-utils
+
+https://github.com/vuejs/vue-test-utils
+
+`npm install --save-dev @vue/test-utils`
+
+### Jest
+
+Jest is a new shooting star at the sky of JavaScript testing frameworks: https://facebook.github.io/jest/
+
+Intro-Blogpost: https://blog.codecentric.de/2017/06/javascript-unit-tests-sind-schwer-aufzusetzen-keep-calm-use-jest/
+
+Examples: https://github.com/vuejs/vue-test-utils-jest-example
+
+Vue.js Jest Docs: https://vue-test-utils.vuejs.org/guides/#testing-single-file-components-with-jest
+
+A Jest Unittest looks like [Hello.test.js](frontend/test/components/Hello.test.js):
+
+```
+import { shallowMount } from '@vue/test-utils';
+import Hello from '@/components/Hello'
+
+describe('Hello.vue', () => {
+  it('should render correct hello message', () => {
+    // Given
+    const hellowrapped = shallowMount(Hello, {
+      propsData: { hellomsg: 'Welcome to your Jest powered Vue.js App' },
+      stubs: ['router-link', 'router-view']
+    });
+
+    // When
+    const contentH1 = hellowrapped.find('h1');
+
+    // Then
+    expect(contentH1.text()).toEqual('Welcome to your Jest powered Vue.js App');
+  })
+})
+```
+
+To pass Component props while using Vue.js Router, see https://stackoverflow.com/a/37940045/4964553.
+
+How to test components with `router-view` or `router-link` https://vue-test-utils.vuejs.org/guides/using-with-vue-router.html#testing-components-that-use-router-link-or-router-view.
+
+The test files itself could be named `xyz.spec.js` or `xyz.test.js` - and could reside nearly everywhere in the project.
+
+##### Jest Configuration  
+
+The Jest run-configuration is done inside the [package.json](frontend/package.json):
+
+```
+"scripts": {
+    ...
+    "unit": "jest --config test/unit/jest.conf.js --coverage",
+    ....
+  },
+```
+
+Jest itself is configured inside [frontend/test/unit/jest.conf.js](frontend/test/unit/jest.conf.js)
+
+##### Run Unit tests
+
+`npm run unit` - that´ll look like:
+
+![unittestrun-jest](unittestrun-jest.png)
+
+
+
+## End-2-End (E2E) tests with Nightwatch
+
+Great tooling: http://nightwatchjs.org/ - Nightwatch controls WebDriver / Selenium standalone Server in own childprocess and abstracts from those, providing a handy DSL for Acceptance tests:
+
+Docs: http://nightwatchjs.org/gettingstarted/#browser-drivers-setup
+
+![http://nightwatchjs.org/img/operation.png](http://nightwatchjs.org/img/operation.png)
+
+Nightwatch is configured through the [nightwatch.conf.js](/frontend/test/e2e/nightwatch.conf.js). Watch out for breaking changes in 1.x: https://github.com/nightwatchjs/nightwatch/wiki/Migrating-to-Nightwatch-1.0
+
+More options could be found in the docs: http://nightwatchjs.org/gettingstarted/#settings-file
+
+
+#### Write Nightwatch tests
+
+An example Nightwatch test is provided in [HelloAcceptance.test.js](/frontend/test/e2e/specs/HelloAcceptance.test.js):
+
+```
+module.exports = {
+  'default e2e tests': function (browser) {
+    // automatically uses dev Server port from /config.index.js
+    // default: http://localhost:8080
+    // see nightwatch.conf.js
+    const devServer = browser.globals.devServerURL
+
+    browser
+      .url(devServer)
+      .waitForElementVisible('#app', 5000)
+      .assert.elementPresent('.hello')
+      .assert.containsText('h1', 'Welcome to your Vue.js powered Spring Boot App')
+      .assert.elementCount('img', 1)
+      .end()
+  }
+}
+
+```
+
+##### Run E2E Tests
+
+`npm run e2e`
+
+##### Current Problem with npm audit (see [NPM Security](#npm-security))
+
+With 1.0.6, the following error occurs after an `npm run e2e`:
+
+```
+OK. 4 assertions passed. (8.625s)
+   The "path" argument must be of type string. Received type object
+       at assertPath (path.js:39:11)
+       at Object.join (path.js:1157:7)
+       at process._tickCallback (internal/process/next_tick.js:68:7)
+```
+
+With the latest 0.9.21 of Nightwatch, this issue is gone. __BUT:__ the the `npm audit` command does find vulnerabilities: 
+
+![nightwatch-npmaudit-vulnerabilities](nightwatch-npmaudit-vulnerabilities.png)
+
+And thus the whole build process will brake. The problem are breaking changes in [Nightwatch 1.x](https://github.com/nightwatchjs/nightwatch#nightwatch-v10), that aren´t reflected inside the Vue.js Webpack template so far (they use the latest 0.9.x, which is vulnerable): https://github.com/nightwatchjs/nightwatch/wiki/Migrating-to-Nightwatch-1.0
+
+
+## Run all tests
+
+ `npm test`
+
+
+
 ## NPM Security
 
 npm Security - npm@6
@@ -475,55 +611,6 @@ https://docs.npmjs.com/getting-started/updating-local-packages
 `npm update`
 
 
-## Testing 
-
-### Install vue-test-utils
-
-https://github.com/vuejs/vue-test-utils
-
-`npm install --save-dev @vue/test-utils`
-
-### Jest
-
-https://facebook.github.io/jest/
-
-Intro-Blogpost: https://blog.codecentric.de/2017/06/javascript-unit-tests-sind-schwer-aufzusetzen-keep-calm-use-jest/
-
-https://github.com/vuejs/vue-test-utils-jest-example
-
-
-Vue.js Jest Docs: https://vue-test-utils.vuejs.org/guides/#testing-single-file-components-with-jest
-
-##### Jest Configuration  
-
-* [package.json](frontend/package.json):
-
-```
-"scripts": {
-    ...
-    "unit": "jest --config test/unit/jest.conf.js --coverage",
-    ....
-  },
-```
-
-* [frontend/test/unit/jest.conf.js](frontend/test/unit/jest.conf.js)
-
-##### Run Unit tests
-
-`npm run unit`
-
-Run all tests (incl. E2E): `npm test`
-
-
-### E2E tests with Nightwatch
-
-http://nightwatchjs.org/
-
-Nightwatch controls Selenium standalone Server in own childprocess
-
-##### Run E2E Tests
-
-`npm run e2e`
 
 
 # Links

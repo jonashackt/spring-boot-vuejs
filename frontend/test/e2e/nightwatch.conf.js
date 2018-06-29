@@ -14,13 +14,19 @@ module.exports = {
     port: 4444,
     cli_args: {
       'webdriver.chrome.driver': require('chromedriver').path
+      //'webdriver.gecko.driver': geckodriver.path
     }
   },
 
   test_settings: {
     default: {
-      selenium_port: 4444,
-      selenium_host: 'localhost',
+      // see breaking changes in 1.x https://github.com/nightwatchjs/nightwatch/wiki/Migrating-to-Nightwatch-1.0
+      webdriver: {
+        webdriver_port: 4444,
+        webdriver_host: 'localhost',
+      },
+      //selenium_port: 4444,
+      //selenium_host: 'localhost',
       silent: true,
       globals: {
         devServerURL: 'http://localhost:' + (process.env.PORT || config.dev.port)

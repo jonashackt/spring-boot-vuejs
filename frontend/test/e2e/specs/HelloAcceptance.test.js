@@ -12,7 +12,7 @@ module.exports = {
       .url(devServer)
       .waitForElementVisible('#app', 5000)
       .assert.elementPresent('.hello')
-      .assert.containsText('h1', 'Welcome to Your Vue.js App')
+      .assert.containsText('h1', 'Welcome to your Vue.js powered Spring Boot App')
       .assert.elementCount('img', 1)
       .end()
   }

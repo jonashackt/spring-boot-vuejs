@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/jonashackt/spring-boot-vuejs/badge.svg?branch=master)](https://coveralls.io/github/jonashackt/spring-boot-vuejs?branch=master)
 [![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/jonashackt/spring-boot-vuejs/blob/master/LICENSE)
 
-![localhost-first-run](https://github.com/jonashackt/spring-boot-vuejs/blob/master/localhost-first-run.png)
+![localhost-first-run](screenshots/localhost-first-run.png)
 
 A live deployment is available on Heroku: https://spring-boot-vuejs.herokuapp.com
 
@@ -20,7 +20,7 @@ Key points are:
 * Angular 2 isn’t the way to go, if you know version 1 (complete re-write, only with Typescript, loss of many of 1’s advantages, Angular 4 is coming)
 * React  (facebookish problems (licence), need to choose btw. Redux & MObX, harder learning curve, slower coding speed)
 
-![comparison-angular-react-vuejs](https://github.com/jonashackt/spring-boot-vuejs/blob/master/comparison-angular-react-vuejs.png)
+![comparison-angular-react-vuejs](screenshots/comparison-angular-react-vuejs.png)
 
 And the [introduction phrase](https://vuejs.org/v2/guide/index.html) sounds really great:
 
@@ -122,7 +122,7 @@ vue init webpack frontend
 
 This will initialize a project skeleton for Vue.js in /frontend directory - it therefore asks some questions in the cli:
 
-![vuejs-cli-init](https://github.com/jonashackt/spring-boot-vuejs/blob/master/vuejs-cli-init.png)
+![vuejs-cli-init](screenshots/vuejs-cli-init.png)
 
 If you want to learn more about installing Vue.js, head over to the docs: https://vuejs.org/v2/guide/installation.html
 
@@ -225,7 +225,13 @@ That’s it!
 
 Install vue-devtools Browser extension https://github.com/vuejs/vue-devtools and get better feedback, e.g. in Chrome:
 
-![vue-devtools-chrome](https://github.com/jonashackt/spring-boot-vuejs/blob/master/vue-devtools-chrome.png)
+![vue-devtools-chrome](screenshots/vue-devtools-chrome.png)
+
+## IntelliJ integration
+
+There´s a blog post: https://blog.jetbrains.com/webstorm/2018/01/working-with-vue-js-in-webstorm/
+
+Escpecially the `New... Vue Component` looks quite cool :)
 
 
 
@@ -409,7 +415,7 @@ The docs contain all the possible components: https://bootstrap-vue.js.org/docs/
 
 See some elements, when you go to http://localhost:8080/#/bootstrap/ - this should look like this:
 
-![bootstrap-styled-vuejs](https://github.com/jonashackt/spring-boot-vuejs/blob/master/bootstrap-styled-vuejs.png)
+![bootstrap-styled-vuejs](screenshots/bootstrap-styled-vuejs.png)
 
 A good discussion about various UI component frameworks: http://vuetips.com/bootstrap
 
@@ -420,11 +426,11 @@ As you may already read, the app is automatically deployed to Heroku on https://
 
 The project makes use of the nice Heroku Pipelines feature, where we do get a full Continuous Delivery pipeline with nearly no effort:
 
-![heroku-pipeline](heroku-pipeline.png)
+![heroku-pipeline](screenshots/heroku-pipeline.png)
 
 And with the help of super cool `Automatic deploys`, we have our TravisCI build our app after every push to master - and with the checkbox set to `Wait for CI to pass before deploy` - the app gets also automatically deployed to Heroku - but only, if the TravisCI (and Coveralls...) build succeeded:
 
-![heroku-automatic-deploys](heroku-automatic-deploys.png)
+![heroku-automatic-deploys](screenshots/heroku-automatic-deploys.png)
 
 You only have to connect your Heroku app to GitHub, activate Automatic deploys and set the named checkbox. That´s everything!
 
@@ -444,6 +450,222 @@ export const AXIOS = axios.create({
   baseURL: `/api`
 })
 ```
+
+
+
+## Testing 
+
+### Install vue-test-utils
+
+https://github.com/vuejs/vue-test-utils
+
+`npm install --save-dev @vue/test-utils`
+
+### Jest
+
+Jest is a new shooting star at the sky of JavaScript testing frameworks: https://facebook.github.io/jest/
+
+Intro-Blogpost: https://blog.codecentric.de/2017/06/javascript-unit-tests-sind-schwer-aufzusetzen-keep-calm-use-jest/
+
+Examples: https://github.com/vuejs/vue-test-utils-jest-example
+
+Vue.js Jest Docs: https://vue-test-utils.vuejs.org/guides/#testing-single-file-components-with-jest
+
+A Jest Unittest looks like [Hello.test.js](frontend/test/components/Hello.test.js):
+
+```
+import { shallowMount } from '@vue/test-utils';
+import Hello from '@/components/Hello'
+
+describe('Hello.vue', () => {
+  it('should render correct hello message', () => {
+    // Given
+    const hellowrapped = shallowMount(Hello, {
+      propsData: { hellomsg: 'Welcome to your Jest powered Vue.js App' },
+      stubs: ['router-link', 'router-view']
+    });
+
+    // When
+    const contentH1 = hellowrapped.find('h1');
+
+    // Then
+    expect(contentH1.text()).toEqual('Welcome to your Jest powered Vue.js App');
+  })
+})
+```
+
+To pass Component props while using Vue.js Router, see https://stackoverflow.com/a/37940045/4964553.
+
+How to test components with `router-view` or `router-link` https://vue-test-utils.vuejs.org/guides/using-with-vue-router.html#testing-components-that-use-router-link-or-router-view.
+
+The test files itself could be named `xyz.spec.js` or `xyz.test.js` - and could reside nearly everywhere in the project.
+
+##### Jest Configuration  
+
+The Jest run-configuration is done inside the [package.json](frontend/package.json):
+
+```
+"scripts": {
+    ...
+    "unit": "jest --config test/unit/jest.conf.js --coverage",
+    ....
+  },
+```
+
+Jest itself is configured inside [frontend/test/unit/jest.conf.js](frontend/test/unit/jest.conf.js)
+
+##### Run Unit tests
+
+`npm run unit` - that´ll look like:
+
+![unittestrun-jest](screenshots/unittestrun-jest.png)
+
+
+##### Integration in Maven build (via frontend-maven-plugin)
+
+Inside the [pom.xml](pom.xml) we always automatically run the Jest Unittests with the following configuration:
+
+```
+<!-- Run Unit tests -->
+  <execution>
+    <id>npm run test</id>
+    <goals>
+      <goal>npm</goal>
+    </goals>
+    <!-- optional: default phase is "generate-resources" -->
+    <phase>test</phase>
+    <!-- Optional configuration which provides for running any npm command -->
+    <configuration>
+      <arguments>run unit</arguments>
+    </configuration>
+  </execution>
+```
+
+This will integrate the Jest Unittests right after the npm run build command, just you are used to in Java-style projects:
+
+![maven-integration-jest-unittests](screenshots/maven-integration-jest-unittests.png)
+
+And don´t mind the depitction with `ERROR` - this is just a known bug: https://github.com/eirslett/frontend-maven-plugin/issues/584
+
+
+##### Run Jest tests inside IntelliJ
+
+First we need to install the NodeJS IntelliJ plugin (https://www.jetbrains.com/help/idea/developing-node-js-applications.html), which isn´t bundled with IntelliJ by default:
+
+![nodejs-intellij-plugin](screenshots/nodejs-intellij-plugin.png)
+
+IntelliJ Jest integration docs: https://www.jetbrains.com/help/idea/running-unit-tests-on-jest.html
+
+The automatic search inside the [package.json](frontend/package.json) for the Jest configuration file [jest.conf.js](frontend/test/unit/jest.conf.js) doesn´t seem to work right now, so we have to manually configure the `scripts` part of:
+
+```
+"unit": "jest --config test/unit/jest.conf.js --coverage",
+```
+
+inside the Run Configuration under `Jest` and `All Tests`:
+
+![configure-jest-inside-intellij](screenshots/configure-jest-inside-intellij.png)
+
+Now, when running `All Tests`, this should look like you´re already used to Unittest IntelliJ-Integration:
+
+![run-jest-inside-intellij](screenshots/run-jest-inside-intellij.png)
+
+ 
+
+## End-2-End (E2E) tests with Nightwatch
+
+Great tooling: http://nightwatchjs.org/ - Nightwatch controls WebDriver / Selenium standalone Server in own childprocess and abstracts from those, providing a handy DSL for Acceptance tests:
+
+Docs: http://nightwatchjs.org/gettingstarted/#browser-drivers-setup
+
+![http://nightwatchjs.org/img/operation.png](http://nightwatchjs.org/img/operation.png)
+
+Nightwatch is configured through the [nightwatch.conf.js](/frontend/test/e2e/nightwatch.conf.js). Watch out for breaking changes in 1.x: https://github.com/nightwatchjs/nightwatch/wiki/Migrating-to-Nightwatch-1.0
+
+More options could be found in the docs: http://nightwatchjs.org/gettingstarted/#settings-file
+
+
+#### Write Nightwatch tests
+
+An example Nightwatch test is provided in [HelloAcceptance.test.js](/frontend/test/e2e/specs/HelloAcceptance.test.js):
+
+```
+module.exports = {
+  'default e2e tests': function (browser) {
+    // automatically uses dev Server port from /config.index.js
+    // default: http://localhost:8080
+    // see nightwatch.conf.js
+    const devServer = browser.globals.devServerURL
+
+    browser
+      .url(devServer)
+      .waitForElementVisible('#app', 5000)
+      .assert.elementPresent('.hello')
+      .assert.containsText('h1', 'Welcome to your Vue.js powered Spring Boot App')
+      .assert.elementCount('img', 1)
+      .end()
+  }
+}
+
+```
+
+##### Run E2E Tests
+
+`npm run e2e`
+
+##### Current Problem with npm audit (see [NPM Security](#npm-security))
+
+With 1.0.6, the following error occurs after an `npm run e2e`:
+
+```
+OK. 4 assertions passed. (8.625s)
+   The "path" argument must be of type string. Received type object
+       at assertPath (path.js:39:11)
+       at Object.join (path.js:1157:7)
+       at process._tickCallback (internal/process/next_tick.js:68:7)
+```
+
+With the latest 0.9.21 of Nightwatch, this issue is gone. __BUT:__ the the `npm audit` command does find vulnerabilities: 
+
+![nightwatch-npmaudit-vulnerabilities](screenshots/nightwatch-npmaudit-vulnerabilities.png)
+
+And thus the whole build process will brake. The problem are breaking changes in [Nightwatch 1.x](https://github.com/nightwatchjs/nightwatch#nightwatch-v10), that aren´t reflected inside the Vue.js Webpack template so far (they use the latest 0.9.x, which is vulnerable): https://github.com/nightwatchjs/nightwatch/wiki/Migrating-to-Nightwatch-1.0
+
+
+## Run all tests
+
+ `npm test`
+
+
+
+## NPM Security
+
+npm Security - npm@6
+
+https://medium.com/npm-inc/announcing-npm-6-5d0b1799a905
+
+`npm audit`
+
+https://blog.npmjs.org/post/173719309445/npm-audit-identify-and-fix-insecure
+
+Run `npm audit fix` to update the vulnerable packages. Only in situations, where nothing else helps, try `npm audit fix --force` (this will also install braking changes)
+
+https://nodejs.org/en/blog/vulnerability/june-2018-security-releases/
+
+---> __Update NPM regularly__
+
+https://docs.npmjs.com/troubleshooting/try-the-latest-stable-version-of-npm
+
+`npm install -g npm@latest`
+
+---> __Update Packages regularly__
+
+https://docs.npmjs.com/getting-started/updating-local-packages
+
+`npm outdated`
+
+`npm update`
+
 
 
 

@@ -451,6 +451,189 @@ export const AXIOS = axios.create({
 })
 ```
 
+#### Using Heroku´s Postgres as Database for Spring Boot backend and Vue.js frontend
+
+First add [Heroku Postgres database](https://elements.heroku.com/addons/heroku-postgresql) for your Heroku app. 
+
+Then follow these instructions on Stackoverflow to configure all needed Environment variables in Heroku: https://stackoverflow.com/a/49978310/4964553
+
+Mind the addition to the backend´s [pom.xml](backend/pom.xml) described here: https://stackoverflow.com/a/49970142/4964553
+
+Now you´re able to use Spring Data´s magic - all you need is an Interface like [UserRepository.java](backend/src/main/java/de/jonashackt/springbootvuejs/repository/UserRepository.java):
+
+```
+package de.jonashackt.springbootvuejs.repository;
+
+import de.jonashackt.springbootvuejs.domain.User;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
+public interface UserRepository extends CrudRepository<User, Long> {
+
+    List<User> findByLastName(@Param("lastname") String lastname);
+
+    List<User> findByFirstName(@Param("firstname") String firstname);
+
+}
+
+```
+
+Now write your Testcases accordingly like [UserRepositoryTest.java](backend/src/test/java/de/jonashackt/springbootvuejs/repository/UserRepositoryTest.java):
+
+```
+package de.jonashackt.springbootvuejs.repository;
+
+import de.jonashackt.springbootvuejs.domain.User;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
+
+import static org.hamcrest.Matchers.contains;
+import static org.junit.Assert.*;
+
+@RunWith(SpringRunner.class)
+@DataJpaTest
+public class UserRepositoryTest {
+
+    @Autowired
+    private TestEntityManager entityManager;
+
+    @Autowired
+    private UserRepository users;
+
+    private User norbertSiegmund = new User("Norbert", "Siegmund");
+    private User jonasHecht = new User("Jonas", "Hecht");
+
+    @Before
+    public void fillSomeDataIntoOurDb() {
+        // Add new Users to Database
+        entityManager.persist(norbertSiegmund);
+        entityManager.persist(jonasHecht);
+    }
+
+    @Test
+    public void testFindByLastName() throws Exception {
+        // Search for specific User in Database according to lastname
+        List<User> usersWithLastNameSiegmund = users.findByLastName("Siegmund");
+
+        assertThat(usersWithLastNameSiegmund, contains(norbertSiegmund));
+    }
+
+
+    @Test
+    public void testFindByFirstName() throws Exception {
+        // Search for specific User in Database according to firstname
+        List<User> usersWithFirstNameJonas = users.findByFirstName("Jonas");
+
+        assertThat(usersWithFirstNameJonas, contains(jonasHecht));
+    }
+
+}
+```
+
+Then include these functionality into your REST-API - see [BackendController.java](backend/src/main/java/de/jonashackt/springbootvuejs/controller/BackendController.java):
+
+```
+    @RequestMapping(path = "/user", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    public @ResponseBody long addNewUser (@RequestParam String firstName, @RequestParam String lastName) {
+        User user = new User(firstName, lastName);
+        userRepository.save(user);
+
+        LOG.info(user.toString() + " successfully saved into DB");
+
+        return user.getId();
+    }
+```
+ 
+and use it from the Vue.js frontend, see [User.vue](frontend/src/components/User.vue):
+
+```
+<template>
+<div class="user">
+ <h1>Create User</h1>
+
+ <h3>Just some database interaction...</h3>
+
+ <input type="text" v-model="user.firstName" placeholder="first name">
+ <input type="text" v-model="user.lastName" placeholder="last name">
+
+ <button @click="createUser()">Create User</button>
+
+ <div v-if="showResponse"><h6>User created with Id: {{ response }}</h6></div>
+
+ <button v-if="showResponse" @click="retrieveUser()">Retrieve user {{user.id}} data from database</button>
+
+ <h4 v-if="showRetrievedUser">Retrieved User {{retrievedUser.firstName}} {{retrievedUser.lastName}}</h4>
+
+</div>
+</template>
+
+<script>
+// import axios from 'axios'
+import {AXIOS} from './http-common'
+
+export default {
+ name: 'user',
+
+ data () {
+   return {
+     response: [],
+     errors: [],
+     user: {
+       lastName: '',
+       firstName: '',
+       id: 0
+     },
+     showResponse: false,
+     retrievedUser: {},
+     showRetrievedUser: false
+   }
+ },
+ methods: {
+   // Fetches posts when the component is created.
+   createUser () {
+     var params = new URLSearchParams()
+     params.append('firstName', this.user.firstName)
+     params.append('lastName', this.user.lastName)
+
+     AXIOS.post(`/user`, params)
+       .then(response => {
+         // JSON responses are automatically parsed.
+         this.response = response.data
+         this.user.id = response.data
+         console.log(response.data)
+         this.showResponse = true
+       })
+       .catch(e => {
+         this.errors.push(e)
+       })
+   },
+   retrieveUser () {
+     AXIOS.get(`/user/` + this.user.id)
+       .then(response => {
+         // JSON responses are automatically parsed.
+         this.retrievedUser = response.data
+         console.log(response.data)
+         this.showRetrievedUser = true
+       })
+       .catch(e => {
+         this.errors.push(e)
+       })
+   }
+ }
+}
+
+</script>
+```
 
 
 ## Testing 

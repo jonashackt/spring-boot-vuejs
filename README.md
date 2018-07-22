@@ -8,7 +8,7 @@
 
 A live deployment is available on Heroku: https://spring-boot-vuejs.herokuapp.com
 
-There´s also a blog post about this project available here: https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/
+There's also a blog post about this project available here: https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/
 
 ## In Search of a new Webfrontend-Framework after 2 Years of absence...
 
@@ -229,7 +229,7 @@ Install vue-devtools Browser extension https://github.com/vuejs/vue-devtools and
 
 ## IntelliJ integration
 
-There´s a blog post: https://blog.jetbrains.com/webstorm/2018/01/working-with-vue-js-in-webstorm/
+There's a blog post: https://blog.jetbrains.com/webstorm/2018/01/working-with-vue-js-in-webstorm/
 
 Escpecially the `New... Vue Component` looks quite cool :)
 
@@ -359,7 +359,7 @@ Now all calls to resources behind `api/` will return the correct CORS headers.
 
 #### But STOP! Webpack & Vue have something much smarter for us to help us with SOP!
 
-Thanks to my colleague [Daniel](https://www.codecentric.de/team/dre/) who pointed me to the nice proxying feature of Webpack dev-server, we don´t need to configure all the complex CORS stuff anymore!
+Thanks to my colleague [Daniel](https://www.codecentric.de/team/dre/) who pointed me to the nice proxying feature of Webpack dev-server, we don't need to configure all the complex CORS stuff anymore!
 
 According to [Vue.js Webpack Template](https://vuejs-templates.github.io/webpack/) the only thing we need to [configure is a Proxy](https://vuejs-templates.github.io/webpack/proxy.html) for our webpack dev-server requests. This could be done easily in the [frontend/config/index.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/index.js) inside `dev.proxyTable`: 
 
@@ -377,7 +377,7 @@ dev: {
 
 With this configuration in place, the webpack dev-server uses the [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware), which is a really handy component, to proxy all frontend-requests from http://localhost:8080 --> http://localhost:8088 - incl. Changing the Origin accordingly.
 
-This is used in the [frontend/build/dev-server.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/build/dev-server.js) to configure the proxyMiddleware (you don´t need to change something here!):
+This is used in the [frontend/build/dev-server.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/build/dev-server.js) to configure the proxyMiddleware (you don't need to change something here!):
 
 ```js
 // proxy api requests
@@ -432,7 +432,7 @@ And with the help of super cool `Automatic deploys`, we have our TravisCI build 
 
 ![heroku-automatic-deploys](screenshots/heroku-automatic-deploys.png)
 
-You only have to connect your Heroku app to GitHub, activate Automatic deploys and set the named checkbox. That´s everything!
+You only have to connect your Heroku app to GitHub, activate Automatic deploys and set the named checkbox. That's everything!
 
 
 #### Accessing Spring Boot REST backend on Heroku from Vue.js frontend
@@ -451,15 +451,15 @@ export const AXIOS = axios.create({
 })
 ```
 
-#### Using Heroku´s Postgres as Database for Spring Boot backend and Vue.js frontend
+#### Using Heroku's Postgres as Database for Spring Boot backend and Vue.js frontend
 
 First add [Heroku Postgres database](https://elements.heroku.com/addons/heroku-postgresql) for your Heroku app. 
 
 Then follow these instructions on Stackoverflow to configure all needed Environment variables in Heroku: https://stackoverflow.com/a/49978310/4964553
 
-Mind the addition to the backend´s [pom.xml](backend/pom.xml) described here: https://stackoverflow.com/a/49970142/4964553
+Mind the addition to the backend's [pom.xml](backend/pom.xml) described here: https://stackoverflow.com/a/49970142/4964553
 
-Now you´re able to use Spring Data´s magic - all you need is an Interface like [UserRepository.java](backend/src/main/java/de/jonashackt/springbootvuejs/repository/UserRepository.java):
+Now you're able to use Spring Data's magic - all you need is an Interface like [UserRepository.java](backend/src/main/java/de/jonashackt/springbootvuejs/repository/UserRepository.java):
 
 ```java
 package de.jonashackt.springbootvuejs.repository;
@@ -699,7 +699,7 @@ Jest itself is configured inside [frontend/test/unit/jest.conf.js](frontend/test
 
 ##### Run Unit tests
 
-`npm run unit` - that´ll look like:
+`npm run unit` - that'll look like:
 
 ![unittestrun-jest](screenshots/unittestrun-jest.png)
 
@@ -728,18 +728,18 @@ This will integrate the Jest Unittests right after the npm run build command, ju
 
 ![maven-integration-jest-unittests](screenshots/maven-integration-jest-unittests.png)
 
-And don´t mind the depitction with `ERROR` - this is just a known bug: https://github.com/eirslett/frontend-maven-plugin/issues/584
+And don't mind the depitction with `ERROR` - this is just a known bug: https://github.com/eirslett/frontend-maven-plugin/issues/584
 
 
 ##### Run Jest tests inside IntelliJ
 
-First we need to install the NodeJS IntelliJ plugin (https://www.jetbrains.com/help/idea/developing-node-js-applications.html), which isn´t bundled with IntelliJ by default:
+First we need to install the NodeJS IntelliJ plugin (https://www.jetbrains.com/help/idea/developing-node-js-applications.html), which isn't bundled with IntelliJ by default:
 
 ![nodejs-intellij-plugin](screenshots/nodejs-intellij-plugin.png)
 
 IntelliJ Jest integration docs: https://www.jetbrains.com/help/idea/running-unit-tests-on-jest.html
 
-The automatic search inside the [package.json](frontend/package.json) for the Jest configuration file [jest.conf.js](frontend/test/unit/jest.conf.js) doesn´t seem to work right now, so we have to manually configure the `scripts` part of:
+The automatic search inside the [package.json](frontend/package.json) for the Jest configuration file [jest.conf.js](frontend/test/unit/jest.conf.js) doesn't seem to work right now, so we have to manually configure the `scripts` part of:
 
 ```
 "unit": "jest --config test/unit/jest.conf.js --coverage",
@@ -749,7 +749,7 @@ inside the Run Configuration under `Jest` and `All Tests`:
 
 ![configure-jest-inside-intellij](screenshots/configure-jest-inside-intellij.png)
 
-Now, when running `All Tests`, this should look like you´re already used to Unittest IntelliJ-Integration:
+Now, when running `All Tests`, this should look like you're already used to Unittest IntelliJ-Integration:
 
 ![run-jest-inside-intellij](screenshots/run-jest-inside-intellij.png)
 
@@ -812,7 +812,7 @@ With the latest 0.9.21 of Nightwatch, this issue is gone. __BUT:__ the the `npm 
 
 ![nightwatch-npmaudit-vulnerabilities](screenshots/nightwatch-npmaudit-vulnerabilities.png)
 
-And thus the whole build process will brake. The problem are breaking changes in [Nightwatch 1.x](https://github.com/nightwatchjs/nightwatch#nightwatch-v10), that aren´t reflected inside the Vue.js Webpack template so far (they use the latest 0.9.x, which is vulnerable): https://github.com/nightwatchjs/nightwatch/wiki/Migrating-to-Nightwatch-1.0
+And thus the whole build process will brake. The problem are breaking changes in [Nightwatch 1.x](https://github.com/nightwatchjs/nightwatch#nightwatch-v10), that aren't reflected inside the Vue.js Webpack template so far (they use the latest 0.9.x, which is vulnerable): https://github.com/nightwatchjs/nightwatch/wiki/Migrating-to-Nightwatch-1.0
 
 
 ## Run all tests

@@ -77,7 +77,7 @@ Go to https://start.spring.io/ and initialize an Spring Boot app with `Web` and 
 
 Customize pom to copy content from Frontend for serving it later with the embedded Tomcat:
 
-```
+```xml
 <build>
   <plugins>
     <plugin>
@@ -130,7 +130,7 @@ If you want to learn more about installing Vue.js, head over to the docs: https:
 
 If you’re a backend dev like me, this Maven plugin here https://github.com/eirslett/frontend-maven-plugin is a great help for you - because, if you know Maven, that’s everything you need! Just add this plugin to the frontend’s `pom.xml`:
 
-```
+```xml
 <build>
     <plugins>
         <plugin>
@@ -245,7 +245,7 @@ npm install axios --save
 
 Calling a REST service with Axios is simple. Go into the script area of your component, e.g. Hello.vue and add:
 
-```
+```js
 import axios from 'axios'
 
 data () {
@@ -270,7 +270,7 @@ callRestService () {
 
 In your template area you can now request a service call via calling `callRestService()` method and access `response` data:
 
-```
+```html
 <button class=”Search__button” @click="callRestService()">CALL Spring Boot REST backend service</button>
 
 <h3>{{ response }}</h3>
@@ -286,7 +286,7 @@ We need to use Cross Origin Resource Sharing Protocol (CORS) to handle that (rea
 
 Create a central Axios configuration file called `http-commons.js`:
 
-```
+```js
 import axios from 'axios'
 
 export const AXIOS = axios.create({
@@ -300,7 +300,7 @@ export const AXIOS = axios.create({
 Here we allow requests to the base URL of our Spring Boot App on port 8088 to be accessable from 8080.
 
 Now we could use this configuration inside our Components, e.g. in `Hello.vue`:
-```
+```js
 import {AXIOS} from './http-common'
 
 export default {
@@ -331,7 +331,7 @@ export default {
 
 Additionally, we need to configure our Spring Boot backend to answer with the appropriate CORS HTTP Headers in it’s responses (theres a good tutorial here: https://spring.io/guides/gs/rest-service-cors/). Therefore we add the annotation `@CrossOrigin` to our BackendController:
 
-```
+```java
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping(path = "/hello")
 public @ResponseBody String sayHello() {
@@ -342,7 +342,7 @@ public @ResponseBody String sayHello() {
 
 Now our Backend will responde CORS-enabled and accepts requests from 8080. But as this only enables CORS on one method, we have to repeatately add this annotation to all of our REST endpoints, which isn’t a nice style. We should use a global solution to allow access with CORS enabled to all of our REST resources. This could be done in the `SpringBootVuejsApplication.class`:
 
-```
+```java
 // Enable CORS globally
 @Bean
 public WebMvcConfigurer corsConfigurer() {
@@ -363,7 +363,7 @@ Thanks to my colleague [Daniel](https://www.codecentric.de/team/dre/) who pointe
 
 According to [Vue.js Webpack Template](https://vuejs-templates.github.io/webpack/) the only thing we need to [configure is a Proxy](https://vuejs-templates.github.io/webpack/proxy.html) for our webpack dev-server requests. This could be done easily in the [frontend/config/index.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/index.js) inside `dev.proxyTable`: 
 
-```
+```js
 dev: {
     ...
     proxyTable: {
@@ -379,7 +379,7 @@ With this configuration in place, the webpack dev-server uses the [http-proxy-mi
 
 This is used in the [frontend/build/dev-server.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/build/dev-server.js) to configure the proxyMiddleware (you don´t need to change something here!):
 
-```
+```js
 // proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
   var options = proxyTable[context]
@@ -461,7 +461,7 @@ Mind the addition to the backend´s [pom.xml](backend/pom.xml) described here: h
 
 Now you´re able to use Spring Data´s magic - all you need is an Interface like [UserRepository.java](backend/src/main/java/de/jonashackt/springbootvuejs/repository/UserRepository.java):
 
-```
+```java
 package de.jonashackt.springbootvuejs.repository;
 
 import de.jonashackt.springbootvuejs.domain.User;
@@ -482,7 +482,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 Now write your Testcases accordingly like [UserRepositoryTest.java](backend/src/test/java/de/jonashackt/springbootvuejs/repository/UserRepositoryTest.java):
 
-```
+```java
 package de.jonashackt.springbootvuejs.repository;
 
 import de.jonashackt.springbootvuejs.domain.User;
@@ -541,7 +541,7 @@ public class UserRepositoryTest {
 
 Then include these functionality into your REST-API - see [BackendController.java](backend/src/main/java/de/jonashackt/springbootvuejs/controller/BackendController.java):
 
-```
+```java
     @RequestMapping(path = "/user", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody long addNewUser (@RequestParam String firstName, @RequestParam String lastName) {
@@ -556,7 +556,7 @@ Then include these functionality into your REST-API - see [BackendController.jav
  
 and use it from the Vue.js frontend, see [User.vue](frontend/src/components/User.vue):
 
-```
+```html
 <template>
 <div class="user">
  <h1>Create User</h1>
@@ -656,7 +656,7 @@ Vue.js Jest Docs: https://vue-test-utils.vuejs.org/guides/#testing-single-file-c
 
 A Jest Unittest looks like [Hello.test.js](frontend/test/components/Hello.test.js):
 
-```
+```js
 import { shallowMount } from '@vue/test-utils';
 import Hello from '@/components/Hello'
 
@@ -687,7 +687,7 @@ The test files itself could be named `xyz.spec.js` or `xyz.test.js` - and could 
 
 The Jest run-configuration is done inside the [package.json](frontend/package.json):
 
-```
+```js
 "scripts": {
     ...
     "unit": "jest --config test/unit/jest.conf.js --coverage",
@@ -708,7 +708,7 @@ Jest itself is configured inside [frontend/test/unit/jest.conf.js](frontend/test
 
 Inside the [pom.xml](pom.xml) we always automatically run the Jest Unittests with the following configuration:
 
-```
+```xml
 <!-- Run Unit tests -->
   <execution>
     <id>npm run test</id>
@@ -772,7 +772,7 @@ More options could be found in the docs: http://nightwatchjs.org/gettingstarted/
 
 An example Nightwatch test is provided in [HelloAcceptance.test.js](/frontend/test/e2e/specs/HelloAcceptance.test.js):
 
-```
+```js
 module.exports = {
   'default e2e tests': function (browser) {
     // automatically uses dev Server port from /config.index.js

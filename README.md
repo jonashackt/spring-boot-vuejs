@@ -14,23 +14,23 @@
 
 A live deployment is available on Heroku: https://spring-boot-vuejs.herokuapp.com
 
-There´s also a blog post about this project available here: https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/
+There's also a blog post about this project available here: https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/
 
-## In Search of a new Webfrontend-Framework after 2 Years of absence...
+## In Search of a new Web Frontend-Framework after 2 Years of absence...
 
-Well I’am not a Frontend developer. I’am more like playing around with Spring Boot, Web- & Microservices & Docker, automating things with Ansible and Docker, Scaling things with Spring Cloud, Docker Compose and Traefik... And the only GUIs I’am building are the "new JS framework in town"-app every two years... :) So the last one was Angular 1 - and it felt, as it was a good choice! I loved the coding experience and after a day of training, I felt able to write awesome Frontends...
+Well, I’m not a Frontend developer. I’m more like playing around with Spring Boot, Web- & Microservices & Docker, automating things with Ansible and Docker, Scaling things with Spring Cloud, Docker Compose, and Traefik... And the only GUIs I’m building are the "new JS framework in town"-app every two years... :) So the last one was Angular 1 - and it felt, as it was a good choice! I loved the coding experience and after a day of training, I felt able to write awesome Frontends...
 
-But now we’re 2 years later and I heard from afar, that there was a complete rewrite of Angular (2), a new kid in town from Facebook (React) and lots of ES201x stuff and dependency managers like bower and Co. So I’am now in the new 2-year-cycle of trying to cope up again - and so glad I found this article: https://medium.com/reverdev/why-we-moved-from-angular-2-to-vue-js-and-why-we-didnt-choose-react-ef807d9f4163
+But now we’re 2 years later and I heard from afar, that there was a complete rewrite of Angular (2), a new kid in town from Facebook (React) and lots of ES201x stuff and dependency managers like bower and Co. So I’m now in the new 2-year-cycle of trying to cope up again - and so glad I found this article: https://medium.com/reverdev/why-we-moved-from-angular-2-to-vue-js-and-why-we-didnt-choose-react-ef807d9f4163
 
 Key points are:
-* Angular 2 isn’t the way to go, if you know version 1 (complete re-write, only with Typescript, loss of many of 1’s advantages, Angular 4 is coming)
+* Angular 2 isn’t the way to go if you know version 1 (complete re-write, only with Typescript, loss of many of 1’s advantages, Angular 4 is coming)
 * React  (facebookish problems (licence), need to choose btw. Redux & MObX, harder learning curve, slower coding speed)
 
 ![comparison-angular-react-vuejs](screenshots/comparison-angular-react-vuejs.png)
 
 And the [introduction phrase](https://vuejs.org/v2/guide/index.html) sounds really great:
 
-> Vue (pronounced /vjuː/, like view) is a progressive framework for building user interfaces. Unlike other monolithic frameworks, Vue is designed from the ground up to be incrementally adoptable. The core library is focused on the view layer only, and is very easy to pick up and integrate with other libraries or existing projects. On the other hand, Vue is also perfectly capable of powering sophisticated Single-Page Applications when used in combination with modern tooling and supporting libraries.
+> Vue (pronounced /vjuː/, like view) is a progressive framework for building user interfaces. Unlike other monolithic frameworks, Vue is designed from the ground up to be incrementally adoptable. The core library is focused on the view layer only and is very easy to pick up and integrate with other libraries or existing projects. On the other hand, Vue is also perfectly capable of powering sophisticated Single-Page Applications when used in combination with modern tooling and supporting libraries.
 
 So I think, it could be a good idea to invest a day or so into Vue.js. Let’s have a look here!
 
@@ -79,11 +79,11 @@ spring-boot-vuejs
 
 ## Backend
 
-Go to https://start.spring.io/ and initialize an Spring Boot app with `Web` and `Actuator`. Place the zip’s contents in the backend folder.
+Go to https://start.spring.io/ and initialize a Spring Boot app with `Web` and `Actuator`. Place the zip’s contents in the backend folder.
 
 Customize pom to copy content from Frontend for serving it later with the embedded Tomcat:
 
-```
+```xml
 <build>
   <plugins>
     <plugin>
@@ -126,7 +126,7 @@ Customize pom to copy content from Frontend for serving it later with the embedd
 vue init webpack frontend
 ```
 
-This will initialize a project skeleton for Vue.js in /frontend directory - it therefore asks some questions in the cli:
+This will initialize a project skeleton for Vue.js in /frontend directory - it, therefore, asks some questions in the cli:
 
 ![vuejs-cli-init](screenshots/vuejs-cli-init.png)
 
@@ -136,7 +136,7 @@ If you want to learn more about installing Vue.js, head over to the docs: https:
 
 If you’re a backend dev like me, this Maven plugin here https://github.com/eirslett/frontend-maven-plugin is a great help for you - because, if you know Maven, that’s everything you need! Just add this plugin to the frontend’s `pom.xml`:
 
-```
+```xml
 <build>
     <plugins>
         <plugin>
@@ -185,7 +185,7 @@ If you’re a backend dev like me, this Maven plugin here https://github.com/eir
 
 ### tell Webpack to output the dist/ contents to target/
 
-Commonly, node projects will create a dist/ directory for final builds which contains the minified source code of the web app - but we want it all in `/target`. Therefore go to `frontend/config/index.js` and replace the following lines:
+Commonly, node projects will create for final build a `dist/` directory which contains the minified source code of the web app - but we want it all in `/target`. Therefore go to `frontend/config/index.js` and replace the following lines:
 
 ```
 index: path.resolve(__dirname, '../dist/index.html'),
@@ -235,15 +235,15 @@ Install vue-devtools Browser extension https://github.com/vuejs/vue-devtools and
 
 ## IntelliJ integration
 
-There´s a blog post: https://blog.jetbrains.com/webstorm/2018/01/working-with-vue-js-in-webstorm/
+There's a blog post: https://blog.jetbrains.com/webstorm/2018/01/working-with-vue-js-in-webstorm/
 
-Escpecially the `New... Vue Component` looks quite cool :)
+Especially the `New... Vue Component` looks quite cool :)
 
 
 
 ## HTTP calls from Vue.js to (Spring Boot) REST backend
 
-Prior to Vue 2.0, there was a build in soultion (vue-resource). But from 2.0 on, 3rd party libraries are necessary. One of them is [Axios](https://github.com/mzabriskie/axios) - also see blog post https://alligator.io/vuejs/rest-api-axios/
+Prior to Vue 2.0, there was a build in solution (vue-resource). But from 2.0 on, 3rd party libraries are necessary. One of them is [Axios](https://github.com/mzabriskie/axios) - also see blog post https://alligator.io/vuejs/rest-api-axios/
 
 ```
 npm install axios --save
@@ -251,7 +251,7 @@ npm install axios --save
 
 Calling a REST service with Axios is simple. Go into the script area of your component, e.g. Hello.vue and add:
 
-```
+```js
 import axios from 'axios'
 
 data () {
@@ -276,7 +276,7 @@ callRestService () {
 
 In your template area you can now request a service call via calling `callRestService()` method and access `response` data:
 
-```
+```html
 <button class=”Search__button” @click="callRestService()">CALL Spring Boot REST backend service</button>
 
 <h3>{{ response }}</h3>
@@ -284,15 +284,15 @@ In your template area you can now request a service call via calling `callRestSe
 
 ### The problem with SOP
 
-Single-Origin Policy (SOP) could be a problem, if we want to develop our app. Because the webpack-dev-server runs on http://localhost:8080 and our Spring Boot REST backend on http://localhost:8088.
+Single-Origin Policy (SOP) could be a problem if we want to develop our app. Because the webpack-dev-server runs on http://localhost:8080 and our Spring Boot REST backend on http://localhost:8088.
 
-We need to use Cross Origin Resource Sharing Protocol (CORS) to handle that (read more background info about CORS here https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)
+We need to use Cross-Origin Resource Sharing Protocol (CORS) to handle that (read more background info about CORS here https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)
 
 #### Enabling Axios CORS support
 
 Create a central Axios configuration file called `http-commons.js`:
 
-```
+```js
 import axios from 'axios'
 
 export const AXIOS = axios.create({
@@ -303,10 +303,10 @@ export const AXIOS = axios.create({
 })
 ```
 
-Here we allow requests to the base URL of our Spring Boot App on port 8088 to be accessable from 8080.
+Here we allow requests to the base URL of our Spring Boot App on port 8088 to be accessible from 8080.
 
 Now we could use this configuration inside our Components, e.g. in `Hello.vue`:
-```
+```js
 import {AXIOS} from './http-common'
 
 export default {
@@ -335,9 +335,9 @@ export default {
 
 #### Enabling Spring Boot CORS support
 
-Additionally, we need to configure our Spring Boot backend to answer with the appropriate CORS HTTP Headers in it’s responses (theres a good tutorial here: https://spring.io/guides/gs/rest-service-cors/). Therefore we add the annotation `@CrossOrigin` to our BackendController:
+Additionally, we need to configure our Spring Boot backend to answer with the appropriate CORS HTTP Headers in its responses (there's a good tutorial here: https://spring.io/guides/gs/rest-service-cors/). Therefore we add the annotation `@CrossOrigin` to our BackendController:
 
-```
+```java
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping(path = "/hello")
 public @ResponseBody String sayHello() {
@@ -346,9 +346,9 @@ public @ResponseBody String sayHello() {
 }
 ```
 
-Now our Backend will responde CORS-enabled and accepts requests from 8080. But as this only enables CORS on one method, we have to repeatately add this annotation to all of our REST endpoints, which isn’t a nice style. We should use a global solution to allow access with CORS enabled to all of our REST resources. This could be done in the `SpringBootVuejsApplication.class`:
+Now our Backend will respond CORS-enabled and will accept requests from 8080. But as this only enables CORS on one method, we have to repeatedly add this annotation to all of our REST endpoints, which isn’t a nice style. We should use a global solution to allow access with CORS enabled to all of our REST resources. This could be done in the `SpringBootVuejsApplication.class`:
 
-```
+```java
 // Enable CORS globally
 @Bean
 public WebMvcConfigurer corsConfigurer() {
@@ -365,11 +365,11 @@ Now all calls to resources behind `api/` will return the correct CORS headers.
 
 #### But STOP! Webpack & Vue have something much smarter for us to help us with SOP!
 
-Thanks to my colleague [Daniel](https://www.codecentric.de/team/dre/) who pointed me to the nice proxying feature of Webpack dev-server, we don´t need to configure all the complex CORS stuff anymore!
+Thanks to my colleague [Daniel](https://www.codecentric.de/team/dre/) who pointed me to the nice proxying feature of Webpack dev-server, we don't need to configure all the complex CORS stuff anymore!
 
 According to [Vue.js Webpack Template](https://vuejs-templates.github.io/webpack/) the only thing we need to [configure is a Proxy](https://vuejs-templates.github.io/webpack/proxy.html) for our webpack dev-server requests. This could be done easily in the [frontend/config/index.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/index.js) inside `dev.proxyTable`: 
 
-```
+```js
 dev: {
     ...
     proxyTable: {
@@ -383,9 +383,9 @@ dev: {
 
 With this configuration in place, the webpack dev-server uses the [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware), which is a really handy component, to proxy all frontend-requests from http://localhost:8080 --> http://localhost:8088 - incl. Changing the Origin accordingly.
 
-This is used in the [frontend/build/dev-server.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/build/dev-server.js) to configure the proxyMiddleware (you don´t need to change something here!):
+This is used in the [frontend/build/dev-server.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/build/dev-server.js) to configure the proxyMiddleware (you don't need to change something here!):
 
-```
+```js
 // proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
   var options = proxyTable[context]
@@ -438,7 +438,7 @@ And with the help of super cool `Automatic deploys`, we have our TravisCI build 
 
 ![heroku-automatic-deploys](screenshots/heroku-automatic-deploys.png)
 
-You only have to connect your Heroku app to GitHub, activate Automatic deploys and set the named checkbox. That´s everything!
+You only have to connect your Heroku app to GitHub, activate Automatic deploys and set the named checkbox. That's everything!
 
 
 #### Accessing Spring Boot REST backend on Heroku from Vue.js frontend
@@ -449,7 +449,7 @@ Frontend needs to know the Port of our Spring Boot backend API, which is [automa
 
 To access the Heroku set port, we need to use relative paths inside our Vue.js application instead of hard-coded hosts and ports! 
 
-All we need to do, is to configure Axios in such a way inside our [frontend/src/components/http-common.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/src/components/http-common.js):
+All we need to do is to configure Axios in such a way inside our [frontend/src/components/http-common.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/src/components/http-common.js):
 
 ```
 export const AXIOS = axios.create({
@@ -457,17 +457,17 @@ export const AXIOS = axios.create({
 })
 ```
 
-#### Using Heroku´s Postgres as Database for Spring Boot backend and Vue.js frontend
+#### Using Heroku's Postgres as Database for Spring Boot backend and Vue.js frontend
 
-First add [Heroku Postgres database](https://elements.heroku.com/addons/heroku-postgresql) for your Heroku app. 
+First, add [Heroku Postgres database](https://elements.heroku.com/addons/heroku-postgresql) for your Heroku app. 
 
 Then follow these instructions on Stackoverflow to configure all needed Environment variables in Heroku: https://stackoverflow.com/a/49978310/4964553
 
-Mind the addition to the backend´s [pom.xml](backend/pom.xml) described here: https://stackoverflow.com/a/49970142/4964553
+Mind the addition to the backend's [pom.xml](backend/pom.xml) described here: https://stackoverflow.com/a/49970142/4964553
 
-Now you´re able to use Spring Data´s magic - all you need is an Interface like [UserRepository.java](backend/src/main/java/de/jonashackt/springbootvuejs/repository/UserRepository.java):
+Now you're able to use Spring Data's magic - all you need is an Interface like [UserRepository.java](backend/src/main/java/de/jonashackt/springbootvuejs/repository/UserRepository.java):
 
-```
+```java
 package de.jonashackt.springbootvuejs.repository;
 
 import de.jonashackt.springbootvuejs.domain.User;
@@ -488,7 +488,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 Now write your Testcases accordingly like [UserRepositoryTest.java](backend/src/test/java/de/jonashackt/springbootvuejs/repository/UserRepositoryTest.java):
 
-```
+```java
 package de.jonashackt.springbootvuejs.repository;
 
 import de.jonashackt.springbootvuejs.domain.User;
@@ -545,9 +545,9 @@ public class UserRepositoryTest {
 }
 ```
 
-Then include these functionality into your REST-API - see [BackendController.java](backend/src/main/java/de/jonashackt/springbootvuejs/controller/BackendController.java):
+Then include this functionality in your REST-API - see [BackendController.java](backend/src/main/java/de/jonashackt/springbootvuejs/controller/BackendController.java):
 
-```
+```java
     @RequestMapping(path = "/user", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody long addNewUser (@RequestParam String firstName, @RequestParam String lastName) {
@@ -562,7 +562,7 @@ Then include these functionality into your REST-API - see [BackendController.jav
  
 and use it from the Vue.js frontend, see [User.vue](frontend/src/components/User.vue):
 
-```
+```html
 <template>
 <div class="user">
  <h1>Create User</h1>
@@ -652,7 +652,7 @@ https://github.com/vuejs/vue-test-utils
 
 ### Jest
 
-Jest is a new shooting star at the sky of JavaScript testing frameworks: https://facebook.github.io/jest/
+Jest is a new shooting star in the sky of JavaScript testing frameworks: https://facebook.github.io/jest/
 
 Intro-Blogpost: https://blog.codecentric.de/2017/06/javascript-unit-tests-sind-schwer-aufzusetzen-keep-calm-use-jest/
 
@@ -662,7 +662,7 @@ Vue.js Jest Docs: https://vue-test-utils.vuejs.org/guides/#testing-single-file-c
 
 A Jest Unittest looks like [Hello.test.js](frontend/test/components/Hello.test.js):
 
-```
+```js
 import { shallowMount } from '@vue/test-utils';
 import Hello from '@/components/Hello'
 
@@ -693,7 +693,7 @@ The test files itself could be named `xyz.spec.js` or `xyz.test.js` - and could 
 
 The Jest run-configuration is done inside the [package.json](frontend/package.json):
 
-```
+```js
 "scripts": {
     ...
     "unit": "jest --config test/unit/jest.conf.js --coverage",
@@ -705,7 +705,7 @@ Jest itself is configured inside [frontend/test/unit/jest.conf.js](frontend/test
 
 ##### Run Unit tests
 
-`npm run unit` - that´ll look like:
+`npm run unit` - that'll look like:
 
 ![unittestrun-jest](screenshots/unittestrun-jest.png)
 
@@ -714,7 +714,7 @@ Jest itself is configured inside [frontend/test/unit/jest.conf.js](frontend/test
 
 Inside the [pom.xml](pom.xml) we always automatically run the Jest Unittests with the following configuration:
 
-```
+```xml
 <!-- Run Unit tests -->
   <execution>
     <id>npm run test</id>
@@ -734,18 +734,18 @@ This will integrate the Jest Unittests right after the npm run build command, ju
 
 ![maven-integration-jest-unittests](screenshots/maven-integration-jest-unittests.png)
 
-And don´t mind the depitction with `ERROR` - this is just a known bug: https://github.com/eirslett/frontend-maven-plugin/issues/584
+And don't mind the depiction with `ERROR` - this is just a known bug: https://github.com/eirslett/frontend-maven-plugin/issues/584
 
 
 ##### Run Jest tests inside IntelliJ
 
-First we need to install the NodeJS IntelliJ plugin (https://www.jetbrains.com/help/idea/developing-node-js-applications.html), which isn´t bundled with IntelliJ by default:
+First, we need to install the NodeJS IntelliJ plugin (https://www.jetbrains.com/help/idea/developing-node-js-applications.html), which isn't bundled with IntelliJ by default:
 
 ![nodejs-intellij-plugin](screenshots/nodejs-intellij-plugin.png)
 
 IntelliJ Jest integration docs: https://www.jetbrains.com/help/idea/running-unit-tests-on-jest.html
 
-The automatic search inside the [package.json](frontend/package.json) for the Jest configuration file [jest.conf.js](frontend/test/unit/jest.conf.js) doesn´t seem to work right now, so we have to manually configure the `scripts` part of:
+The automatic search inside the [package.json](frontend/package.json) for the Jest configuration file [jest.conf.js](frontend/test/unit/jest.conf.js) doesn't seem to work right now, so we have to manually configure the `scripts` part of:
 
 ```
 "unit": "jest --config test/unit/jest.conf.js --coverage",
@@ -755,7 +755,7 @@ inside the Run Configuration under `Jest` and `All Tests`:
 
 ![configure-jest-inside-intellij](screenshots/configure-jest-inside-intellij.png)
 
-Now, when running `All Tests`, this should look like you´re already used to Unittest IntelliJ-Integration:
+Now, when running `All Tests`, this should look like you're already used to Unittest IntelliJ-Integration:
 
 ![run-jest-inside-intellij](screenshots/run-jest-inside-intellij.png)
 
@@ -763,7 +763,7 @@ Now, when running `All Tests`, this should look like you´re already used to Uni
 
 ## End-2-End (E2E) tests with Nightwatch
 
-Great tooling: http://nightwatchjs.org/ - Nightwatch controls WebDriver / Selenium standalone Server in own childprocess and abstracts from those, providing a handy DSL for Acceptance tests:
+Great tooling: http://nightwatchjs.org/ - Nightwatch controls WebDriver / Selenium standalone Server in own child process and abstracts from those, providing a handy DSL for Acceptance tests:
 
 Docs: http://nightwatchjs.org/gettingstarted/#browser-drivers-setup
 
@@ -778,7 +778,7 @@ More options could be found in the docs: http://nightwatchjs.org/gettingstarted/
 
 An example Nightwatch test is provided in [HelloAcceptance.test.js](/frontend/test/e2e/specs/HelloAcceptance.test.js):
 
-```
+```js
 module.exports = {
   'default e2e tests': function (browser) {
     // automatically uses dev Server port from /config.index.js
@@ -818,7 +818,7 @@ With the latest 0.9.21 of Nightwatch, this issue is gone. __BUT:__ the the `npm 
 
 ![nightwatch-npmaudit-vulnerabilities](screenshots/nightwatch-npmaudit-vulnerabilities.png)
 
-And thus the whole build process will brake. The problem are breaking changes in [Nightwatch 1.x](https://github.com/nightwatchjs/nightwatch#nightwatch-v10), that aren´t reflected inside the Vue.js Webpack template so far (they use the latest 0.9.x, which is vulnerable): https://github.com/nightwatchjs/nightwatch/wiki/Migrating-to-Nightwatch-1.0
+And thus the whole build process will break. The problem is breaking changes in [Nightwatch 1.x](https://github.com/nightwatchjs/nightwatch#nightwatch-v10), that aren't reflected inside the Vue.js Webpack template so far (they use the latest 0.9.x, which is vulnerable): https://github.com/nightwatchjs/nightwatch/wiki/Migrating-to-Nightwatch-1.0
 
 
 ## Run all tests
@@ -860,7 +860,7 @@ https://docs.npmjs.com/getting-started/updating-local-packages
 
 # Links
 
-Nice introdutory video: https://www.youtube.com/watch?v=z6hQqgvGI4Y
+Nice introductory video: https://www.youtube.com/watch?v=z6hQqgvGI4Y
 
 Examples: https://vuejs.org/v2/examples/
 

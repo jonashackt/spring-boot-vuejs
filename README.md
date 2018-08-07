@@ -185,7 +185,7 @@ If you’re a backend dev like me, this Maven plugin here https://github.com/eir
 
 ### tell Webpack to output the dist/ contents to target/
 
-Commonly, node projects will create for final build a `dist/` directory which contains the minified source code of the web app - but we want it all in `/target`. Therefore go to `frontend/config/index.js` and replace the following lines:
+Commonly, node projects will create a dist/ directory for builds which contains the minified source code of the web app - but we want it all in `/target`. Therefore go to `frontend/config/index.js` and replace the following lines:
 
 ```
 index: path.resolve(__dirname, '../dist/index.html'),
@@ -254,14 +254,14 @@ Calling a REST service with Axios is simple. Go into the script area of your com
 ```js
 import axios from 'axios'
 
-data () {
+data (){
   return {
     response: [],
     errors: []
   }
 },
 
-callRestService () {
+callRestService (){
   axios.get(`api/hello`)
     .then(response => {
       // JSON responses are automatically parsed.

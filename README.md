@@ -8,7 +8,7 @@
 [![versionwebpack](https://img.shields.io/badge/webpack-3.6.0-brightgreen.svg)]()
 [![versionaxios](https://img.shields.io/badge/axios-0.18.0-brightgreen.svg)]()
 [![versionjest](https://img.shields.io/badge/jest-22.0.4-brightgreen.svg)]()
-[![versionnightwatch](https://img.shields.io/badge/nightwatch-1.0.8-brightgreen.svg)]()
+[![versionnightwatch](https://img.shields.io/badge/nightwatch-1.0.10-brightgreen.svg)]()
 
 ![localhost-first-run](screenshots/localhost-first-run.png)
 

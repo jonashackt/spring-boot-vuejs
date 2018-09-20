@@ -1,82 +1,66 @@
 {
   "name": "frontend",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "A Vue.js & Spring Boot example project",
   "author": "Jonas Hecht <jonas.hecht@codecentric.de>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
-    "unit": "jest --config test/unit/jest.conf.js --coverage",
-    "e2e": "node test/e2e/runner.js",
-    "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
-    "build": "node build/build.js"
+    "serve": "vue-cli-service serve",
+    "test:unit": "vue-cli-service test:unit",
+    "test:e2e": "vue-cli-service test:e2e",
+    "test": "vue-cli-service test:unit && vue-cli-service test:e2e",
+    "build": "vue-cli-service build"
   },
   "dependencies": {
+    "vue": "^2.5.17",
+    "vue-router": "^3.0.1",
     "axios": "^0.18.0",
     "bootstrap": "^4.1.1",
-    "bootstrap-vue": "^1.5.1",
-    "jquery": "^3.3.1",
-    "vue": "^2.5.17",
-    "vue-router": "^3.0.1"
+    "bootstrap-vue": "^1.5.1"
   },
   "devDependencies": {
-    "@vue/test-utils": "^1.0.0-beta.25",
-    "autoprefixer": "^7.1.2",
-    "babel-core": "^6.26.3",
-    "babel-helper-vue-jsx-merge-props": "^2.0.3",
-    "babel-jest": "^21.0.2",
-    "babel-loader": "^7.1.5",
-    "babel-plugin-dynamic-import-node": "^1.2.0",
-    "babel-plugin-syntax-jsx": "^6.18.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.22.0",
-    "babel-plugin-transform-vue-jsx": "^3.5.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-2": "^6.22.0",
-    "babel-register": "^6.22.0",
-    "chalk": "^2.4.1",
-    "chromedriver": "^2.41.0",
-    "copy-webpack-plugin": "^4.5.2",
-    "cross-spawn": "^5.0.1",
-    "css-loader": "^0.28.0",
-    "extract-text-webpack-plugin": "^3.0.0",
-    "file-loader": "^1.1.4",
-    "friendly-errors-webpack-plugin": "^1.6.1",
-    "html-webpack-plugin": "^2.30.1",
-    "jest": "^22.0.4",
-    "jest-serializer-vue": "^0.3.0",
-    "nightwatch": "^1.0.11",
-    "node-notifier": "^5.1.2",
-    "optimize-css-assets-webpack-plugin": "^3.2.0",
-    "ora": "^1.2.0",
-    "portfinder": "^1.0.17",
-    "postcss-import": "^11.0.0",
-    "postcss-loader": "^2.1.6",
-    "postcss-url": "^7.2.1",
-    "rimraf": "^2.6.0",
-    "selenium-server": "^3.14.0",
-    "semver": "^5.5.1",
-    "shelljs": "^0.7.6",
-    "uglifyjs-webpack-plugin": "^1.3.0",
-    "url-loader": "^1.1.1",
-    "vue-jest": "^1.0.2",
-    "vue-loader": "^13.7.3",
-    "vue-style-loader": "^3.0.1",
-    "vue-template-compiler": "^2.5.17",
-    "webpack": "^3.6.0",
-    "webpack-bundle-analyzer": "^2.13.1",
-    "webpack-dev-server": "^2.11.3",
-    "webpack-merge": "^4.1.4"
+    "@vue/cli-plugin-babel": "^3.0.3",
+    "@vue/cli-plugin-e2e-nightwatch": "^3.0.3",
+    "@vue/cli-plugin-unit-jest": "^3.0.3",
+    "@vue/cli-service": "^3.0.3",
+    "@vue/test-utils": "^1.0.0-beta.20",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^23.0.1",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
+    "vue-template-compiler": "^2.5.17"
   },
-  "engines": {
-    "node": ">= 6.0.0",
-    "npm": ">= 3.0.0"
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      "^.+\\.vue$": "vue-jest",
+      ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "snapshotSerializers": [
+      "jest-serializer-vue"
+    ],
+    "testMatch": [
+      "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
+    ],
+    "testURL": "http://localhost/"
+  }
 }

@@ -5,10 +5,10 @@
 [![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/jonashackt/spring-boot-vuejs/blob/master/LICENSE)
 [![versionspringboot](https://img.shields.io/badge/springboot-2.0.4.RELEASE-brightgreen.svg)]()
 [![versionvuejs](https://img.shields.io/badge/vue.js-2.5.17-brightgreen.svg)]()
-[![versionwebpack](https://img.shields.io/badge/webpack-3.6.0-brightgreen.svg)]()
+[![versionwebpack](https://img.shields.io/badge/webpack-4.19.1-brightgreen.svg)]()
 [![versionaxios](https://img.shields.io/badge/axios-0.18.0-brightgreen.svg)]()
-[![versionjest](https://img.shields.io/badge/jest-22.0.4-brightgreen.svg)]()
-[![versionnightwatch](https://img.shields.io/badge/nightwatch-1.0.11-brightgreen.svg)]()
+[![versionjest](https://img.shields.io/badge/jest-23.6.0-brightgreen.svg)]()
+[![versionnightwatch](https://img.shields.io/badge/nightwatch-0.9.21-brightgreen.svg)]()
 
 ![localhost-first-run](screenshots/localhost-first-run.png)
 
@@ -864,7 +864,7 @@ In the long run, templates like the main [webpack](https://github.com/vuejs-temp
 
 https://vuejsdevelopers.com/2018/03/26/vue-cli-3/
 
-Plugin bring the following benefits compared to templates:
+Plugins bring the following benefits compared to templates:
 
 * No lock in, as plugins can be added at any point in the development lifecycle
 * Zero config plugins allow you to spend time developing rather than configuring
@@ -991,9 +991,35 @@ As you dig into the directories like `node_modules/@vue/cli-plugin-e2e-nightwatc
 This is really cool, I have to admit!
 
 
+#### Configure webpack CORS - the vue.config.js file
 
-Configuring webpack: https://github.com/vuejs/vue-cli/blob/dev/docs/guide/webpack.md
+Vue CLI 3 removes the need for explicit configuration files - and thus you wont find any `build` or `config` directories in your projects root any more. This now implements a "convention over configuration" approach, which makes it much easier to kick-start a Vue.js project, as it provides widly used defaults to webpack etc. It also eases the upgradeability of Vue.js projects - or even makes it possible. 
 
+__But__: How do we configure webpack etc. for CORS handling, the build directories and so on? This could be done with the optional [vue.config.js](https://cli.vuejs.org/config/#vue-config-js):
+
+```javascript
+module.exports = {
+  // proxy all webpack dev-server requests starting with /api
+  // to our Spring Boot backend (localhost:8088) using http-proxy-middleware
+  // see https://cli.vuejs.org/config/#devserver-proxy
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8088',
+        ws: true,
+        changeOrigin: true
+      }
+    }
+  },
+  // Change build paths to make them Maven compatible
+  // see https://cli.vuejs.org/config/
+  outputDir: 'target/dist'
+}
+```
+
+#### Run webpack devserver
+
+`npm run serve`
 
 
 # Links

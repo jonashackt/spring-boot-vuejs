@@ -8,7 +8,7 @@
 [![versionwebpack](https://img.shields.io/badge/webpack-3.6.0-brightgreen.svg)]()
 [![versionaxios](https://img.shields.io/badge/axios-0.18.0-brightgreen.svg)]()
 [![versionjest](https://img.shields.io/badge/jest-22.0.4-brightgreen.svg)]()
-[![versionnightwatch](https://img.shields.io/badge/nightwatch-1.0.10-brightgreen.svg)]()
+[![versionnightwatch](https://img.shields.io/badge/nightwatch-1.0.11-brightgreen.svg)]()
 
 ![localhost-first-run](screenshots/localhost-first-run.png)
 
@@ -855,6 +855,144 @@ https://docs.npmjs.com/getting-started/updating-local-packages
 
 `npm update`
 
+
+
+
+## Shift from templates to plugin-based architecture in Vue Cli 3
+
+In the long run, templates like the main [webpack](https://github.com/vuejs-templates/webpack) are deprecated in the Vue.js universe:
+
+https://vuejsdevelopers.com/2018/03/26/vue-cli-3/
+
+Plugin bring the following benefits compared to templates:
+
+* No lock in, as plugins can be added at any point in the development lifecycle
+* Zero config plugins allow you to spend time developing rather than configuring
+* Easy to upgrade, as configuration can be customized without “ejecting”
+* Allows developers to make their own plugins and presets
+
+Starting point: https://cli.vuejs.org/
+
+#### Upgrade from Vue CLI 2 (vue-cli) to 3 (@vue/cli)
+
+see https://cli.vuejs.org/guide/
+
+You can see, which Vue CLI version you´re using, by typing `vue --version`. To upgrade to the latest Vue CLI 3, just do:
+
+`npm install -g @vue/cli`
+
+Now creating our `frontend` project is done by the slightly changed (we use `--no-git` here, because our parent project is already a git repository and otherwise vue CLI 3 would initialize an new one):
+
+`vue create frontend --no-git`
+
+![vuejs-cli3-create](screenshots/vuejs-cli3-create.png)
+
+__Do not__ choose the default preset with `default (babel, eslint)`, because we need some more plugins for our project here (choose the Plugins with the __space bar__):
+
+![vuejs-cli3-select-plugins](screenshots/vuejs-cli3-select-plugins.png)
+
+You can now also use the new `vue ui` command/feature to configure your project:
+
+![vue-ui](screenshots/vue-ui.png)
+
+
+#### OMG! My package.json is so small - Vue CLI 3 Plugins
+
+From https://cli.vuejs.org/guide/plugins-and-presets.html:
+
+> Vue CLI uses a plugin-based architecture. If you inspect a newly created project's package.json, you will find dependencies that start with `@vue/cli-plugin-`. Plugins can modify the internal webpack configuration and inject commands to `vue-cli-service`. Most of the features listed during the project creation process are implemented as plugins.
+
+With plugings, extensions to an existing project could also be made via: `vue add pluginName`. E.g. if you want to add Nightwatch E2E tests to your project, just run `vue add @vue/e2e-nightwatch`. All scoped packages are available here: https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue
+
+These new Vue CLI 3 plugin architecture cleans our big `package.json` to a really neat compact thing. This was the old big dependency block:
+
+````json
+  "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.25",
+    "autoprefixer": "^7.1.2",
+    "babel-core": "^6.26.3",
+    "babel-helper-vue-jsx-merge-props": "^2.0.3",
+    "babel-jest": "^21.0.2",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-dynamic-import-node": "^1.2.0",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.22.0",
+    "babel-plugin-transform-vue-jsx": "^3.5.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.22.0",
+    "babel-register": "^6.22.0",
+    "chalk": "^2.4.1",
+    "chromedriver": "^2.41.0",
+    "copy-webpack-plugin": "^4.5.2",
+    "cross-spawn": "^5.0.1",
+    "css-loader": "^0.28.0",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^1.1.4",
+    "friendly-errors-webpack-plugin": "^1.6.1",
+    "html-webpack-plugin": "^2.30.1",
+    "jest": "^22.0.4",
+    "jest-serializer-vue": "^0.3.0",
+    "nightwatch": "^1.0.11",
+    "node-notifier": "^5.1.2",
+    "optimize-css-assets-webpack-plugin": "^3.2.0",
+    "ora": "^1.2.0",
+    "portfinder": "^1.0.17",
+    "postcss-import": "^11.0.0",
+    "postcss-loader": "^2.1.6",
+    "postcss-url": "^7.2.1",
+    "rimraf": "^2.6.0",
+    "selenium-server": "^3.14.0",
+    "semver": "^5.5.1",
+    "shelljs": "^0.7.6",
+    "uglifyjs-webpack-plugin": "^1.3.0",
+    "url-loader": "^1.1.1",
+    "vue-jest": "^1.0.2",
+    "vue-loader": "^13.7.3",
+    "vue-style-loader": "^3.0.1",
+    "vue-template-compiler": "^2.5.17",
+    "webpack": "^3.6.0",
+    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-dev-server": "^2.11.3",
+    "webpack-merge": "^4.1.4"
+  },
+````
+
+As you can see, we´re not only maintaining our high-level libraries of choice like nightwatch, jest and so on. We´re also maintaining libraries that they use itself. Now this is over with Vue CLI 3. Let´s have a look at the super clean dependency block now:
+
+```json
+"devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.3",
+    "@vue/cli-plugin-e2e-nightwatch": "^3.0.3",
+    "@vue/cli-plugin-unit-jest": "^3.0.3",
+    "@vue/cli-service": "^3.0.3",
+    "@vue/test-utils": "^1.0.0-beta.20",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^23.0.1",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
+    "vue-template-compiler": "^2.5.17"
+  },
+``` 
+
+As you dig into the directories like `node_modules/@vue/cli-plugin-e2e-nightwatch`, you´ll find where the used libraries of nightwatch are configured - in the respective `package.json` there:
+
+```json
+  "dependencies": {
+    "@vue/cli-shared-utils": "^3.0.2",
+    "chromedriver": "^2.40.0",
+    "deepmerge": "^2.1.1",
+    "execa": "^0.10.0",
+    "nightwatch": "^0.9.21",
+    "selenium-server": "^3.13.0"
+  },
+```
+
+This is really cool, I have to admit!
+
+
+
+Configuring webpack: https://github.com/vuejs/vue-cli/blob/dev/docs/guide/webpack.md
 
 
 

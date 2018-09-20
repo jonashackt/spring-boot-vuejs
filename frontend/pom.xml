@@ -30,7 +30,7 @@
 							<goal>install-node-and-npm</goal>
 						</goals>
 						<configuration>
-							<nodeVersion>v9.11.1</nodeVersion>
+							<nodeVersion>v10.10.0</nodeVersion>
 						</configuration>
 					</execution>
 					<!-- Install all project dependencies -->
@@ -54,32 +54,32 @@
 						</goals>
 						<configuration>
 							<arguments>run build</arguments>
-            </configuration>
+            			</configuration>
 					</execution>
-          <!-- Run Unit tests with Jest -->
-          <execution>
-            <id>npm run unit</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <phase>test</phase>
-            <configuration>
-              <arguments>run unit</arguments>
-            </configuration>
-          </execution>
-          <!-- Run End2End tests with Nightwatch -->
-          <!--
-          <execution>
-            <id>npm run e2e</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <phase>test</phase>
-            <configuration>
-              <arguments>run e2e</arguments>
-            </configuration>
-          </execution>
-          -->
+					<!-- Run Unit tests with Jest -->
+					<execution>
+					<id>npm run unit</id>
+					<goals>
+						<goal>npm</goal>
+					</goals>
+					<phase>test</phase>
+					<configuration>
+						<arguments>run test:unit</arguments>
+					</configuration>
+					</execution>
+					<!-- Run End2End tests with Nightwatch -->
+					<!--
+					<execution>
+					<id>npm run e2e</id>
+					<goals>
+						<goal>npm</goal>
+					</goals>
+					<phase>test</phase>
+					<configuration>
+					  	<arguments>run test:e2e</arguments>
+					</configuration>
+					</execution>
+					-->
 				</executions>
 			</plugin>
 		</plugins>

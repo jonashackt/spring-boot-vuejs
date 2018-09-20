@@ -31,8 +31,8 @@ frontend/node_modules/
 frontend/npm-debug.log
 frontend/target
 frontend/test-output
-frontend/test/e2e/reports
-frontend/test/unit/coverage
+frontend/tests/e2e/reports
+frontend/tests/unit/coverage
 frontend/yarn-error.log
 frontend/yarn.lock
 security/target/

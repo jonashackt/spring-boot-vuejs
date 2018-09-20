@@ -5,10 +5,13 @@
 [![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/jonashackt/spring-boot-vuejs/blob/master/LICENSE)
 [![versionspringboot](https://img.shields.io/badge/springboot-2.0.5.RELEASE-brightgreen.svg)]()
 [![versionvuejs](https://img.shields.io/badge/vue.js-2.5.17-brightgreen.svg)]()
+[![versionvuecli](https://img.shields.io/badge/vue_CLI-3-brightgreen.svg)]()
 [![versionwebpack](https://img.shields.io/badge/webpack-4.19.1-brightgreen.svg)]()
 [![versionaxios](https://img.shields.io/badge/axios-0.18.0-brightgreen.svg)]()
 [![versionjest](https://img.shields.io/badge/jest-23.6.0-brightgreen.svg)]()
 [![versionnightwatch](https://img.shields.io/badge/nightwatch-0.9.21-brightgreen.svg)]()
+
+> **If you´re a JavaMagazin / blog.codecentric.de / Softwerker reader**, consider switching to [vue-cli-v2-webpack-v3](https://github.com/jonashackt/spring-boot-vuejs/tree/vue-cli-v2-webpack-v3)
 
 ![localhost-first-run](screenshots/localhost-first-run.png)
 
@@ -61,8 +64,6 @@ npm install --global vue-cli
 choco install npm
 npm install --global vue-cli
 ```
-
-(Oder per Installer von der Website: https://nodejs.org/en/download/)
 
 ## Project setup
 

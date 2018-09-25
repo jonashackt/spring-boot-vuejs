@@ -20,8 +20,32 @@ A live deployment is available on Heroku: https://spring-boot-vuejs.herokuapp.co
 There's also a blog post about this project available here: https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/
 
 ## Table of Contents  
-[In Search of a new Web Frontend-Framework after 2 Years of absence...](#in-search-of-a-new-web-frontend-framework-after-2-years-of-absence) 
-[Setup Vue.js & Spring Boot](#setup-vuejs--spring-boot)  
+* [In Search of a new Web Frontend-Framework after 2 Years of absence...](#in-search-of-a-new-web-frontend-framework-after-2-years-of-absence)
+* [Setup Vue.js & Spring Boot](#setup-vuejs--spring-boot)
+* [Project setup](#project-setup)
+* [Backend](#backend)
+* [Frontend](#frontend)
+* [Use frontend-maven-plugin to handle NPM, Node, Bower, Grunt, Gulp, Webpack and so on :)](#use-frontend-maven-plugin-to-handle-npm-node-bower-grunt-gulp-webpack-and-so-on-)
+* [First App run](first-app-run)
+* [Faster feedback with webpack-dev-server](#faster-feedback-with-webpack-dev-server)
+* [Browser developer tools extension](#browser-developer-tools-extension)
+* [HTTP calls from Vue.js to (Spring Boot) REST backend](#http-calls-from-vuejs-to-spring-boot-rest-backend)
+* [The problem with SOP](#the-problem-with-sop)
+* [But STOP! Webpack & Vue have something much smarter for us to help us with SOP!](#but-stop-webpack--vue-have-something-much-smarter-for-us-to-help-us-with-sop)
+* [Bootstrap & Vue.js](#bootstrap--vuejs)
+* [Heroku Deployment](#heroku-deployment)
+* [Using Heroku's Postgres as Database for Spring Boot backend and Vue.js frontend](#using-herokus-postgres-as-database-for-spring-boot-backend-and-vuejs-frontend)
+* [Testing](#testing)
+* [Jest](#jest)
+* [Jest Configuration](#jest-configuration)
+* [Integration in Maven build (via frontend-maven-plugin)](#integration-in-maven-build-via-frontend-maven-plugin)
+* [Run Jest tests inside IntelliJ](#run-jest-tests-inside-intellij)
+* [End-2-End (E2E) tests with Nightwatch](#end-2-end-e2e-tests-with-nightwatch)
+* [NPM Security](#npm-security)
+* [Shift from templates to plugin-based architecture in Vue Cli 3](#shift-from-templates-to-plugin-based-architecture-in-vue-cli-3)
+* [OMG! My package.json is so small - Vue CLI 3 Plugins](#omg-my-packagejson-is-so-small---vue-cli-3-plugins)
+* [The vue.config.js file](the-vueconfigjs-file)
+
 
 
 ## In Search of a new Web Frontend-Framework after 2 Years of absence...
@@ -896,29 +920,6 @@ Plugins bring the following benefits compared to templates:
 Starting point: https://cli.vuejs.org/
 
 
-#### Upgrade from Vue CLI 2 (vue-cli) to 3 (@vue/cli)
-
-see https://cli.vuejs.org/guide/
-
-You can see, which Vue CLI version you´re using, by typing `vue --version`. To upgrade to the latest Vue CLI 3, just do:
-
-`npm install -g @vue/cli`
-
-Now creating our `frontend` project is done by the slightly changed (we use `--no-git` here, because our parent project is already a git repository and otherwise vue CLI 3 would initialize an new one):
-
-`vue create frontend --no-git`
-
-![vuejs-cli3-create](screenshots/vuejs-cli3-create.png)
-
-__Do not__ choose the default preset with `default (babel, eslint)`, because we need some more plugins for our project here (choose the Plugins with the __space bar__):
-
-![vuejs-cli3-select-plugins](screenshots/vuejs-cli3-select-plugins.png)
-
-You can now also use the new `vue ui` command/feature to configure your project:
-
-![vue-ui](screenshots/vue-ui.png)
-
-
 #### OMG! My package.json is so small - Vue CLI 3 Plugins
 
 From https://cli.vuejs.org/guide/plugins-and-presets.html:
@@ -1014,7 +1015,7 @@ As you dig into the directories like `node_modules/@vue/cli-plugin-e2e-nightwatc
 This is really cool, I have to admit!
 
 
-#### Configure webpack CORS - the vue.config.js file
+#### The vue.config.js file
 
 Vue CLI 3 removes the need for explicit configuration files - and thus you wont find any `build` or `config` directories in your projects root any more. This now implements a "convention over configuration" approach, which makes it much easier to kick-start a Vue.js project, as it provides widly used defaults to webpack etc. It also eases the upgradeability of Vue.js projects - or even makes it possible. 
 

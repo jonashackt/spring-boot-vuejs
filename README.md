@@ -19,6 +19,11 @@ A live deployment is available on Heroku: https://spring-boot-vuejs.herokuapp.co
 
 There's also a blog post about this project available here: https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/
 
+## Table of Contents  
+[In Search of a new Web Frontend-Framework after 2 Years of absence...](#in-search-of-a-new-web-frontend-framework-after-2-years-of-absence) 
+[Setup Vue.js & Spring Boot](#setup-vuejs--spring-boot)  
+
+
 ## In Search of a new Web Frontend-Framework after 2 Years of absence...
 
 Well, I’m not a Frontend developer. I’m more like playing around with Spring Boot, Web- & Microservices & Docker, automating things with Ansible and Docker, Scaling things with Spring Cloud, Docker Compose, and Traefik... And the only GUIs I’m building are the "new JS framework in town"-app every two years... :) So the last one was Angular 1 - and it felt, as it was a good choice! I loved the coding experience and after a day of training, I felt able to write awesome Frontends...
@@ -47,7 +52,7 @@ So I think, it could be a good idea to invest a day or so into Vue.js. Let’s h
 
 ```
 brew install node
-npm install --global vue-cli
+npm install -g @vue/cli
 ```
 
 #### Linux
@@ -55,14 +60,14 @@ npm install --global vue-cli
 ```
 sudo apt update
 sudo apt install node
-npm install --global vue-cli
+npm install -g @vue/cli
 ```
 
 #### Windows
 
 ```
 choco install npm
-npm install --global vue-cli
+npm install -g @vue/cli
 ```
 
 ## Project setup
@@ -109,6 +114,7 @@ Customize pom to copy content from Frontend for serving it later with the embedd
                 <includes>
                   <include>static/</include>
                   <include>index.html</include>
+                  <include>favicon.ico</include>
                 </includes>
               </resource>
             </resources>
@@ -123,15 +129,28 @@ Customize pom to copy content from Frontend for serving it later with the embedd
 
 ## Frontend
 
+Creating our `frontend` project is done by the slightly changed (we use `--no-git` here, because our parent project is already a git repository and otherwise vue CLI 3 would initialize an new one):
+
 ```
-vue init webpack frontend
+vue create frontend --no-git
 ```
+
+see https://cli.vuejs.org/guide/
 
 This will initialize a project skeleton for Vue.js in /frontend directory - it, therefore, asks some questions in the cli:
 
-![vuejs-cli-init](screenshots/vuejs-cli-init.png)
+![vuejs-cli3-create](screenshots/vuejs-cli3-create.png)
+
+__Do not__ choose the default preset with `default (babel, eslint)`, because we need some more plugins for our project here (choose the Plugins with the __space bar__):
+
+![vuejs-cli3-select-plugins](screenshots/vuejs-cli3-select-plugins.png)
+
+You can now also use the new `vue ui` command/feature to configure your project:
+
+![vue-ui](screenshots/vue-ui.png)
 
 If you want to learn more about installing Vue.js, head over to the docs: https://vuejs.org/v2/guide/installation.html
+
 
 ### Use frontend-maven-plugin to handle NPM, Node, Bower, Grunt, Gulp, Webpack and so on :)
 
@@ -152,7 +171,7 @@ If you’re a backend dev like me, this Maven plugin here https://github.com/eir
                         <goal>install-node-and-npm</goal>
                     </goals>
                     <configuration>
-                        <nodeVersion>v9.11.1</nodeVersion>
+                        <nodeVersion>v10.10.0</nodeVersion>
                     </configuration>
                 </execution>
                 <!-- Install all project dependencies -->
@@ -184,24 +203,24 @@ If you’re a backend dev like me, this Maven plugin here https://github.com/eir
 </build>
 ```
 
-### tell Webpack to output the dist/ contents to target/
+### Tell Webpack to output the dist/ contents to target/
 
-Commonly, node projects will create a dist/ directory for builds which contains the minified source code of the web app - but we want it all in `/target`. Therefore go to `frontend/config/index.js` and replace the following lines:
+Commonly, node projects will create a dist/ directory for builds which contains the minified source code of the web app - but we want it all in `/target`. Therefore we need to create the optional [vue.config.js](https://cli.vuejs.org/config/#vue-config-js) and configure the `outputDir` and `assetsDir` correctly: 
 
-```
-index: path.resolve(__dirname, '../dist/index.html'),
-assetsRoot: path.resolve(__dirname, '../dist'),
-```
-
-with
-
-```
-index: path.resolve(__dirname, '../target/dist/index.html'),
-assetsRoot: path.resolve(__dirname, '../target/dist'),
+```javascript
+module.exports = {
+  ...
+  // Change build paths to make them Maven compatible
+  // see https://cli.vuejs.org/config/
+  outputDir: 'target/dist',
+  assetsDir: 'static'
+}
 ```
 
 
 ## First App run
+
+Inside the root directory, do a: 
 
 ```
 mvn clean install
@@ -217,12 +236,12 @@ Now go to http://localhost:8088/ and have a look at your first Vue.js Spring Boo
 
 
 
-## fast feedback with webpack-dev-server
+## Faster feedback with webpack-dev-server
 
 The webpack-dev-server, which will update and build every change through all the parts of the JavaScript build-chain, is pre-configured in Vue.js out-of-the-box! So the only thing needed to get fast feedback development-cycle is to cd into `frontend` and run:
 
 ```
-npm run dev
+npm run serve
 ```
 
 That’s it! 
@@ -233,6 +252,7 @@ That’s it!
 Install vue-devtools Browser extension https://github.com/vuejs/vue-devtools and get better feedback, e.g. in Chrome:
 
 ![vue-devtools-chrome](screenshots/vue-devtools-chrome.png)
+
 
 ## IntelliJ integration
 
@@ -288,6 +308,7 @@ In your template area you can now request a service call via calling `callRestSe
 Single-Origin Policy (SOP) could be a problem if we want to develop our app. Because the webpack-dev-server runs on http://localhost:8080 and our Spring Boot REST backend on http://localhost:8088.
 
 We need to use Cross-Origin Resource Sharing Protocol (CORS) to handle that (read more background info about CORS here https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)
+
 
 #### Enabling Axios CORS support
 
@@ -364,27 +385,34 @@ public WebMvcConfigurer corsConfigurer() {
 
 Now all calls to resources behind `api/` will return the correct CORS headers. 
 
+
 #### But STOP! Webpack & Vue have something much smarter for us to help us with SOP!
 
 Thanks to my colleague [Daniel](https://www.codecentric.de/team/dre/) who pointed me to the nice proxying feature of Webpack dev-server, we don't need to configure all the complex CORS stuff anymore!
 
-According to [Vue.js Webpack Template](https://vuejs-templates.github.io/webpack/) the only thing we need to [configure is a Proxy](https://vuejs-templates.github.io/webpack/proxy.html) for our webpack dev-server requests. This could be done easily in the [frontend/config/index.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/config/index.js) inside `dev.proxyTable`: 
+According to the [Vue CLI 3 docs](https://cli.vuejs.org/config) the only thing we need to [configure is a devserver-proxy](https://cli.vuejs.org/config/#devserver-proxy) for our webpack devserver requests. This could be done easily in the optional [vue.config.js](https://cli.vuejs.org/config/#vue-config-js) inside `devServer.proxy`: 
 
 ```js
-dev: {
-    ...
-    proxyTable: {
-      // proxy all webpack dev-server requests starting with /api to our Spring Boot backend (localhost:8088)
+module.exports = {
+  // proxy all webpack dev-server requests starting with /api
+  // to our Spring Boot backend (localhost:8088) using http-proxy-middleware
+  // see https://cli.vuejs.org/config/#devserver-proxy
+  devServer: {
+    proxy: {
       '/api': {
         target: 'http://localhost:8088',
+        ws: true,
         changeOrigin: true
       }
-    },
+    }
+  },
+  ...
+}
 ```
 
 With this configuration in place, the webpack dev-server uses the [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware), which is a really handy component, to proxy all frontend-requests from http://localhost:8080 --> http://localhost:8088 - incl. Changing the Origin accordingly.
 
-This is used in the [frontend/build/dev-server.js](https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/build/dev-server.js) to configure the proxyMiddleware (you don't need to change something here!):
+This is used in the webpack build process to configure the proxyMiddleware (you don't need to change something here!):
 
 ```js
 // proxy api requests
@@ -697,16 +725,33 @@ The Jest run-configuration is done inside the [package.json](frontend/package.js
 ```js
 "scripts": {
     ...
-    "unit": "jest --config test/unit/jest.conf.js --coverage",
+    "test:unit": "vue-cli-service test:unit --coverage",
     ....
   },
 ```
 
-Jest itself is configured inside [frontend/test/unit/jest.conf.js](frontend/test/unit/jest.conf.js)
+Jest can be configured via `jest.config.js` in your project root, or the `jest` field in [package.json](frontend/package.json). In our case we especially need to configure `coverageDirectory`:
 
-##### Run Unit tests
+```json
+  ],
+  "jest": {
+    ...
+    "coverageDirectory": "<rootDir>/tests/unit/coverage",
+    "collectCoverageFrom": [
+      "src/**/*.{js,vue}",
+      "!src/main.js",
+      "!src/router/index.js",
+      "!**/node_modules/**"
+    ]
+  }
+}
+```
 
-`npm run unit` - that'll look like:
+Jest needs to know the right output directory `/tests/unit/coverage` to show a correct output when `npm run test:unit` is run (or the corresponding Maven build). If you run the Jest Unit tests now with:
+
+`npm run test:unit`
+
+- you´ll recognize the table of test covered files:
 
 ![unittestrun-jest](screenshots/unittestrun-jest.png)
 
@@ -718,7 +763,7 @@ Inside the [pom.xml](pom.xml) we always automatically run the Jest Unittests wit
 ```xml
 <!-- Run Unit tests -->
   <execution>
-    <id>npm run test</id>
+    <id>npm run test:unit</id>
     <goals>
       <goal>npm</goal>
     </goals>
@@ -726,7 +771,7 @@ Inside the [pom.xml](pom.xml) we always automatically run the Jest Unittests wit
     <phase>test</phase>
     <!-- Optional configuration which provides for running any npm command -->
     <configuration>
-      <arguments>run unit</arguments>
+      <arguments>run test:unit</arguments>
     </configuration>
   </execution>
 ```
@@ -781,45 +826,21 @@ An example Nightwatch test is provided in [HelloAcceptance.test.js](/frontend/te
 
 ```js
 module.exports = {
-  'default e2e tests': function (browser) {
-    // automatically uses dev Server port from /config.index.js
-    // default: http://localhost:8080
-    // see nightwatch.conf.js
-    const devServer = browser.globals.devServerURL
-
-    browser
-      .url(devServer)
-      .waitForElementVisible('#app', 5000)
-      .assert.elementPresent('.hello')
-      .assert.containsText('h1', 'Welcome to your Vue.js powered Spring Boot App')
-      .assert.elementCount('img', 1)
-      .end()
-  }
+    'default e2e tests': browser => {
+        browser
+            .url(process.env.VUE_DEV_SERVER_URL)
+            .waitForElementVisible('#app', 5000)
+            .assert.elementPresent('.hello')
+            .assert.containsText('h1', 'Welcome to your Vue.js powered Spring Boot App')
+            .assert.elementCount('img', 1)
+            .end()
+    }
 }
-
 ```
 
 ##### Run E2E Tests
 
-`npm run e2e`
-
-##### Current Problem with npm audit (see [NPM Security](#npm-security))
-
-With 1.0.6, the following error occurs after an `npm run e2e`:
-
-```
-OK. 4 assertions passed. (8.625s)
-   The "path" argument must be of type string. Received type object
-       at assertPath (path.js:39:11)
-       at Object.join (path.js:1157:7)
-       at process._tickCallback (internal/process/next_tick.js:68:7)
-```
-
-With the latest 0.9.21 of Nightwatch, this issue is gone. __BUT:__ the the `npm audit` command does find vulnerabilities: 
-
-![nightwatch-npmaudit-vulnerabilities](screenshots/nightwatch-npmaudit-vulnerabilities.png)
-
-And thus the whole build process will break. The problem is breaking changes in [Nightwatch 1.x](https://github.com/nightwatchjs/nightwatch#nightwatch-v10), that aren't reflected inside the Vue.js Webpack template so far (they use the latest 0.9.x, which is vulnerable): https://github.com/nightwatchjs/nightwatch/wiki/Migrating-to-Nightwatch-1.0
+`npm run test:e2e`
 
 
 ## Run all tests
@@ -873,6 +894,7 @@ Plugins bring the following benefits compared to templates:
 * Allows developers to make their own plugins and presets
 
 Starting point: https://cli.vuejs.org/
+
 
 #### Upgrade from Vue CLI 2 (vue-cli) to 3 (@vue/cli)
 
@@ -1018,9 +1040,6 @@ module.exports = {
 }
 ```
 
-#### Run webpack devserver
-
-`npm run serve`
 
 
 # Links

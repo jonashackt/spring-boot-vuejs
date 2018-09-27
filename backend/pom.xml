@@ -16,7 +16,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<rest-assured.version>3.0.7</rest-assured.version>
+		<rest-assured.version>3.1.1</rest-assured.version>
+		<postgresql.version>42.2.5</postgresql.version>
 	</properties>
 
 	<dependencies>
@@ -56,7 +57,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.2</version>
+            <version>${postgresql.version}</version>
         </dependency>
 
 		<!-- Testing -->

@@ -17,7 +17,13 @@
 
 A live deployment is available on Heroku: https://spring-boot-vuejs.herokuapp.com
 
-There's also a blog post about this project available here: https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/
+This project is used as example in a variety of articles & as eBook:
+
+[![java-magazin-8.2018](screenshots/java-magazin-8.2018.png)](https://jaxenter.de/ausgaben/java-magazin-8-18)
+[![entwickler-press-092018](screenshots/entwickler-press-092018.jpg)](https://www.amazon.com/Vue-js-f%C3%BCr-alle-Wissenswertes-Einsteiger-ebook/dp/B07HQF9VX4/ref=sr_1_1?ie=UTF8&qid=1538484852&sr=8-1&keywords=Vue-js-f%C3%BCr-alle-Wissenswertes-Einsteiger-ebook)
+[![softwerker-vol12](screenshots/softwerker-vol12.png)](https://info.codecentric.de/softwerker-vol-12)
+
+[blog.codecentric.de/en/2018/04/spring-boot-vuejs](https://blog.codecentric.de/en/2018/04/spring-boot-vuejs) | [JavaMagazin 8.2018](https://jaxenter.de/ausgaben/java-magazin-8-18) | [entwickler.press shortcuts 229](https://www.amazon.com/Vue-js-f%C3%BCr-alle-Wissenswertes-Einsteiger-ebook/dp/B07HQF9VX4/ref=sr_1_1?ie=UTF8&qid=1538484852&sr=8-1&keywords=Vue-js-f%C3%BCr-alle-Wissenswertes-Einsteiger-ebook) | [softwerker Vol.12](https://info.codecentric.de/softwerker-vol-12)
 
 ## Table of Contents  
 * [In Search of a new Web Frontend-Framework after 2 Years of absence...](#in-search-of-a-new-web-frontend-framework-after-2-years-of-absence)
@@ -44,7 +50,7 @@ There's also a blog post about this project available here: https://blog.codecen
 * [NPM Security](#npm-security)
 * [Shift from templates to plugin-based architecture in Vue Cli 3](#shift-from-templates-to-plugin-based-architecture-in-vue-cli-3)
 * [OMG! My package.json is so small - Vue CLI 3 Plugins](#omg-my-packagejson-is-so-small---vue-cli-3-plugins)
-* [The vue.config.js file](the-vueconfigjs-file)
+* [The vue.config.js file](#the-vueconfigjs-file)
 
 
 

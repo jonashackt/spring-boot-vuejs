@@ -6,10 +6,10 @@
 [![versionspringboot](https://img.shields.io/badge/springboot-2.1.0_RELEASE-brightgreen.svg)](https://github.com/spring-projects/spring-boot)
 [![versionnodejs](https://img.shields.io/badge/nodejs-10.13.0_LTS-brightgreen.svg)](https://nodejs.org/en/)
 [![versionvuejs](https://img.shields.io/badge/vue.js-2.5.17-brightgreen.svg)](https://vuejs.org/)
-[![versionvuecli](https://img.shields.io/badge/vue_CLI-3-brightgreen.svg)](https://cli.vuejs.org/)
-[![versionwebpack](https://img.shields.io/badge/webpack-4.19.1-brightgreen.svg)](https://webpack.js.org/)
+[![versionvuecli](https://img.shields.io/badge/vue_CLI-3.1.0-brightgreen.svg)](https://cli.vuejs.org/)
+[![versionwebpack](https://img.shields.io/badge/webpack-4.23.1-brightgreen.svg)](https://webpack.js.org/)
 [![versionaxios](https://img.shields.io/badge/axios-0.18.0-brightgreen.svg)](https://github.com/axios/axios)
-[![versionjest](https://img.shields.io/badge/jest-23.4.0-brightgreen.svg)](https://jestjs.io/)
+[![versionjest](https://img.shields.io/badge/jest-23.6.0-brightgreen.svg)](https://jestjs.io/)
 [![versionnightwatch](https://img.shields.io/badge/nightwatch-0.9.21-brightgreen.svg)](http://nightwatchjs.org/)
 
 > **If you´re a JavaMagazin / blog.codecentric.de / Softwerker reader**, consider switching to [vue-cli-v2-webpack-v3](https://github.com/jonashackt/spring-boot-vuejs/tree/vue-cli-v2-webpack-v3)
@@ -720,7 +720,7 @@ Examples: https://github.com/vuejs/vue-test-utils-jest-example
 
 Vue.js Jest Docs: https://vue-test-utils.vuejs.org/guides/#testing-single-file-components-with-jest
 
-A Jest Unittest looks like [Hello.test.js](frontend/test/components/Hello.test.js):
+A Jest Unittest looks like [Hello.spec.js](frontend/test/components/Hello.spec.js):
 
 ```js
 import { shallowMount } from '@vue/test-utils';

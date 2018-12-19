@@ -12,25 +12,25 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "vue": "^2.5.17",
-    "vue-router": "^3.0.1",
     "axios": "^0.18.0",
     "bootstrap": "^4.1.1",
     "bootstrap-vue": "^2.0.0-rc.11",
-    "jquery": "^3.3.1"
+    "jquery": "^3.3.1",
+    "vue": "^2.5.21",
+    "vue-router": "^3.0.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.1.0",
-    "@vue/cli-plugin-e2e-nightwatch": "^3.1.0",
-    "@vue/cli-plugin-unit-jest": "^3.1.0",
-    "@vue/cli-service": "^3.1.0",
-    "@vue/test-utils": "^1.0.0-beta.20",
+    "@vue/cli-plugin-babel": "^3.2.0",
+    "@vue/cli-plugin-e2e-nightwatch": "^3.2.0",
+    "@vue/cli-plugin-unit-jest": "^3.2.0",
+    "@vue/cli-service": "^3.2.0",
+    "@vue/test-utils": "^1.0.0-beta.27",
+    "ajv": "^6.6.2",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
-    "ajv": "^6.5.4",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.11.0",
     "sass-loader": "^7.0.1",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.5.21"
   },
   "postcss": {
     "plugins": {

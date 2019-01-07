@@ -31,7 +31,7 @@
                             <goal>install-node-and-npm</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v10.10.0</nodeVersion>
+                            <nodeVersion>v11.5.0</nodeVersion>
                         </configuration>
                     </execution>
                     <!-- Install all project dependencies -->

@@ -15,7 +15,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>11</java.version>
         <rest-assured.version>3.2.0</rest-assured.version>
         <postgresql.version>42.2.5</postgresql.version>
         <surefire.version>3.0.0-M3</surefire.version> <!-- there seems to be trouble with surefire and Java -->
@@ -84,16 +83,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${surefire.version}</version>
-                <configuration>
-                    <forkCount>0</forkCount> <!-- changed this to 0 -->
-                </configuration>
-
             </plugin>
 
             <plugin>

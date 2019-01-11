@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>frontend</artifactId>
@@ -13,7 +14,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>11</java.version>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
     </properties>
 
@@ -24,7 +24,7 @@
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>${frontend-maven-plugin.version}</version>
                 <executions>
-                    <!-- Install our node and npm version to run npm/node scripts-->
+                    <!-- Install our node and npm version to run npm/node scripts -->
                     <execution>
                         <id>install node and npm</id>
                         <goals>
@@ -42,7 +42,8 @@
                         </goals>
                         <!-- optional: default phase is "generate-resources" -->
                         <phase>generate-resources</phase>
-                        <!-- Optional configuration which provides for running any npm command -->
+                        <!-- Optional configuration which provides for running any
+                            npm command -->
                         <configuration>
                             <arguments>install</arguments>
                         </configuration>

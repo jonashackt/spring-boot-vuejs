@@ -19,6 +19,7 @@
     </parent>
 
     <properties>
+        <java.version>1.8</java.version>
         <main.basedir>${project.basedir}</main.basedir>
         <!-- Analysis Tools for CI -->
         <build-plugin.jacoco.version>0.8.2</build-plugin.jacoco.version>
@@ -64,5 +65,32 @@
         </plugins>
 
     </build>
+
+    <profiles>
+        <profile>
+            <id>Java-11-profile</id>
+            <activation>
+                <jdk>11</jdk>
+            </activation>
+            <properties>
+                <java.version>11</java.version>
+                <surefire.version>3.0.0-M3</surefire.version> <!-- there seems to be trouble with surefire and Java -->
+            </properties>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>${surefire.version}</version>
+                            <configuration>
+                                <forkCount>0</forkCount> <!-- changed this to 0 -->
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

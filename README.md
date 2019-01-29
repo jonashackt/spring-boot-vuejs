@@ -5,9 +5,9 @@
 [![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/jonashackt/spring-boot-vuejs/blob/master/LICENSE)
 [![versionspringboot](https://img.shields.io/badge/springboot-2.1.2_RELEASE-brightgreen.svg)](https://github.com/spring-projects/spring-boot)
 [![versionnodejs](https://img.shields.io/badge/nodejs-v11.8.0-brightgreen.svg)](https://nodejs.org/en/)
-[![versionvuejs](https://img.shields.io/badge/vue.js-2.5.21-brightgreen.svg)](https://vuejs.org/)
-[![versionvuecli](https://img.shields.io/badge/vue_CLI-3.2.1-brightgreen.svg)](https://cli.vuejs.org/)
-[![versionwebpack](https://img.shields.io/badge/webpack-4.27.1-brightgreen.svg)](https://webpack.js.org/)
+[![versionvuejs](https://img.shields.io/badge/vue.js-2.5.22-brightgreen.svg)](https://vuejs.org/)
+[![versionvuecli](https://img.shields.io/badge/vue_CLI-3.3.0-brightgreen.svg)](https://cli.vuejs.org/)
+[![versionwebpack](https://img.shields.io/badge/webpack-4.28.4-brightgreen.svg)](https://webpack.js.org/)
 [![versionaxios](https://img.shields.io/badge/axios-0.18.0-brightgreen.svg)](https://github.com/axios/axios)
 [![versionjest](https://img.shields.io/badge/jest-23.6.0-brightgreen.svg)](https://jestjs.io/)
 [![versionnightwatch](https://img.shields.io/badge/nightwatch-0.9.21-brightgreen.svg)](http://nightwatchjs.org/)
@@ -1060,6 +1060,7 @@ npm install -g @vue/cli
 Then update Vue.js and all your other JS dependencies with:
 
 ```
+cd frontend
 npm update
 ```
 

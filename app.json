@@ -1,0 +1,43 @@
+{
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-java"
+    }
+  ],
+  "description": "Configuration for Heroku Review Apps for PullRequests on GitHub",
+  "env": {
+    "SPRING_DATASOURCE_DRIVER-CLASS-NAME": {
+      "required": true
+    },
+    "SPRING_DATASOURCE_PASSWORD": {
+      "required": true
+    },
+    "SPRING_DATASOURCE_TYPE": {
+      "required": true
+    },
+    "SPRING_DATASOURCE_URL": {
+      "required": true
+    },
+    "SPRING_DATASOURCE_USERNAME": {
+      "required": true
+    },
+    "SPRING_JPA_DATABASE-PLATFORM": {
+      "required": true
+    },
+    "SPRING_JPA_HIBERNATE_DDL-AUTO": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "name": "spring-boot-vuejs",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}

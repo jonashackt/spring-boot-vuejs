@@ -5,6 +5,7 @@
   "author": "Jonas Hecht <jonas.hecht@codecentric.de>",
   "private": true,
   "scripts": {
+    "clean": "rm -rf node_modules target",
     "serve": "vue-cli-service serve",
     "test:unit": "vue-cli-service test:unit --coverage",
     "test:e2e": "vue-cli-service test:e2e",
@@ -14,8 +15,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
-    "bootstrap-vue": "^2.0.0-rc.19",
-    "jquery": "^3.4.0",
+    "bootstrap-vue": "^2.0.0-rc.20",
+    "jquery": "^3.4.1",
     "vue": "^2.6.10",
     "vue-router": "^3.0.6"
   },

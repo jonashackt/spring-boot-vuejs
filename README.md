@@ -1338,6 +1338,45 @@ Using `rest-assured` we can also test, if one could access the API correctly wit
 
 The crucial point here is to use the `given().auth().basic("foo", "bar")` configuration to inject the correct credentials properly.
 
+
+
+#### Extract user & password definition to application.properties and finally environment variables
+
+Defining the users and password inside code (like our [WebSecurityConfiguration.class](backend/src/main/java/de/jonashackt/springbootvuejs/configuration/WebSecurityConfiguration.java)) that should be grant access to our application should only be suitalbe to testing reasons.
+
+For our super simple example application, we could have a solution quite similar - but much more safe: If we would be able to extract this code into configuration and later use Spring's powerful mechanism of overriding these configuration with environment variables, we could then store them safely inside our deployment pipelines settings, that are again secured by another login - e.g. as Heroku Config Vars.
+
+Therefore the first step would be to delete the following code:
+
+```
+@Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("foo").password("{noop}bar").roles("USER");
+    }
+```
+
+and add the following configuration to our [application.properties](backend/src/main/resources/application.properties):
+
+```
+spring.security.user.name=sina
+spring.security.user.password=miller
+```
+
+Running our tests using the old credentials should fail now. Providing the newer one, the test should go green again.
+
+Now introducing environment variables to the game could also done locally inside our IDE for example. First change the test `secured_api_should_give_http_200_when_authorized` again and choose some new credentials like user `maik` with pw `meyer`.
+
+Don't change the `application.properties` right now - use your IDE's run configuration and insert two environment variables:
+
+```
+SPRING_SECURITY_USER_NAME=maik
+SPRING_SECURITY_USER_PASSWORD=meyer
+```
+
+Now the test should run green again with this new values.
+
+
 ## Protect parts of Vue.js frontend
 
 

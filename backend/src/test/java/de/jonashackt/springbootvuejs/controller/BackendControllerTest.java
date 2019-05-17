@@ -98,7 +98,7 @@ public class BackendControllerTest {
 	public void secured_api_should_give_http_200_when_authorized() {
 
 		given()
-			.auth().basic("foo", "bar")
+			.auth().basic("sina", "miller")
 		.when()
 			.get("/api/secured")
 		.then()

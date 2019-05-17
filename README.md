@@ -1197,6 +1197,119 @@ Now access your Dockerized Spring Boot powererd Vue.js app inside your Browser a
 If you have played enough with your Dockerized app, don't forget to stop (`docker stop 745e854d7781`) and remove (`docker rm 745e854d7781`) it in the end.
 
 
+# Secure Spring Boot backend and protect Vue.js frontend
+
+Securing parts of our application must consist of two parts: securing the Spring Boot backend - and reacting on that secured backend in the Vue.js frontend.
+
+https://spring.io/guides/tutorials/spring-security-and-angular-js/
+
+https://developer.okta.com/blog/2018/11/20/build-crud-spring-and-vue
+
+https://auth0.com/blog/vuejs2-authentication-tutorial/
+
+https://medium.com/@zitko/structuring-a-vue-project-authentication-87032e5bfe16
+
+
+
+## Secure the '/secured' Backend API with Spring Security
+
+https://spring.io/guides/tutorials/spring-boot-oauth2
+
+https://spring.io/guides/gs/securing-web/
+
+https://www.baeldung.com/rest-assured-authentication
+
+
+First we add a new REST resource `/secured` inside our `BackendController we want to secure - and use in a separate frontend later:
+
+```
+    @GetMapping(path="/secured")
+    public @ResponseBody String getSecured() {
+        LOG.info("GET successfully called on /secured resource");
+        return SECURED_TEXT;
+    }
+```
+
+With Spring it is relatively easy to secure our API. Let's add `spring-boot-starter-security` to our [pom.xml](backend/pom.xml):
+
+```xml
+		<!-- Secure backend API -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+```
+
+Also create a new @Configuration annotated class called [WebSecurityConfiguration.class](backend/src/main/java/de/jonashackt/springbootvuejs/configuration/WebSecurityConfiguration.java):
+
+```java
+package de.jonashackt.springbootvuejs.configuration;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        // No session will be created or used by spring security
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http
+            .httpBasic()
+        .and()
+            .authorizeRequests()
+                .antMatchers("/api/hello").permitAll()
+                .antMatchers("/api/user/**").permitAll()
+                .antMatchers("/api/secured").authenticated()
+                .antMatchers("/").permitAll()
+                .anyRequest().authenticated();  // protect all other requests (this isn't really needed here, since we don't have that much
+                                                // resources, but it's a best practice to protect everything - except the ones we'd like to open
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser("test").password("{noop}foo").roles("USER");
+    }
+}
+```
+
+Now secured with that configuration, our backend should react with the appropriate HTTP status code 403 FORBIDDEN, if one tries to access our API without appropriate credentials. To verify this, we should write a test case inside our [BackendControllerTest](backend/src/test/java/de/jonashackt/springbootvuejs/controller/BackendControllerTest.java):
+
+```java
+	@Test
+	public void secured_api_should_react_with_forbidden_per_default() {
+
+		given()
+		.when()
+			.get("/api/secured")
+		.then()
+			.statusCode(HttpStatus.SC_FORBIDDEN);
+	}
+```
+
+
+## Protect parts of Vue.js frontend
+
+
+## Authenticate Users in Vue.js frontend
+
+
+
+
+
 # Links
 
 Nice introductory video: https://www.youtube.com/watch?v=z6hQqgvGI4Y

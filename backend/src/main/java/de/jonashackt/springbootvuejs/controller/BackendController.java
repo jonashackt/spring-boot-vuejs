@@ -1,6 +1,7 @@
 package de.jonashackt.springbootvuejs.controller;
 
 import de.jonashackt.springbootvuejs.domain.User;
+import de.jonashackt.springbootvuejs.exception.UserNotFoundException;
 import de.jonashackt.springbootvuejs.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ public class BackendController {
     private static final Logger LOG = LoggerFactory.getLogger(BackendController.class);
 
     public static final String HELLO_TEXT = "Hello from Spring Boot Backend!";
+    public static final String SECURED_TEXT = "Hello from the secured resource!";
 
     @Autowired
     private UserRepository userRepository;
@@ -25,21 +27,29 @@ public class BackendController {
         return HELLO_TEXT;
     }
 
-    @RequestMapping(path = "/user", method = RequestMethod.POST)
+    @RequestMapping(path = "/user/{lastName}/{firstName}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody long addNewUser (@RequestParam String firstName, @RequestParam String lastName) {
-        User user = new User(firstName, lastName);
-        userRepository.save(user);
+    public @ResponseBody long addNewUser (@PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName) {
+        User savedUser = userRepository.save(new User(firstName, lastName));
 
-        LOG.info(user.toString() + " successfully saved into DB");
+        LOG.info(savedUser.toString() + " successfully saved into DB");
 
-        return user.getId();
+        return savedUser.getId();
     }
 
-    @GetMapping(path="/user/{id}")
+    @GetMapping(path = "/user/{id}")
     public @ResponseBody User getUserById(@PathVariable("id") long id) {
-        LOG.info("Reading user with id " + id + " from database.");
-        return userRepository.findById(id).get();
+
+        return userRepository.findById(id).map(user -> {
+            LOG.info("Reading user with id " + id + " from database.");
+            return user;
+        }).orElseThrow(() -> new UserNotFoundException("The user with the id " + id + " couldn't be found in the database."));
+    }
+
+    @RequestMapping(path="/secured", method = RequestMethod.GET)
+    public @ResponseBody String getSecured() {
+        LOG.info("GET successfully called on /secured resource");
+        return SECURED_TEXT;
     }
 
 }

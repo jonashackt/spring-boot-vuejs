@@ -49,10 +49,10 @@ public class BackendControllerTest {
 
         Long userId =
             given()
-                .queryParam("firstName", "Norbert")
-                .queryParam("lastName", "Siegmund")
+                .pathParam("firstName", "Norbert")
+                .pathParam("lastName", "Siegmund")
             .when()
-                .post("/api/user")
+                .put("/api/user/{lastName}/{firstName}")
             .then()
                 .statusCode(is(HttpStatus.SC_CREATED))
                 .extract()
@@ -72,5 +72,39 @@ public class BackendControllerTest {
         assertThat(responseUser.getFirstName(), is("Norbert"));
         assertThat(responseUser.getLastName(), is("Siegmund"));
     }
+
+	@Test
+	public void user_api_should_give_http_404_not_found_when_user_not_present_in_db() {
+		Long someId = 200L;
+		given()
+			.pathParam("id", someId)
+		.when()
+			.get("/api/user/{id}")
+		.then()
+			.statusCode(HttpStatus.SC_NOT_FOUND);
+	}
+
+	@Test
+	public void secured_api_should_react_with_unauthorized_per_default() {
+
+		given()
+		.when()
+			.get("/api/secured")
+		.then()
+			.statusCode(HttpStatus.SC_UNAUTHORIZED);
+	}
+
+	@Test
+	public void secured_api_should_give_http_200_when_authorized() {
+
+		given()
+			.auth().basic("foo", "bar")
+		.when()
+			.get("/api/secured")
+		.then()
+			.statusCode(HttpStatus.SC_OK)
+			.assertThat()
+				.body(is(equalTo(BackendController.SECURED_TEXT)));
+	}
 
 }

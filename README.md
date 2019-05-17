@@ -1220,6 +1220,8 @@ https://spring.io/guides/gs/securing-web/
 https://www.baeldung.com/rest-assured-authentication
 
 
+#### Configure Spring Security
+
 First we add a new REST resource `/secured` inside our `BackendController we want to secure - and use in a separate frontend later:
 
 ```
@@ -1264,42 +1266,77 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // No session will be created or used by spring security
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No session will be created or used by spring security
+        .and()
             .httpBasic()
         .and()
             .authorizeRequests()
                 .antMatchers("/api/hello").permitAll()
-                .antMatchers("/api/user/**").permitAll()
+                .antMatchers("/api/user/**").permitAll() // allow every URI, that begins with '/api/user/'
                 .antMatchers("/api/secured").authenticated()
-                .antMatchers("/").permitAll()
-                .anyRequest().authenticated();  // protect all other requests (this isn't really needed here, since we don't have that much
-                                                // resources, but it's a best practice to protect everything - except the ones we'd like to open
+                .anyRequest().authenticated() // protect all other requests
+        .and()
+            .csrf().disable(); // disable cross site request forgery, as we don't use cookies - otherwise ALL PUT, POST, DELETE will get HTTP 403!
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("test").password("{noop}foo").roles("USER");
+        auth.inMemoryAuthentication()
+                .withUser("foo").password("{noop}bar").roles("USER");
     }
 }
+
 ```
 
-Now secured with that configuration, our backend should react with the appropriate HTTP status code 403 FORBIDDEN, if one tries to access our API without appropriate credentials. To verify this, we should write a test case inside our [BackendControllerTest](backend/src/test/java/de/jonashackt/springbootvuejs/controller/BackendControllerTest.java):
+Using a simple `http.httpBasic()` we configure to provide a Basic Authentication for our secured resources.
 
-```java
+To deep dive into the Matcher configurations, have a look into https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#jc-authorize-requests
+
+#### Be aware of CSRF!
+
+__BUT:__ Be aware of the CSRF (cross site request forgery) part! The defaults will render a [HTTP 403 FORBIDDEN for any HTTP verb that modifies state (PATCH, POST, PUT, DELETE)](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#csrf-configure):
+
+> by default Spring Security’s CSRF protection will produce an HTTP 403 access denied.
+
+For now we can disable the default behavior with `http.csrf().disable()`
+
+
+#### Testing the secured Backend
+
+Inside our [BackendControllerTest](backend/src/test/java/de/jonashackt/springbootvuejs/controller/BackendControllerTest.java) we should check, whether our API reacts with correct HTTP 401 UNAUTHORIZED, when called without our User credentials:
+
+```
 	@Test
-	public void secured_api_should_react_with_forbidden_per_default() {
+	public void secured_api_should_react_with_unauthorized_per_default() {
 
 		given()
 		.when()
 			.get("/api/secured")
 		.then()
-			.statusCode(HttpStatus.SC_FORBIDDEN);
+			.statusCode(HttpStatus.SC_UNAUTHORIZED);
 	}
 ```
 
+Using `rest-assured` we can also test, if one could access the API correctly with the credentials included:
+
+```
+	@Test
+	public void secured_api_should_give_http_200_when_authorized() {
+
+		given()
+			.auth().basic("foo", "bar")
+		.when()
+			.get("/api/secured")
+		.then()
+			.statusCode(HttpStatus.SC_OK)
+			.assertThat()
+				.body(is(equalTo(BackendController.SECURED_TEXT)));
+	}
+```
+
+The crucial point here is to use the `given().auth().basic("foo", "bar")` configuration to inject the correct credentials properly.
 
 ## Protect parts of Vue.js frontend
 

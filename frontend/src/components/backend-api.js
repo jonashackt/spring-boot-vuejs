@@ -5,14 +5,17 @@ const AXIOS = axios.create({
   timeou: 1000
 });
 
-export function hello() {
-    return AXIOS.get(`/hello`);
+
+export default {
+    hello() {
+        return AXIOS.get(`/hello`);
+    },
+    getUser(userId) {
+        return AXIOS.get(`/user/` + userId);
+    },
+    createUser(firstName, lastName) {
+        return AXIOS.post(`/user/` + firstName + '/' + lastName);
+    }
 }
 
-export function getUser(userId) {
-  return AXIOS.get(`/user/` + userId);
-}
 
-export function createUser(firstName, lastName) {
-    return AXIOS.post(`/user/` + firstName + '/' + lastName);
-}

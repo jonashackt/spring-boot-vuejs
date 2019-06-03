@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import {getUser, createUser} from "./backend-api";
+  import api from "./backend-api";
 
   export default {
     name: 'user',
@@ -42,7 +42,7 @@
       // Fetches posts when the component is created.
       createNewUser () {
 
-        createUser(this.user.firstName, this.user.lastName).then(response => {
+        api.createUser(this.user.firstName, this.user.lastName).then(response => {
             // JSON responses are automatically parsed.
             this.response = response.data;
             this.user.id = response.data;
@@ -54,7 +54,7 @@
           })
       },
       retrieveUser () {
-        getUser(this.user.id).then(response => {
+        api.getUser(this.user.id).then(response => {
             // JSON responses are automatically parsed.
             this.retrievedUser = response.data;
             this.showRetrievedUser = true

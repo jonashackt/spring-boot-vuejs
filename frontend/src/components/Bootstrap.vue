@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import {hello} from './backend-api'
+import api from './backend-api'
 
 export default {
   name: 'bootstrap',
@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     callHelloApi () {
-      hello().then(response => {
+        api.hello().then(response => {
           this.backendResponse = response.data;
           this.httpStatusCode = response.status;
           this.httpStatusText = response.statusText;

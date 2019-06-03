@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import {hello} from "./backend-api";
+  import api from "./backend-api";
 
   export default {
     name: 'service',
@@ -26,7 +26,7 @@
     methods: {
       // Fetches posts when the component is created.
       callHelloApi () {
-        hello().then(response => {
+        api.hello().then(response => {
             this.backendResponse = response.data;
             console.log(response.data)
         })

@@ -6,7 +6,7 @@
 [![versionspringboot](https://img.shields.io/badge/springboot-2.1.5_RELEASE-brightgreen.svg)](https://github.com/spring-projects/spring-boot)
 [![versionnodejs](https://img.shields.io/badge/nodejs-v11.14.0-brightgreen.svg)](https://nodejs.org/en/)
 [![versionvuejs](https://img.shields.io/badge/vue.js-2.6.10-brightgreen.svg)](https://vuejs.org/)
-[![versionvuecli](https://img.shields.io/badge/vue_CLI-3.7.0-brightgreen.svg)](https://cli.vuejs.org/)
+[![versionvuecli](https://img.shields.io/badge/vue_CLI-3.8.2-brightgreen.svg)](https://cli.vuejs.org/)
 [![versionwebpack](https://img.shields.io/badge/webpack-4.28.4-brightgreen.svg)](https://webpack.js.org/)
 [![versionaxios](https://img.shields.io/badge/axios-0.18.0-brightgreen.svg)](https://github.com/axios/axios)
 [![versionjest](https://img.shields.io/badge/jest-23.6.0-brightgreen.svg)](https://jestjs.io/)

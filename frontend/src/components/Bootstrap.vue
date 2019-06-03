@@ -5,7 +5,7 @@
     <p></p>
     <h6><b-badge variant="primary"> Let´s go!</b-badge> Call a Spring Boot REST backend service, by clicking a button:</h6>
     <p></p>
-      <b-btn variant="success" @click="callHelloApi() showResponse=true" id="btnCallHello">/hello (GET)</b-btn>
+      <b-btn variant="success" @click="callHelloApi()" id="btnCallHello">/hello (GET)</b-btn>
       <p></p>
     <h4>Backend response: <b-alert :show="showResponse" dismissible @dismissed="showResponse=false">{{ backendResponse }}</b-alert></h4>
 
@@ -51,7 +51,7 @@ export default {
 
   data () {
     return {
-      msg: 'HowTo call REST-Services:',
+      msg: 'Nice Bootstrap candy!',
       showResponse: false,
       backendResponse: '',
       fullResponse: {
@@ -73,7 +73,8 @@ export default {
           this.httpStatusCode = response.status;
           this.httpStatusText = response.statusText;
           this.headers = response.headers;
-          this.fullResponse = response
+          this.fullResponse = response;
+          this.showResponse=true
         })
         .catch(e => {
           this.errors.push(e)

@@ -1436,6 +1436,28 @@ Now that we have secured a specific part of our backend API, let's also secure a
         +-----------------------------------------------------------------------+
 
 
+## Secure a new Vue.js component
+
+As there is already a secured Backend API, we also want to have a secured frontend part. Therefore let's create a new `Protected.vue` component:
+
+```
+<template>
+  <div class="protected">
+    <h1><b-badge variant="danger">This Site is protected!</b-badge></h1>
+    <h5>If you're able to read this, you've successfully logged in.</h5>
+
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'protected',
+}
+
+</script>
+
+```
+
 
 ## Authenticate Users in Vue.js frontend
 

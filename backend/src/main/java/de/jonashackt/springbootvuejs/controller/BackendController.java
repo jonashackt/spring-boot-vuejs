@@ -27,7 +27,7 @@ public class BackendController {
         return HELLO_TEXT;
     }
 
-    @RequestMapping(path = "/user/{lastName}/{firstName}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/user/{lastName}/{firstName}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody long addNewUser (@PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName) {
         User savedUser = userRepository.save(new User(firstName, lastName));

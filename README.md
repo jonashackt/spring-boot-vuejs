@@ -53,6 +53,12 @@ This project is used as example in a variety of articles & as eBook:
 * [OMG! My package.json is so small - Vue CLI 3 Plugins](#omg-my-packagejson-is-so-small---vue-cli-3-plugins)
 * [The vue.config.js file](#the-vueconfigjs-file)
 * [Build and run with Docker](#build-and-run-with-docker)
+* [Secure Spring Boot backend and protect Vue.js frontend](#secure-spring-boot-backend-and-protect-vuejs-frontend)
+* [Secure the backend API with Spring Security](#secure-the-backend-api-with-spring-security)
+* [Configure Spring Security](#configure-spring-security)
+* [Be aware of CSRF!](#be-aware-of-csrf)
+* [Testing the secured Backend](#testing-the-secured-backend)
+* [Configure credentials inside application.properties and environment variables](#configure-credentials-inside-applicationproperties-and-environment-variables)
 
 
 
@@ -1211,13 +1217,32 @@ https://medium.com/@zitko/structuring-a-vue-project-authentication-87032e5bfe16
 
 
 
-## Secure the '/secured' Backend API with Spring Security
+
+
+## Secure the backend API with Spring Security
 
 https://spring.io/guides/tutorials/spring-boot-oauth2
 
 https://spring.io/guides/gs/securing-web/
 
 https://www.baeldung.com/rest-assured-authentication
+
+Now let's focus on securing our Spring Boot backend first! Therefore we introduce a new RESTful resource, that we want to secure specifically:
+
+
+                   +---+                  +---+                  +---+
+                   |   | /api/hello       |   | /api/user        |   | /api/secured
+                   +---+                  +---+                  +---+
+                     |                      |                      |
+        +-----------------------------------------------------------------------+
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |  Spring Boot backend                                                  |
+        |                                                                       |
+        +-----------------------------------------------------------------------+
 
 
 #### Configure Spring Security
@@ -1305,6 +1330,8 @@ For now we can disable the default behavior with `http.csrf().disable()`
 
 #### Testing the secured Backend
 
+See https://www.baeldung.com/rest-assured-authentication
+
 Inside our [BackendControllerTest](backend/src/test/java/de/jonashackt/springbootvuejs/controller/BackendControllerTest.java) we should check, whether our API reacts with correct HTTP 401 UNAUTHORIZED, when called without our User credentials:
 
 ```
@@ -1340,9 +1367,9 @@ The crucial point here is to use the `given().auth().basic("foo", "bar")` config
 
 
 
-#### Extract user & password definition to application.properties and finally environment variables
+#### Configure credentials inside application.properties and environment variables
 
-Defining the users and password inside code (like our [WebSecurityConfiguration.class](backend/src/main/java/de/jonashackt/springbootvuejs/configuration/WebSecurityConfiguration.java)) that should be grant access to our application should only be suitalbe to testing reasons.
+Defining the users (and passwords) inside code (like our [WebSecurityConfiguration.class](backend/src/main/java/de/jonashackt/springbootvuejs/configuration/WebSecurityConfiguration.java)) that should be given access to our application is a test-only practice!
 
 For our super simple example application, we could have a solution quite similar - but much more safe: If we would be able to extract this code into configuration and later use Spring's powerful mechanism of overriding these configuration with environment variables, we could then store them safely inside our deployment pipelines settings, that are again secured by another login - e.g. as Heroku Config Vars.
 
@@ -1365,7 +1392,7 @@ spring.security.user.password=miller
 
 Running our tests using the old credentials should fail now. Providing the newer one, the test should go green again.
 
-Now introducing environment variables to the game could also done locally inside our IDE for example. First change the test `secured_api_should_give_http_200_when_authorized` again and choose some new credentials like user `maik` with pw `meyer`.
+Now introducing environment variables to the game could also be done locally inside our IDE for example. First change the test `secured_api_should_give_http_200_when_authorized` again and choose some new credentials like user `maik` with pw `meyer`.
 
 Don't change the `application.properties` right now - use your IDE's run configuration and insert two environment variables:
 
@@ -1378,6 +1405,36 @@ Now the test should run green again with this new values.
 
 
 ## Protect parts of Vue.js frontend
+
+Now that we have secured a specific part of our backend API, let's also secure a part of our Vue.js frontend:
+
+        +-----------------------------------------------------------------------+
+        |  Vue.js frontend                                                      |
+        |                                                                       |
+        |   +-----------------+    +-----------------+    +-----------------+   |
+        |   |                 |    |                 |    |                 |   |
+        |   |                 |    |                 |    |  Secured        |   |
+        |   |                 |    |                 |    |                 |   |
+        |   |                 |    |                 |    |  Vue.js View    |   |
+        |   |                 |    |                 |    |                 |   |
+        |   +-----------------+    +-----------------+    +-----------------+   |
+        |                                                                       |
+        +-----------------------------------------------------------------------+
+
+                   +---+                  +---+                  +---+
+                   |   | /api/hello       |   | /api/user        |   | /api/secured
+                   +---+                  +---+                  +---+
+                     |                      |                      |
+        +-----------------------------------------------------------------------+
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |  Spring Boot backend                                                  |
+        +-----------------------------------------------------------------------+
+
 
 
 ## Authenticate Users in Vue.js frontend

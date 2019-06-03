@@ -52,7 +52,7 @@ public class BackendControllerTest {
                 .pathParam("firstName", "Norbert")
                 .pathParam("lastName", "Siegmund")
             .when()
-                .put("/api/user/{lastName}/{firstName}")
+                .post("/api/user/{lastName}/{firstName}")
             .then()
                 .statusCode(is(HttpStatus.SC_CREATED))
                 .extract()

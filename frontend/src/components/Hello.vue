@@ -15,7 +15,7 @@
       <li>HowTo to interact with the Spring Boot database backend:</li>
       <li><router-link :to="{ name: 'User' }" exact target="_blank">/user</router-link></li>
       <li>A secured part of this application:</li>
-      <li><router-link :to="{ name: 'Protected' }" exact target="_blank">/protected</router-link></li>
+      <li><router-link :to="{ name: 'Login' }" exact target="_blank">/login</router-link></li>
     </ul>
   </div>
 </template>

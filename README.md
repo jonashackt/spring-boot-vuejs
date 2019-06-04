@@ -1436,27 +1436,160 @@ Now that we have secured a specific part of our backend API, let's also secure a
         +-----------------------------------------------------------------------+
 
 
-## Secure a new Vue.js component
+#### Create a new Vue Login component
 
-As there is already a secured Backend API, we also want to have a secured frontend part. Therefore let's create a new `Protected.vue` component:
+As there is already a secured Backend API, we also want to have a secured frontend part. 
+
+The super simple solution: No frontend auth store at all!
+
+Every solution you find on the net is quite overengineered for the "super-small-we-have-to-ship-today-app". Why should we bother with a frontend auth store like vuex, why start with OAuth right up front. These could be easily added later on!
+
+The simplest possible solution would simply invoke a backend resource every time, we want to check, whether somebody should be able to access the current site.
+
+Therefore we use [Vue.js conditionals](https://vuejs.org/v2/guide/conditional.html) to show something on our Protected.vue - or not, if we're not logged in. For now this is only handled by a boolean:
 
 ```
 <template>
-  <div class="protected">
-    <h1><b-badge variant="danger">This Site is protected!</b-badge></h1>
+  <div class="protected" v-if="loginSuccess">
+    <h1><b-badge variant="success">Access to protected site granted!</b-badge></h1>
     <h5>If you're able to read this, you've successfully logged in.</h5>
+  </div>
+  <div class="unprotected" v-else-if="loginError">
+    <h1><b-badge variant="danger">You don't have rights here, mate :D</b-badge></h1>
+    <h5>Seams that you don't have access rights... </h5>
+  </div>
+  <div class="unprotected" v-else>
+    <h1><b-badge variant="info">Please login to get access!</b-badge></h1>
+    <h5>You're not logged in - so you don't see much here. Try to log in:</h5>
 
+    <form @submit.prevent="callLogin()">
+      <input type="text" placeholder="username" v-model="user">
+      <input type="password" placeholder="password" v-model="password">
+      <b-btn variant="success" type="submit">Login</b-btn>
+      <p v-if="error" class="error">Bad login information</p>
+    </form>
+  </div>
+
+</template>
+
+<script>
+import api from './backend-api'
+
+export default {
+  name: 'login',
+
+  data () {
+    return {
+      loginSuccess: false,
+      loginError: false,
+      user: '',
+      password: '',
+      error: false
+    }
+  },
+  methods: {
+    callLogin() {
+      api.getSecured(this.user, this.password).then(response => {
+        console.log("Response: '" + response.data + "' with Statuscode " + response.status)
+        if(response.status == 200) {
+          this.loginSuccess = true
+        }
+      }).catch(error => {
+        console.log("Error: " + error)
+        this.loginError = true
+      })
+    }
+  }
+}
+
+</script>
+
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+
+</style>
+
+``` 
+
+
+## The super simple solution: No frontend auth store at all!
+
+Every solution you find on the net is quite overengineered for the "super-small-we-have-to-ship-today-app". Why should we bother with a frontend auth store like vuex, why start with OAuth right up front. These could be easily added later on!
+
+The simplest possible solution would simply invoke a backend resource every time, we want to check, whether somebody should be able to access the current site.
+
+Therefore we use [Vue.js conditionals](https://vuejs.org/v2/guide/conditional.html) to show something on our Protected.vue - or not, if we're not logged in. For now this is only handled by a boolean:
+
+```
+<template>
+  <div class="protected" v-if="showMe">
+    <h1><b-badge variant="success">Access to protected site granted!</b-badge></h1>
+    <h5>If you're able to read this, you've successfully logged in.</h5>
+  </div>
+  <div class="unprotected" v-else>
+    <h1><b-badge variant="danger">This Site is protected - and you don't have rights here, mate :D</b-badge></h1>
+    <h5>You're not logged in - so you don't see much here.</h5>
   </div>
 </template>
 
 <script>
 export default {
   name: 'protected',
-}
 
-</script>
+  data () {
+    return {
+      showMe: false,
+...
+}
+``` 
+
+
+
+
+## Store login information with vuex
+
+We want to start with the simplest solution first! As https://pusher.com/tutorials/authentication-vue-vuex states:
+
+> The simplest option will be to set a unique token for each user in a localStorage. This means, whenever you need to access the user’s token or any other important user data for authentication purposes, we will need to fetch the token over and over again.
+
+So there is https://github.com/vuejs/vuex for centralized state management in Vue.js, which is pretty popular. So you should invest some time to get familiar with it.
+
+There's also a full guide available: https://vuex.vuejs.org/guide/
+
+You could also initialize a new Vue.js project with Vue CLI and mark the `vuex` checkbox. But we try to extend the current project here.
+
+First we add [the vuex dependency](https://www.npmjs.com/package/vuex) into our [package.json](frontend/package.json):
 
 ```
+...
+    "vue": "^2.6.10",
+    "vue-router": "^3.0.6",
+    "vuex": "^3.1.1"
+  },
+```
+
+Now create a new [store.js](frontend/src/store.js) file:
+
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+
+  },
+  mutations: {
+
+  },
+  actions: {
+
+  }
+})
+
+``` 
 
 
 ## Authenticate Users in Vue.js frontend

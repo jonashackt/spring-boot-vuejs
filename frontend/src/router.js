@@ -4,7 +4,7 @@ import Hello from '@/components/Hello'
 import Service from '@/components/Service'
 import Bootstrap from '@/components/Bootstrap'
 import User from '@/components/User'
-import Protected from '@/components/Protected'
+import Login from '@/components/Login'
 
 Vue.use(Router);
 
@@ -31,9 +31,9 @@ export default new Router({
       component: User
     },
     {
-      path: '/protected',
-      name: 'Protected',
-      component: Protected
+      path: '/login',
+      name: 'Login',
+      component: Login
     }
   ]
 })

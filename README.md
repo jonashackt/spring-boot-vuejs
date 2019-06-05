@@ -1440,13 +1440,11 @@ Now that we have secured a specific part of our backend API, let's also secure a
 
 As there is already a secured Backend API, we also want to have a secured frontend part. 
 
-The super simple solution: No frontend auth store at all!
+Every solution you find on the net seems to be quite overengineered for the "super-small-we-have-to-ship-today-app". Why should we bother with a frontend auth store like vuex at the beginning? Why start with OAuth right up front? These could be easily added later on!
 
-Every solution you find on the net is quite overengineered for the "super-small-we-have-to-ship-today-app". Why should we bother with a frontend auth store like vuex, why start with OAuth right up front. These could be easily added later on!
+The simplest solution one could think about how to secure our frontend, would be to create a simple Login.vue component, that simply accesses the `/api/secured` resource every time the login is used.
 
-The simplest possible solution would simply invoke a backend resource every time, we want to check, whether somebody should be able to access the current site.
-
-Therefore we use [Vue.js conditionals](https://vuejs.org/v2/guide/conditional.html) to show something on our Protected.vue - or not, if we're not logged in. For now this is only handled by a boolean:
+Therefore we use [Vue.js conditionals](https://vuejs.org/v2/guide/conditional.html) to show something on our new [Login.vue](frontend/src/components/Login.vue):
 
 ```
 <template>
@@ -1486,7 +1484,18 @@ export default {
       password: '',
       error: false
     }
-  },
+  }
+}
+
+</script>
+``` 
+
+For now the conditional is only handled by two boolean values: `loginSuccess` and `loginError`.
+
+To bring those to life, we implement the `callLogin()` method:
+
+```
+,
   methods: {
     callLogin() {
       api.getSecured(this.user, this.password).then(response => {
@@ -1500,18 +1509,23 @@ export default {
       })
     }
   }
-}
+```
 
-</script>
+With this simple implementation, the Login component ask the Spring Boot backend, if a user is allowed to access the `/api/secured` resource. The [backend-api.js](frontend/src/components/backend-api.js) provides an method, which uses axios' Basic Auth feature:
 
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>
-
+```
+    getSecured(user, password) {
+        return AXIOS.get(`/secured/`,{
+            auth: {
+                username: user,
+                password: password
+            }});
+    }
 ``` 
 
+Now the Login component works for the first time:
+
+![secure-spring-vue-simple-login](screenshots/secure-spring-vue-simple-login.gif)
 
 ## The super simple solution: No frontend auth store at all!
 

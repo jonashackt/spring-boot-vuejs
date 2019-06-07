@@ -59,6 +59,15 @@ This project is used as example in a variety of articles & as eBook:
 * [Be aware of CSRF!](#be-aware-of-csrf)
 * [Testing the secured Backend](#testing-the-secured-backend)
 * [Configure credentials inside application.properties and environment variables](#configure-credentials-inside-applicationproperties-and-environment-variables)
+* [Protect parts of Vue.js frontend](#protect-parts-of-vuejs-frontend)
+* [Create a new Vue Login component](#create-a-new-vue-login-component)
+* [Protect multiple Vue.js components](#protect-multiple-vuejs-components)
+* [Store login information with vuex](#store-login-information-with-vuex)
+* [Define the vuex state](#define-the-vuex-state)
+* [Define a vuex action login() and the mutations login_success & login_error](#define-a-vuex-action-login-and-the-mutations-login_success--login_error)
+* [Last but not least: define getters for the vuex state](#last-but-not-least-define-getters-for-the-vuex-state)
+* [Use vuex Store inside the Login component and forward to Protected.vue, if Login succeeded](#use-vuex-store-inside-the-login-component-and-forward-to-protectedvue-if-login-succeeded)
+* [Redirect user from Protected.vue to Login.vue, if not authenticated before](#redirect-user-from-protectedvue-to-loginvue-if-not-authenticated-before)
 
 
 
@@ -1530,7 +1539,7 @@ Now the Login component works for the first time:
 
 
 
-#### A Protected.vue component
+#### Protect multiple Vue.js components
 
 Now we have a working Login component. Now let's create a new `Protected.vue` component, since we want to have something that's only accessible, if somebody has logged in correctly:
 
@@ -1570,14 +1579,12 @@ export default {
 
 This component should only be visible, if the appropriate access was granted at the Login. Therefore we need to solve 2 problems:
 
-__1. Store the login state__
-__2. Redirect user from Protected.vue to Login.vue, if not authenticated before__
+* __Store the login state__
+* __Redirect user from Protected.vue to Login.vue, if not authenticated before__
 
 
 
-
-
-#### 1. Store login information with vuex
+#### Store login information with vuex
 
 The super dooper simple solution would be to simply use `LocalStorage`. But with [vuex](https://github.com/vuejs/vuex) there is a centralized state management in Vue.js, which is pretty popular. So we should invest some time to get familiar with it. There's a full guide available: https://vuex.vuejs.org/guide/ and a great introductory blog post here: https://pusher.com/tutorials/authentication-vue-vuex
 
@@ -1595,7 +1602,7 @@ First we add [the vuex dependency](https://www.npmjs.com/package/vuex) into our 
 
 > There are four things that go into a Vuex module: the initial [state](https://vuex.vuejs.org/guide/state.html), [getters](https://vuex.vuejs.org/guide/getters.html), [mutations](https://vuex.vuejs.org/guide/mutations.html) and [actions](https://vuex.vuejs.org/guide/actions.html)
 
-###### Define the vuex state
+#### Define the vuex state
 
 To implement them, we create a new [store.js](frontend/src/store.js) file:
 
@@ -1627,7 +1634,7 @@ export default new Vuex.Store({
 We only have an initial state here, which is that a login could be successful or not - and there should be a `userName`.
 
 
-###### Define a vuex action login() and the mutations login_success & login_error
+#### Define a vuex action login() and the mutations login_success & login_error
 
 Then we have a look onto __vuex actions: They provide a way to commit mutations to the vuex store.__ 
 
@@ -1669,7 +1676,7 @@ We just shift our logic on how to login a user from the `Login.vue` to our vuex 
 Instead of directly setting a boolean to a variable, we `commit` a mutation to our store if the authentication request was successful or unsuccessful. We therefore implement two simple mutations: `login_success` & `login_error`
 
 
-###### Last but not least: define getters for the vuex state
+#### Last but not least: define getters for the vuex state
 
 To be able to access vuex state from within other components, we need to implement getters inside our vuex store. As we only want some simple info, we need the following getters:
 
@@ -1680,7 +1687,7 @@ To be able to access vuex state from within other components, we need to impleme
     }
 ```
 
-###### Use vuex Store inside the Login component and forward to Protected.vue, if Login succeeded
+#### Use vuex Store inside the Login component and forward to Protected.vue, if Login succeeded
 
 Instead of directly calling the auth endpoint via axios inside our Login component, we now want to use our vuex store and its actions instead. Therefore we don't even need to import the [store.js](frontend/src/store.js) inside our `Login.vue`, we can simply access it through `$store`. Thy is that? Because we already did that inside our [main.js](frontend/src/main.js):
 

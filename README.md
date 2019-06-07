@@ -1511,7 +1511,7 @@ To bring those to life, we implement the `callLogin()` method:
   }
 ```
 
-With this simple implementation, the Login component ask the Spring Boot backend, if a user is allowed to access the `/api/secured` resource. The [backend-api.js](frontend/src/components/backend-api.js) provides an method, which uses axios' Basic Auth feature:
+With this simple implementation, the Login component asks the Spring Boot backend, if a user is allowed to access the `/api/secured` resource. The [backend-api.js](frontend/src/components/backend-api.js) provides an method, which uses axios' Basic Auth feature:
 
 ```
     getSecured(user, password) {
@@ -1527,41 +1527,56 @@ Now the Login component works for the first time:
 
 ![secure-spring-vue-simple-login](screenshots/secure-spring-vue-simple-login.gif)
 
-## The super simple solution: No frontend auth store at all!
 
-Every solution you find on the net is quite overengineered for the "super-small-we-have-to-ship-today-app". Why should we bother with a frontend auth store like vuex, why start with OAuth right up front. These could be easily added later on!
 
-The simplest possible solution would simply invoke a backend resource every time, we want to check, whether somebody should be able to access the current site.
 
-Therefore we use [Vue.js conditionals](https://vuejs.org/v2/guide/conditional.html) to show something on our Protected.vue - or not, if we're not logged in. For now this is only handled by a boolean:
+#### A Protected.vue component
+
+Now we have a working Login component. Now let's create a new `Protected.vue` component, since we want to have something that's only accessible, if somebody has logged in correctly:
 
 ```
 <template>
-  <div class="protected" v-if="showMe">
+  <div class="protected" v-if="loginSuccess">
     <h1><b-badge variant="success">Access to protected site granted!</b-badge></h1>
     <h5>If you're able to read this, you've successfully logged in.</h5>
   </div>
   <div class="unprotected" v-else>
-    <h1><b-badge variant="danger">This Site is protected - and you don't have rights here, mate :D</b-badge></h1>
-    <h5>You're not logged in - so you don't see much here.</h5>
+    <h1><b-badge variant="info">Please login to get access!</b-badge></h1>
+    <h5>You're not logged in - so you don't see much here. Try to log in:</h5>
+    <router-link :to="{ name: 'Login' }" exact target="_blank">Login</router-link>
   </div>
+
 </template>
 
 <script>
+import api from './backend-api'
+
 export default {
   name: 'protected',
 
   data () {
     return {
-      showMe: false,
-...
+      loginSuccess: false,
+      error: false
+    }
+  },
+  methods: {
+    //
+  }
 }
-``` 
+
+</script>
+```
+
+This component should only be visible, if the appropriate access was granted at the Login. Therefore we need to solve 2 problems:
+
+__1. store the login state__
+__2. make the component visible in Vue router, only if user is authenticated__
 
 
 
+#### 1. Store login information with vuex
 
-## Store login information with vuex
 
 We want to start with the simplest solution first! As https://pusher.com/tutorials/authentication-vue-vuex states:
 
@@ -1605,8 +1620,6 @@ export default new Vuex.Store({
 
 ``` 
 
-
-## Authenticate Users in Vue.js frontend
 
 
 

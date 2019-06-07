@@ -1570,8 +1570,8 @@ export default {
 
 This component should only be visible, if the appropriate access was granted at the Login. Therefore we need to solve 2 problems:
 
-__1. store the login state__
-__2. make the component visible in Vue router, only if user is authenticated__
+__1. Store the login state__
+__2. Redirect user from Protected.vue to Login.vue, if not authenticated before__
 
 
 
@@ -1579,9 +1579,7 @@ __2. make the component visible in Vue router, only if user is authenticated__
 
 #### 1. Store login information with vuex
 
-https://pusher.com/tutorials/authentication-vue-vuex
-
-The super dooper simple solution would be to simply use `LocalStorage`. But with [vuex](https://github.com/vuejs/vuex) there is a centralized state management in Vue.js, which is pretty popular. So we should invest some time to get familiar with it. There's a full guide available: https://vuex.vuejs.org/guide/
+The super dooper simple solution would be to simply use `LocalStorage`. But with [vuex](https://github.com/vuejs/vuex) there is a centralized state management in Vue.js, which is pretty popular. So we should invest some time to get familiar with it. There's a full guide available: https://vuex.vuejs.org/guide/ and a great introductory blog post here: https://pusher.com/tutorials/authentication-vue-vuex
 
 You could also initialize a new Vue.js project with Vue CLI and mark the `vuex` checkbox. But we try to extend the current project here.
 
@@ -1597,6 +1595,8 @@ First we add [the vuex dependency](https://www.npmjs.com/package/vuex) into our 
 
 > There are four things that go into a Vuex module: the initial [state](https://vuex.vuejs.org/guide/state.html), [getters](https://vuex.vuejs.org/guide/getters.html), [mutations](https://vuex.vuejs.org/guide/mutations.html) and [actions](https://vuex.vuejs.org/guide/actions.html)
 
+###### Define the vuex state
+
 To implement them, we create a new [store.js](frontend/src/store.js) file:
 
 ```
@@ -1606,9 +1606,11 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-
-  },
+    state: {
+        loginSuccess: false,
+        loginError: false,
+        userName: null
+    },
   mutations: {
 
   },
@@ -1622,8 +1624,96 @@ export default new Vuex.Store({
 
 ``` 
 
+We only have an initial state here, which is that a login could be successful or not - and there should be a `userName`.
 
-#### 2. make the component visible in Vue router, only if user is authenticated
+
+###### Define a vuex action login() and the mutations login_success & login_error
+
+Then we have a look onto __vuex actions: They provide a way to commit mutations to the vuex store.__ 
+
+As our app here is super simple, we only have one action to implement here: `login`. We omit the `logout` and `register` actions, because we only define one admin user in the Spring Boot backend right now and don't need an implemented logout right now. Both could be implemented later!
+
+We just shift our logic on how to login a user from the `Login.vue` to our vuex action method:
+
+```
+    mutations: {
+        login_success(state, name){
+            state.loginSuccess = true
+            state.userName = name
+
+        },
+        login_error(state){
+            state.loginError = true
+            state.userName = name
+        }
+    },
+    actions: {
+        async login({commit}, user, password) {
+            api.getSecured(user, password)
+                .then(response => {
+                    console.log("Response: '" + response.data + "' with Statuscode " + response.status);
+                    if(response.status == 200) {
+                        // place the loginSuccess state into our vuex store
+                        return commit('login_success', name);
+                    }
+                }).catch(error => {
+                    console.log("Error: " + error);
+                    // place the loginError state into our vuex store
+                    commit('login_error', name);
+                    return Promise.reject("Invald credentials!")
+                })
+        }
+    },
+```
+
+Instead of directly setting a boolean to a variable, we `commit` a mutation to our store if the authentication request was successful or unsuccessful. We therefore implement two simple mutations: `login_success` & `login_error`
+
+
+###### Last but not least: define getters for the vuex state
+
+To be able to access vuex state from within other components, we need to implement getters inside our vuex store. As we only want some simple info, we need the following getters:
+
+```
+    getters: {
+        isLoggedIn: state => state.loginSuccess,
+        hasLoginErrored: state => state.loginError
+    }
+```
+
+###### Use vuex Store inside the Login component and forward to Protected.vue, if Login succeeded
+
+Instead of directly calling the auth endpoint via axios inside our Login component, we now want to use our vuex store and its actions instead. Therefore we don't even need to import the [store.js](frontend/src/store.js) inside our `Login.vue`, we can simply access it through `$store`. Thy is that? Because we already did that inside our [main.js](frontend/src/main.js):
+
+```
+import store from './store'
+
+...
+
+new Vue({
+    router,
+    store,
+    render: h => h(App)
+}).$mount('#app')
+```
+
+With that configuration `store` and `router` are accessible from within every Vue component with the `$` prefixed :) 
+
+If we have a look into our `Login.vue` we see that in action:
+
+```
+callLogin() {
+      this.$store.dispatch('login', { user: this.user, password: this.password})
+        .then(() => this.$router.push('/Protected'))
+        .catch(error => {
+          this.error.push(error)
+        })
+    }
+```
+
+Here we access our vuex store action `login` and issue a login request to our Spring Boot backend. If this succeeds, we use the Vue `$router` to forward the user to our `Protected.vue` component.
+
+
+#### Redirect user from Protected.vue to Login.vue, if not authenticated before
 
 Now let's enhance our [router.js](frontend/src/router.js) slightly. We use the Vue.js routers' [meta field](https://router.vuejs.org/guide/advanced/meta.html) feature to check, whether a user is loggin in already and therefore should be able to access our Protected component with the URI `/protected` :
 
@@ -1657,6 +1747,11 @@ router.beforeEach((to, from, next) => {
 });
 ```
 
+Now if one clicks onto `Protected` and didn't login prior, our application redirects to `Login` automatically:
+
+![secure-spring-redirect-to-login](screenshots/secure-spring-redirect-to-login.gif)
+
+With this redirect, we also don't need the part with `<div class="protected" v-if="loginSuccess">` inside our Login.vue, since in case of a successful login, the user is directly redirected to the Protected.vue.
 
 
 

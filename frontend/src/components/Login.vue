@@ -1,9 +1,5 @@
 <template>
-  <div class="protected" v-if="loginSuccess">
-    <h1><b-badge variant="success">Access to protected sites granted!</b-badge></h1>
-    <h5>If you're able to read this, you've successfully logged in.</h5>
-  </div>
-  <div class="unprotected" v-else-if="loginError">
+  <div class="unprotected" v-if="loginError">
     <h1><b-badge variant="danger">You don't have rights here, mate :D</b-badge></h1>
     <h5>Seams that you don't have access rights... </h5>
   </div>
@@ -22,39 +18,31 @@
 </template>
 
 <script>
-import api from './backend-api'
-
 export default {
   name: 'login',
 
   data () {
     return {
-      loginSuccess: false,
       loginError: false,
       user: '',
       password: '',
-      error: false
+      error: false,
+      errors: []
     }
   },
   methods: {
     callLogin() {
-      api.getSecured(this.user, this.password).then(response => {
-        console.log("Response: '" + response.data + "' with Statuscode " + response.status);
-        if(response.status == 200) {
-          this.loginSuccess = true
-        }
-      }).catch(error => {
-        console.log("Error: " + error);
-        this.loginError = true
-      })
+      this.errors = [];
+      this.$store.dispatch("login", { user: this.user, password: this.password})
+        .then(() => {
+          this.$router.push('/Protected')
+        })
+        .catch(error => {
+          this.loginError = true;
+          this.errors.push(error);
+          this.error = true
+        })
     }
   }
 }
-
 </script>
-
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>

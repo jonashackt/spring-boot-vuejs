@@ -17,7 +17,7 @@
         <li>Login to the secured part of the application</li>
         <li><router-link to="/login">/login</router-link></li>
         <li>A secured part of this application:</li>
-        <li><router-link to="/login">/login</router-link></li>
+        <li><router-link to="/protected">/protected</router-link></li>
     </ul>
   </div>
 </template>

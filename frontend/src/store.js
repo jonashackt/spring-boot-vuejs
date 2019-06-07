@@ -22,22 +22,26 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        async login({commit}, {user, password}) {
-            console.log("Accessing backend with user: '" + user + "' and password '" + password + "'");
-            api.getSecured(user, password)
-                .then(response => {
-                    console.log("Response: '" + response.data + "' with Statuscode " + response.status);
-                    if(response.status == 200) {
-                        console.log("Login successful");
-                        // place the loginSuccess state into our vuex store
-                        return commit('login_success', name);
-                    }
-                }).catch(error => {
-                    console.log("Error: " + error);
-                    // place the loginError state into our vuex store
-                    commit('login_error', name);
-                    return Promise.reject("Invalid credentials!")
-                })
+        login({commit}, {user, password}) {
+            return new Promise((resolve, reject) => {
+                console.log("Accessing backend with user: '" + user + "' and password '" + password + "'");
+                api.getSecured(user, password)
+                    .then(response => {
+                        console.log("Response: '" + response.data + "' with Statuscode " + response.status);
+                        if(response.status == 200) {
+                            console.log("Login successful");
+                            // place the loginSuccess state into our vuex store
+                            commit('login_success', name);
+                        }
+                        resolve(response)
+                    })
+                    .catch(error => {
+                        console.log("Error: " + error);
+                        // place the loginError state into our vuex store
+                        commit('login_error', name);
+                        reject("Invalid credentials!")
+                    })
+            })
         }
     },
     getters: {

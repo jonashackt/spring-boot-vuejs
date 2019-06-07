@@ -1575,16 +1575,13 @@ __2. make the component visible in Vue router, only if user is authenticated__
 
 
 
+
+
 #### 1. Store login information with vuex
 
+https://pusher.com/tutorials/authentication-vue-vuex
 
-We want to start with the simplest solution first! As https://pusher.com/tutorials/authentication-vue-vuex states:
-
-> The simplest option will be to set a unique token for each user in a localStorage. This means, whenever you need to access the user’s token or any other important user data for authentication purposes, we will need to fetch the token over and over again.
-
-So there is https://github.com/vuejs/vuex for centralized state management in Vue.js, which is pretty popular. So you should invest some time to get familiar with it.
-
-There's also a full guide available: https://vuex.vuejs.org/guide/
+The super dooper simple solution would be to simply use `LocalStorage`. But with [vuex](https://github.com/vuejs/vuex) there is a centralized state management in Vue.js, which is pretty popular. So we should invest some time to get familiar with it. There's a full guide available: https://vuex.vuejs.org/guide/
 
 You could also initialize a new Vue.js project with Vue CLI and mark the `vuex` checkbox. But we try to extend the current project here.
 
@@ -1598,7 +1595,9 @@ First we add [the vuex dependency](https://www.npmjs.com/package/vuex) into our 
   },
 ```
 
-Now create a new [store.js](frontend/src/store.js) file:
+> There are four things that go into a Vuex module: the initial [state](https://vuex.vuejs.org/guide/state.html), [getters](https://vuex.vuejs.org/guide/getters.html), [mutations](https://vuex.vuejs.org/guide/mutations.html) and [actions](https://vuex.vuejs.org/guide/actions.html)
+
+To implement them, we create a new [store.js](frontend/src/store.js) file:
 
 ```
 import Vue from 'vue'
@@ -1615,11 +1614,48 @@ export default new Vuex.Store({
   },
   actions: {
 
+  },
+  getters: {
+  
   }
 })
 
 ``` 
 
+
+#### 2. make the component visible in Vue router, only if user is authenticated
+
+Now let's enhance our [router.js](frontend/src/router.js) slightly. We use the Vue.js routers' [meta field](https://router.vuejs.org/guide/advanced/meta.html) feature to check, whether a user is loggin in already and therefore should be able to access our Protected component with the URI `/protected` :
+
+```
+    {
+        path: '/protected',
+        component: Protected,
+        meta: { 
+            requiresAuth: true 
+        }
+    },
+``` 
+
+We also add a new behavior to our router, that checks if it requires authentication every time a route is accessed. If so, it will redirect to our Login component:
+
+```
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        // this route requires auth, check if logged in
+        // if not, redirect to login page.
+        if (!store.getters.isLoggedIn) {
+            next({
+                path: '/login'
+            })
+        } else {
+            next();
+        }
+    } else {
+        next(); // make sure to always call next()!
+    }
+});
+```
 
 
 

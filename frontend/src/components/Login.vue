@@ -1,6 +1,6 @@
 <template>
   <div class="protected" v-if="loginSuccess">
-    <h1><b-badge variant="success">Access to protected site granted!</b-badge></h1>
+    <h1><b-badge variant="success">Access to protected sites granted!</b-badge></h1>
     <h5>If you're able to read this, you've successfully logged in.</h5>
   </div>
   <div class="unprotected" v-else-if="loginError">

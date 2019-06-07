@@ -4,14 +4,16 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import store from './store'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 // Bootstrap
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);
 
 new Vue({
     router,
+    store,
     render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');
 

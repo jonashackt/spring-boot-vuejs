@@ -3,16 +3,15 @@
     <h1>{{ msg }}</h1>
     <h2>REST service call results</h2>
 
-    <button @click="callRestService()">CALL Spring Boot REST backend service</button>
+    <button @click="callHelloApi()">CALL Spring Boot REST backend service</button>
 
-    <h4>Backend response: {{ response }}</h4>
+    <h4>Backend response: {{ backendResponse }}</h4>
 
   </div>
 </template>
 
 <script>
-  // import axios from 'axios'
-  import {AXIOS} from './http-common'
+  import api from "./backend-api";
 
   export default {
     name: 'service',
@@ -20,22 +19,20 @@
     data () {
       return {
         msg: 'HowTo call REST-Services:',
-        response: [],
+        backendResponse: [],
         errors: []
       }
     },
     methods: {
       // Fetches posts when the component is created.
-      callRestService () {
-        AXIOS.get(`/hello`)
-          .then(response => {
-            // JSON responses are automatically parsed.
-            this.response = response.data
+      callHelloApi () {
+        api.hello().then(response => {
+            this.backendResponse = response.data;
             console.log(response.data)
-          })
-          .catch(e => {
-            this.errors.push(e)
-          })
+        })
+        .catch(error => {
+          this.errors.push(error)
+        })
       }
     }
   }

@@ -6,7 +6,7 @@
 [![versionspringboot](https://img.shields.io/badge/springboot-2.1.5_RELEASE-brightgreen.svg)](https://github.com/spring-projects/spring-boot)
 [![versionnodejs](https://img.shields.io/badge/nodejs-v11.14.0-brightgreen.svg)](https://nodejs.org/en/)
 [![versionvuejs](https://img.shields.io/badge/vue.js-2.6.10-brightgreen.svg)](https://vuejs.org/)
-[![versionvuecli](https://img.shields.io/badge/vue_CLI-3.7.0-brightgreen.svg)](https://cli.vuejs.org/)
+[![versionvuecli](https://img.shields.io/badge/vue_CLI-3.8.2-brightgreen.svg)](https://cli.vuejs.org/)
 [![versionwebpack](https://img.shields.io/badge/webpack-4.28.4-brightgreen.svg)](https://webpack.js.org/)
 [![versionaxios](https://img.shields.io/badge/axios-0.18.0-brightgreen.svg)](https://github.com/axios/axios)
 [![versionjest](https://img.shields.io/badge/jest-23.6.0-brightgreen.svg)](https://jestjs.io/)
@@ -53,6 +53,12 @@ This project is used as example in a variety of articles & as eBook:
 * [OMG! My package.json is so small - Vue CLI 3 Plugins](#omg-my-packagejson-is-so-small---vue-cli-3-plugins)
 * [The vue.config.js file](#the-vueconfigjs-file)
 * [Build and run with Docker](#build-and-run-with-docker)
+* [Secure Spring Boot backend and protect Vue.js frontend](#secure-spring-boot-backend-and-protect-vuejs-frontend)
+* [Secure the backend API with Spring Security](#secure-the-backend-api-with-spring-security)
+* [Configure Spring Security](#configure-spring-security)
+* [Be aware of CSRF!](#be-aware-of-csrf)
+* [Testing the secured Backend](#testing-the-secured-backend)
+* [Configure credentials inside application.properties and environment variables](#configure-credentials-inside-applicationproperties-and-environment-variables)
 
 
 
@@ -1195,6 +1201,559 @@ $ docker logs 745e854d7781 --follow
 Now access your Dockerized Spring Boot powererd Vue.js app inside your Browser at [http://localhost:8088](http://localhost:8088). 
 
 If you have played enough with your Dockerized app, don't forget to stop (`docker stop 745e854d7781`) and remove (`docker rm 745e854d7781`) it in the end.
+
+
+# Secure Spring Boot backend and protect Vue.js frontend
+
+Securing parts of our application must consist of two parts: securing the Spring Boot backend - and reacting on that secured backend in the Vue.js frontend.
+
+https://spring.io/guides/tutorials/spring-security-and-angular-js/
+
+https://developer.okta.com/blog/2018/11/20/build-crud-spring-and-vue
+
+https://auth0.com/blog/vuejs2-authentication-tutorial/
+
+https://medium.com/@zitko/structuring-a-vue-project-authentication-87032e5bfe16
+
+
+
+
+
+## Secure the backend API with Spring Security
+
+https://spring.io/guides/tutorials/spring-boot-oauth2
+
+https://spring.io/guides/gs/securing-web/
+
+https://www.baeldung.com/rest-assured-authentication
+
+Now let's focus on securing our Spring Boot backend first! Therefore we introduce a new RESTful resource, that we want to secure specifically:
+
+
+                   +---+                  +---+                  +---+
+                   |   | /api/hello       |   | /api/user        |   | /api/secured
+                   +---+                  +---+                  +---+
+                     |                      |                      |
+        +-----------------------------------------------------------------------+
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |  Spring Boot backend                                                  |
+        |                                                                       |
+        +-----------------------------------------------------------------------+
+
+
+#### Configure Spring Security
+
+First we add a new REST resource `/secured` inside our `BackendController we want to secure - and use in a separate frontend later:
+
+```
+    @GetMapping(path="/secured")
+    public @ResponseBody String getSecured() {
+        LOG.info("GET successfully called on /secured resource");
+        return SECURED_TEXT;
+    }
+```
+
+With Spring it is relatively easy to secure our API. Let's add `spring-boot-starter-security` to our [pom.xml](backend/pom.xml):
+
+```xml
+		<!-- Secure backend API -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+```
+
+Also create a new @Configuration annotated class called [WebSecurityConfiguration.class](backend/src/main/java/de/jonashackt/springbootvuejs/configuration/WebSecurityConfiguration.java):
+
+```java
+package de.jonashackt.springbootvuejs.configuration;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No session will be created or used by spring security
+        .and()
+            .httpBasic()
+        .and()
+            .authorizeRequests()
+                .antMatchers("/api/hello").permitAll()
+                .antMatchers("/api/user/**").permitAll() // allow every URI, that begins with '/api/user/'
+                .antMatchers("/api/secured").authenticated()
+                .anyRequest().authenticated() // protect all other requests
+        .and()
+            .csrf().disable(); // disable cross site request forgery, as we don't use cookies - otherwise ALL PUT, POST, DELETE will get HTTP 403!
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("foo").password("{noop}bar").roles("USER");
+    }
+}
+
+```
+
+Using a simple `http.httpBasic()` we configure to provide a Basic Authentication for our secured resources.
+
+To deep dive into the Matcher configurations, have a look into https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#jc-authorize-requests
+
+#### Be aware of CSRF!
+
+__BUT:__ Be aware of the CSRF (cross site request forgery) part! The defaults will render a [HTTP 403 FORBIDDEN for any HTTP verb that modifies state (PATCH, POST, PUT, DELETE)](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#csrf-configure):
+
+> by default Spring Security’s CSRF protection will produce an HTTP 403 access denied.
+
+For now we can disable the default behavior with `http.csrf().disable()`
+
+
+#### Testing the secured Backend
+
+See https://www.baeldung.com/rest-assured-authentication
+
+Inside our [BackendControllerTest](backend/src/test/java/de/jonashackt/springbootvuejs/controller/BackendControllerTest.java) we should check, whether our API reacts with correct HTTP 401 UNAUTHORIZED, when called without our User credentials:
+
+```
+	@Test
+	public void secured_api_should_react_with_unauthorized_per_default() {
+
+		given()
+		.when()
+			.get("/api/secured")
+		.then()
+			.statusCode(HttpStatus.SC_UNAUTHORIZED);
+	}
+```
+
+Using `rest-assured` we can also test, if one could access the API correctly with the credentials included:
+
+```
+	@Test
+	public void secured_api_should_give_http_200_when_authorized() {
+
+		given()
+			.auth().basic("foo", "bar")
+		.when()
+			.get("/api/secured")
+		.then()
+			.statusCode(HttpStatus.SC_OK)
+			.assertThat()
+				.body(is(equalTo(BackendController.SECURED_TEXT)));
+	}
+```
+
+The crucial point here is to use the `given().auth().basic("foo", "bar")` configuration to inject the correct credentials properly.
+
+
+
+#### Configure credentials inside application.properties and environment variables
+
+Defining the users (and passwords) inside code (like our [WebSecurityConfiguration.class](backend/src/main/java/de/jonashackt/springbootvuejs/configuration/WebSecurityConfiguration.java)) that should be given access to our application is a test-only practice!
+
+For our super simple example application, we could have a solution quite similar - but much more safe: If we would be able to extract this code into configuration and later use Spring's powerful mechanism of overriding these configuration with environment variables, we could then store them safely inside our deployment pipelines settings, that are again secured by another login - e.g. as Heroku Config Vars.
+
+Therefore the first step would be to delete the following code:
+
+```
+@Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("foo").password("{noop}bar").roles("USER");
+    }
+```
+
+and add the following configuration to our [application.properties](backend/src/main/resources/application.properties):
+
+```
+spring.security.user.name=sina
+spring.security.user.password=miller
+```
+
+Running our tests using the old credentials should fail now. Providing the newer one, the test should go green again.
+
+Now introducing environment variables to the game could also be done locally inside our IDE for example. First change the test `secured_api_should_give_http_200_when_authorized` again and choose some new credentials like user `maik` with pw `meyer`.
+
+Don't change the `application.properties` right now - use your IDE's run configuration and insert two environment variables:
+
+```
+SPRING_SECURITY_USER_NAME=maik
+SPRING_SECURITY_USER_PASSWORD=meyer
+```
+
+Now the test should run green again with this new values.
+
+
+## Protect parts of Vue.js frontend
+
+Now that we have secured a specific part of our backend API, let's also secure a part of our Vue.js frontend:
+
+        +-----------------------------------------------------------------------+
+        |  Vue.js frontend                                                      |
+        |                                                                       |
+        |   +-----------------+    +-----------------+    +-----------------+   |
+        |   |                 |    |                 |    |                 |   |
+        |   |                 |    |                 |    |  Secured        |   |
+        |   |                 |    |                 |    |                 |   |
+        |   |                 |    |                 |    |  Vue.js View    |   |
+        |   |                 |    |                 |    |                 |   |
+        |   +-----------------+    +-----------------+    +-----------------+   |
+        |                                                                       |
+        +-----------------------------------------------------------------------+
+
+                   +---+                  +---+                  +---+
+                   |   | /api/hello       |   | /api/user        |   | /api/secured
+                   +---+                  +---+                  +---+
+                     |                      |                      |
+        +-----------------------------------------------------------------------+
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |  Spring Boot backend                                                  |
+        +-----------------------------------------------------------------------+
+
+
+#### Create a new Vue Login component
+
+As there is already a secured Backend API, we also want to have a secured frontend part. 
+
+Every solution you find on the net seems to be quite overengineered for the "super-small-we-have-to-ship-today-app". Why should we bother with a frontend auth store like vuex at the beginning? Why start with OAuth right up front? These could be easily added later on!
+
+The simplest solution one could think about how to secure our frontend, would be to create a simple Login.vue component, that simply accesses the `/api/secured` resource every time the login is used.
+
+Therefore we use [Vue.js conditionals](https://vuejs.org/v2/guide/conditional.html) to show something on our new [Login.vue](frontend/src/components/Login.vue):
+
+```
+<template>
+  <div class="protected" v-if="loginSuccess">
+    <h1><b-badge variant="success">Access to protected site granted!</b-badge></h1>
+    <h5>If you're able to read this, you've successfully logged in.</h5>
+  </div>
+  <div class="unprotected" v-else-if="loginError">
+    <h1><b-badge variant="danger">You don't have rights here, mate :D</b-badge></h1>
+    <h5>Seams that you don't have access rights... </h5>
+  </div>
+  <div class="unprotected" v-else>
+    <h1><b-badge variant="info">Please login to get access!</b-badge></h1>
+    <h5>You're not logged in - so you don't see much here. Try to log in:</h5>
+
+    <form @submit.prevent="callLogin()">
+      <input type="text" placeholder="username" v-model="user">
+      <input type="password" placeholder="password" v-model="password">
+      <b-btn variant="success" type="submit">Login</b-btn>
+      <p v-if="error" class="error">Bad login information</p>
+    </form>
+  </div>
+
+</template>
+
+<script>
+import api from './backend-api'
+
+export default {
+  name: 'login',
+
+  data () {
+    return {
+      loginSuccess: false,
+      loginError: false,
+      user: '',
+      password: '',
+      error: false
+    }
+  }
+}
+
+</script>
+``` 
+
+For now the conditional is only handled by two boolean values: `loginSuccess` and `loginError`.
+
+To bring those to life, we implement the `callLogin()` method:
+
+```
+,
+  methods: {
+    callLogin() {
+      api.getSecured(this.user, this.password).then(response => {
+        console.log("Response: '" + response.data + "' with Statuscode " + response.status)
+        if(response.status == 200) {
+          this.loginSuccess = true
+        }
+      }).catch(error => {
+        console.log("Error: " + error)
+        this.loginError = true
+      })
+    }
+  }
+```
+
+With this simple implementation, the Login component asks the Spring Boot backend, if a user is allowed to access the `/api/secured` resource. The [backend-api.js](frontend/src/components/backend-api.js) provides an method, which uses axios' Basic Auth feature:
+
+```
+    getSecured(user, password) {
+        return AXIOS.get(`/secured/`,{
+            auth: {
+                username: user,
+                password: password
+            }});
+    }
+``` 
+
+Now the Login component works for the first time:
+
+![secure-spring-vue-simple-login](screenshots/secure-spring-vue-simple-login.gif)
+
+
+
+
+#### A Protected.vue component
+
+Now we have a working Login component. Now let's create a new `Protected.vue` component, since we want to have something that's only accessible, if somebody has logged in correctly:
+
+```
+<template>
+  <div class="protected" v-if="loginSuccess">
+    <h1><b-badge variant="success">Access to protected site granted!</b-badge></h1>
+    <h5>If you're able to read this, you've successfully logged in.</h5>
+  </div>
+  <div class="unprotected" v-else>
+    <h1><b-badge variant="info">Please login to get access!</b-badge></h1>
+    <h5>You're not logged in - so you don't see much here. Try to log in:</h5>
+    <router-link :to="{ name: 'Login' }" exact target="_blank">Login</router-link>
+  </div>
+
+</template>
+
+<script>
+import api from './backend-api'
+
+export default {
+  name: 'protected',
+
+  data () {
+    return {
+      loginSuccess: false,
+      error: false
+    }
+  },
+  methods: {
+    //
+  }
+}
+
+</script>
+```
+
+This component should only be visible, if the appropriate access was granted at the Login. Therefore we need to solve 2 problems:
+
+__1. Store the login state__
+__2. Redirect user from Protected.vue to Login.vue, if not authenticated before__
+
+
+
+
+
+#### 1. Store login information with vuex
+
+The super dooper simple solution would be to simply use `LocalStorage`. But with [vuex](https://github.com/vuejs/vuex) there is a centralized state management in Vue.js, which is pretty popular. So we should invest some time to get familiar with it. There's a full guide available: https://vuex.vuejs.org/guide/ and a great introductory blog post here: https://pusher.com/tutorials/authentication-vue-vuex
+
+You could also initialize a new Vue.js project with Vue CLI and mark the `vuex` checkbox. But we try to extend the current project here.
+
+First we add [the vuex dependency](https://www.npmjs.com/package/vuex) into our [package.json](frontend/package.json):
+
+```
+...
+    "vue": "^2.6.10",
+    "vue-router": "^3.0.6",
+    "vuex": "^3.1.1"
+  },
+```
+
+> There are four things that go into a Vuex module: the initial [state](https://vuex.vuejs.org/guide/state.html), [getters](https://vuex.vuejs.org/guide/getters.html), [mutations](https://vuex.vuejs.org/guide/mutations.html) and [actions](https://vuex.vuejs.org/guide/actions.html)
+
+###### Define the vuex state
+
+To implement them, we create a new [store.js](frontend/src/store.js) file:
+
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+    state: {
+        loginSuccess: false,
+        loginError: false,
+        userName: null
+    },
+  mutations: {
+
+  },
+  actions: {
+
+  },
+  getters: {
+  
+  }
+})
+
+``` 
+
+We only have an initial state here, which is that a login could be successful or not - and there should be a `userName`.
+
+
+###### Define a vuex action login() and the mutations login_success & login_error
+
+Then we have a look onto __vuex actions: They provide a way to commit mutations to the vuex store.__ 
+
+As our app here is super simple, we only have one action to implement here: `login`. We omit the `logout` and `register` actions, because we only define one admin user in the Spring Boot backend right now and don't need an implemented logout right now. Both could be implemented later!
+
+We just shift our logic on how to login a user from the `Login.vue` to our vuex action method:
+
+```
+    mutations: {
+        login_success(state, name){
+            state.loginSuccess = true
+            state.userName = name
+
+        },
+        login_error(state){
+            state.loginError = true
+            state.userName = name
+        }
+    },
+    actions: {
+        async login({commit}, user, password) {
+            api.getSecured(user, password)
+                .then(response => {
+                    console.log("Response: '" + response.data + "' with Statuscode " + response.status);
+                    if(response.status == 200) {
+                        // place the loginSuccess state into our vuex store
+                        return commit('login_success', name);
+                    }
+                }).catch(error => {
+                    console.log("Error: " + error);
+                    // place the loginError state into our vuex store
+                    commit('login_error', name);
+                    return Promise.reject("Invald credentials!")
+                })
+        }
+    },
+```
+
+Instead of directly setting a boolean to a variable, we `commit` a mutation to our store if the authentication request was successful or unsuccessful. We therefore implement two simple mutations: `login_success` & `login_error`
+
+
+###### Last but not least: define getters for the vuex state
+
+To be able to access vuex state from within other components, we need to implement getters inside our vuex store. As we only want some simple info, we need the following getters:
+
+```
+    getters: {
+        isLoggedIn: state => state.loginSuccess,
+        hasLoginErrored: state => state.loginError
+    }
+```
+
+###### Use vuex Store inside the Login component and forward to Protected.vue, if Login succeeded
+
+Instead of directly calling the auth endpoint via axios inside our Login component, we now want to use our vuex store and its actions instead. Therefore we don't even need to import the [store.js](frontend/src/store.js) inside our `Login.vue`, we can simply access it through `$store`. Thy is that? Because we already did that inside our [main.js](frontend/src/main.js):
+
+```
+import store from './store'
+
+...
+
+new Vue({
+    router,
+    store,
+    render: h => h(App)
+}).$mount('#app')
+```
+
+With that configuration `store` and `router` are accessible from within every Vue component with the `$` prefixed :) 
+
+If we have a look into our `Login.vue` we see that in action:
+
+```
+callLogin() {
+      this.$store.dispatch('login', { user: this.user, password: this.password})
+        .then(() => this.$router.push('/Protected'))
+        .catch(error => {
+          this.error.push(error)
+        })
+    }
+```
+
+Here we access our vuex store action `login` and issue a login request to our Spring Boot backend. If this succeeds, we use the Vue `$router` to forward the user to our `Protected.vue` component.
+
+
+#### Redirect user from Protected.vue to Login.vue, if not authenticated before
+
+Now let's enhance our [router.js](frontend/src/router.js) slightly. We use the Vue.js routers' [meta field](https://router.vuejs.org/guide/advanced/meta.html) feature to check, whether a user is loggin in already and therefore should be able to access our Protected component with the URI `/protected` :
+
+```
+    {
+        path: '/protected',
+        component: Protected,
+        meta: { 
+            requiresAuth: true 
+        }
+    },
+``` 
+
+We also add a new behavior to our router, that checks if it requires authentication every time a route is accessed. If so, it will redirect to our Login component:
+
+```
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        // this route requires auth, check if logged in
+        // if not, redirect to login page.
+        if (!store.getters.isLoggedIn) {
+            next({
+                path: '/login'
+            })
+        } else {
+            next();
+        }
+    } else {
+        next(); // make sure to always call next()!
+    }
+});
+```
+
+Now if one clicks onto `Protected` and didn't login prior, our application redirects to `Login` automatically:
+
+![secure-spring-redirect-to-login](screenshots/secure-spring-redirect-to-login.gif)
+
+With this redirect, we also don't need the part with `<div class="protected" v-if="loginSuccess">` inside our Login.vue, since in case of a successful login, the user is directly redirected to the Protected.vue.
+
+
 
 
 # Links

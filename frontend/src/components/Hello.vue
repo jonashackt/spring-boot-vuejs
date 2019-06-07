@@ -8,12 +8,16 @@
     </ul>
     <h3>This site contains more stuff :)</h3>
     <ul>
-      <li>HowTo call REST-Services:</li>
-      <li><router-link :to="{ name: 'Service' }" exact target="_blank">/callservice</router-link></li>
-      <li>HowTo to play around with Bootstrap UI components:</li>
-      <li><router-link :to="{ name: 'Bootstrap' }" exact target="_blank">/bootstrap</router-link></li>
-      <li>HowTo to interact with the Spring Boot database backend:</li>
-      <li><router-link :to="{ name: 'User' }" exact target="_blank">/user</router-link></li>
+        <li>HowTo call REST-Services:</li>
+        <li><router-link to="/callservice">/callservice</router-link></li>
+        <li>HowTo to play around with Bootstrap UI components:</li>
+        <li><router-link to="/bootstrap">/bootstrap</router-link></li>
+        <li>HowTo to interact with the Spring Boot database backend:</li>
+        <li><router-link to="/user">/user</router-link></li>
+        <li>Login to the secured part of the application</li>
+        <li><router-link to="/login">/login</router-link></li>
+        <li>A secured part of this application:</li>
+        <li><router-link to="/protected">/protected</router-link></li>
     </ul>
   </div>
 </template>

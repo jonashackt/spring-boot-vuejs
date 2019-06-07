@@ -7,7 +7,7 @@
     <input type="text" v-model="user.firstName" placeholder="first name">
     <input type="text" v-model="user.lastName" placeholder="last name">
 
-    <button @click="createUser()">Create User</button>
+    <button @click="createNewUser()">Create User</button>
 
     <div v-if="showResponse"><h6>User created with Id: {{ response }}</h6></div>
 
@@ -19,8 +19,7 @@
 </template>
 
 <script>
-  // import axios from 'axios'
-  import {AXIOS} from './http-common'
+  import api from "./backend-api";
 
   export default {
     name: 'user',
@@ -41,17 +40,13 @@
     },
     methods: {
       // Fetches posts when the component is created.
-      createUser () {
-        var params = new URLSearchParams()
-        params.append('firstName', this.user.firstName)
-        params.append('lastName', this.user.lastName)
+      createNewUser () {
 
-        AXIOS.post(`/user`, params)
-          .then(response => {
+        api.createUser(this.user.firstName, this.user.lastName).then(response => {
             // JSON responses are automatically parsed.
-            this.response = response.data
-            this.user.id = response.data
-            console.log(response.data)
+            this.response = response.data;
+            this.user.id = response.data;
+            console.log('Created new User with Id ' + response.data);
             this.showResponse = true
           })
           .catch(e => {
@@ -59,11 +54,9 @@
           })
       },
       retrieveUser () {
-        AXIOS.get(`/user/` + this.user.id)
-          .then(response => {
+        api.getUser(this.user.id).then(response => {
             // JSON responses are automatically parsed.
-            this.retrievedUser = response.data
-            console.log(response.data)
+            this.retrievedUser = response.data;
             this.showRetrievedUser = true
           })
           .catch(e => {

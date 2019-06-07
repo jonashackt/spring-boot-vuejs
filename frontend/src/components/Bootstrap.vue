@@ -5,9 +5,9 @@
     <p></p>
     <h6><b-badge variant="primary"> Let´s go!</b-badge> Call a Spring Boot REST backend service, by clicking a button:</h6>
     <p></p>
-    <b-btn variant="success" @click="callRestService(); showResponse=true" id="btnCallHello">/hello (GET)</b-btn>
-    <p></p>
-    <h4>Backend response: <b-alert :show="showResponse" dismissible @dismissed="showResponse=false">{{ response }}</b-alert></h4>
+      <b-btn variant="success" @click="callHelloApi()" id="btnCallHello">/hello (GET)</b-btn>
+      <p></p>
+    <h4>Backend response: <b-alert :show="showResponse" dismissible @dismissed="showResponse=false">{{ backendResponse }}</b-alert></h4>
 
     <b-btn v-b-toggle.collapse1>Show Response details</b-btn>
     <p></p>
@@ -44,17 +44,16 @@
 </template>
 
 <script>
-// import axios from 'axios'
-import {AXIOS} from './http-common'
+import api from './backend-api'
 
 export default {
   name: 'bootstrap',
 
   data () {
     return {
-      msg: 'HowTo call REST-Services:',
+      msg: 'Nice Bootstrap candy!',
       showResponse: false,
-      response: '',
+      backendResponse: '',
       fullResponse: {
         config: {
           foo: '',
@@ -68,17 +67,14 @@ export default {
     }
   },
   methods: {
-    // Fetches posts when the component is created.
-    callRestService () {
-      AXIOS.get(`/hello`)
-        .then(response => {
-          // JSON responses are automatically parsed.
-          this.response = response.data
-          console.log(response.data)
-          this.httpStatusCode = response.status
-          this.httpStatusText = response.statusText
-          this.headers = response.headers
-          this.fullResponse = response
+    callHelloApi () {
+        api.hello().then(response => {
+          this.backendResponse = response.data;
+          this.httpStatusCode = response.status;
+          this.httpStatusText = response.statusText;
+          this.headers = response.headers;
+          this.fullResponse = response;
+          this.showResponse=true
         })
         .catch(e => {
           this.errors.push(e)

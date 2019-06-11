@@ -1422,7 +1422,7 @@ Now that we have secured a specific part of our backend API, let's also secure a
         |                                                                       |
         |   +-----------------+    +-----------------+    +-----------------+   |
         |   |                 |    |                 |    |                 |   |
-        |   |                 |    |                 |    |  Secured        |   |
+        |   |                 |    |                 |    |  Protected      |   |
         |   |                 |    |                 |    |                 |   |
         |   |                 |    |                 |    |  Vue.js View    |   |
         |   |                 |    |                 |    |                 |   |
@@ -1760,6 +1760,115 @@ Now if one clicks onto `Protected` and didn't login prior, our application redir
 
 With this redirect, we also don't need the part with `<div class="protected" v-if="loginSuccess">` inside our Login.vue, since in case of a successful login, the user is directly redirected to the Protected.vue.
 
+
+## Check auth state at secured backend endpoints
+
+We're now already where we wanted to be at the first place: Our Spring Boot backend has a secured API endpoint, which works with simple user/password authentication. And our Vue.js frontend uses this endpoint to do a Login and protect the `Protected` component, if the user didn't log in before. The login state is held in the frontend, using the `vuex` store.
+
+Now if we want to go a step ahead and call a secured API endpoint in the backend from within our `Protected` frontend component, we need to fully store the credentials inside our `vuex` store, so we could access our secured resource
+
+
+        +-----------------------------------------------------------------------+
+        |  Vue.js frontend                                                      |
+        |                          +----------------------------------------+   |
+        |                          |                vuex store              |   |
+        |                          +----------------------------------------+   |
+        |                                   |                      |            |
+        |   +-----------------+    +-----------------+    +-----------------+   |
+        |   |                 |    |                 |    |                 |   |
+        |   |                 |    |    Login.vue    |    |    Protected    |   |
+        |   |                 |    |                 |    |                 |   |
+        |   +-----------------+    +-----------------+    +-----------------+   |
+        |                                           |               |           |
+        +-------------------------------------------|---------------|-----------+
+                                                    |-------------| |  
+                   +---+                  +---+                  +---+
+                   |   | /api/hello       |   | /api/user        |   | /api/secured
+                   +---+                  +---+                  +---+
+                     |                      |                      |
+        +-----------------------------------------------------------------------+
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |                                                                       |
+        |  Spring Boot backend                                                  |
+        +-----------------------------------------------------------------------+
+
+Therefore we enhance our [store.js](frontend/src/store.js):
+
+```
+export default new Vuex.Store({
+    state: {
+        loginSuccess: false,
+        loginError: false,
+        userName: null,
+        userPass: null,
+        response: []
+    },
+    mutations: {
+        login_success(state, payload){
+            state.loginSuccess = true;
+            state.userName = payload.userName;
+            state.userPass = payload.userPass;
+        },
+    ...
+    },
+    actions: {
+        login({commit}, {user, password}) {
+            ...
+                            // place the loginSuccess state into our vuex store
+                            commit('login_success', {
+                                userName: user,
+                                userPass: password
+                            });
+            ...
+    getters: {
+        isLoggedIn: state => state.loginSuccess,
+        hasLoginErrored: state => state.loginError,
+        getUserName: state => state.userName,
+        getUserPass: state => state.userPass
+    }
+```
+
+> Be sure to use the current way to define and [interact with vuex mutations](https://vuex.vuejs.org/guide/mutations.html). Lot's of blog posts are using an old way of committing multiple parameters like `commit('auth_success', token, user)`. This DOES NOT work anymore. Only the first parameter will be set, the others are lost! 
+
+Now inside our [Protected.vue](frontend/src/components/Protected.vue), we can use the stored credentials to access our `/secured` endpoint:
+
+```
+<script>
+  import api from './backend-api'
+  import store from './../store'
+
+export default {
+  name: 'protected',
+
+  data () {
+    return {
+      backendResponse: '',
+      securedApiCallSuccess: false,
+      errors: null
+    }
+  },
+  methods: {
+    getSecuredTextFromBackend() {
+      api.getSecured(store.getters.getUserName, store.getters.getUserPass)
+              .then(response => {
+                console.log("Response: '" + response.data + "' with Statuscode " + response.status);
+                this.securedApiCallSuccess = true;
+                this.backendResponse = response.data;
+              })
+              .catch(error => {
+                console.log("Error: " + error);
+                this.errors = error;
+              })
+    }
+  }
+}
+```
+
+Feel free to create a nice GUI based on `securedApiCallSuccess`, `backendResponse` and `errors` :)
 
 
 

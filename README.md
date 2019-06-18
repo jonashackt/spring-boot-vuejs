@@ -53,6 +53,7 @@ This project is used as example in a variety of articles & as eBook:
 * [OMG! My package.json is so small - Vue CLI 3 Plugins](#omg-my-packagejson-is-so-small---vue-cli-3-plugins)
 * [The vue.config.js file](#the-vueconfigjs-file)
 * [Build and run with Docker](#build-and-run-with-docker)
+* [Run with JDK 8, 9 or 11ff](#run-with-jdk-8-9-or-11-ff)
 * [Secure Spring Boot backend and protect Vue.js frontend](#secure-spring-boot-backend-and-protect-vuejs-frontend)
 * [Secure the backend API with Spring Security](#secure-the-backend-api-with-spring-security)
 * [Configure Spring Security](#configure-spring-security)
@@ -1211,6 +1212,24 @@ $ docker logs 745e854d7781 --follow
 Now access your Dockerized Spring Boot powererd Vue.js app inside your Browser at [http://localhost:8088](http://localhost:8088). 
 
 If you have played enough with your Dockerized app, don't forget to stop (`docker stop 745e854d7781`) and remove (`docker rm 745e854d7781`) it in the end.
+
+
+# Run with JDK 8, 9 or 11 ff
+
+As with Spring Boot, we can define the desired Java version simply by editing our backend's [pom.xml](backend/pom.xml): 
+
+```
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+```
+
+If you want to have `JDK9`, place a `<java.version>9</java.version>` or other versions just as you like to (see [this stackoverflow answer](https://stackoverflow.com/questions/54467287/how-to-specify-java-11-version-in-spring-spring-boot-pom-xml)).
+
+Spring Boot handles the needed `maven.compiler.release`, which tell's Java from version 9 on to build for a specific target.
+
+We just set `1.8` as the baseline here, since if we set a newer version as the standard, builds on older versions then 8 will fail (see [this build log for example](https://travis-ci.org/jonashackt/spring-boot-vuejs/builds/547227298).
+
 
 
 # Secure Spring Boot backend and protect Vue.js frontend

@@ -68,6 +68,7 @@ This project is used as example in a variety of articles & as eBook:
 * [Last but not least: define getters for the vuex state](#last-but-not-least-define-getters-for-the-vuex-state)
 * [Use vuex Store inside the Login component and forward to Protected.vue, if Login succeeded](#use-vuex-store-inside-the-login-component-and-forward-to-protectedvue-if-login-succeeded)
 * [Redirect user from Protected.vue to Login.vue, if not authenticated before](#redirect-user-from-protectedvue-to-loginvue-if-not-authenticated-before)
+* [Check auth state at secured backend endpoints](#check-auth-state-at-secured-backend-endpoints)
 
 
 

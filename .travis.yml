@@ -1,7 +1,14 @@
 language: java
 jdk:
-- oraclejdk8
-script: mvn clean install jacoco:report coveralls:report
+  - oraclejdk8
+  - oraclejdk9
+  - oraclejdk11
+
+script: mvn clean install
+
 cache:
   directories:
   - node_modules
+
+after_success:
+  - mvn clean test jacoco:report coveralls:report

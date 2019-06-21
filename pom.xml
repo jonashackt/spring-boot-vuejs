@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.5.RELEASE</version>
+		<version>2.1.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -22,7 +22,7 @@
         <main.basedir>${project.basedir}</main.basedir>
 
 		<!-- Analysis Tools for CI -->
-		<build-plugin.jacoco.version>0.8.3</build-plugin.jacoco.version>
+		<build-plugin.jacoco.version>0.8.4</build-plugin.jacoco.version>
 		<build-plugin.coveralls.version>4.3.0</build-plugin.coveralls.version>
     </properties>
 	

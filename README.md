@@ -41,6 +41,7 @@ This project is used as example in a variety of articles & as eBook:
 * [HTTP calls from Vue.js to (Spring Boot) REST backend](#http-calls-from-vuejs-to-spring-boot-rest-backend)
 * [The problem with SOP](#the-problem-with-sop)
 * [But STOP! Webpack & Vue have something much smarter for us to help us with SOP!](#but-stop-webpack--vue-have-something-much-smarter-for-us-to-help-us-with-sop)
+* [Using history mode for nicer URLs](#using-history-mode-for-nicer-urls)
 * [Bootstrap & Vue.js](#bootstrap--vuejs)
 * [Heroku Deployment](#heroku-deployment)
 * [Using Heroku's Postgres as Database for Spring Boot backend and Vue.js frontend](#using-herokus-postgres-as-database-for-spring-boot-backend-and-vuejs-frontend)
@@ -475,6 +476,53 @@ Object.keys(proxyTable).forEach(function (context) {
   app.use(proxyMiddleware(options.filter || context, options))
 })
 ```
+
+## Using history mode for nicer URLs
+
+If we use the default configuration of the generated Vue.js template, we see URLs with a `#` inside them - like this:
+
+```
+http://localhost:8098/#/bootstrap
+
+or
+
+http://localhost:8098/#/user
+```
+
+With the usage of __[HTML5 history mode](https://router.vuejs.org/guide/essentials/history-mode.html#html5-history-mode)__, we can achieve much nicer URLs without the `#` in them. Only thing to do in the Vue.js frontend is to configure our router accordingly inside the [router.js](frontend/src/router.js):
+
+```
+...
+
+Vue.use(Router);
+
+const router = new Router({
+    mode: 'history', // uris without hashes #, see https://router.vuejs.org/guide/essentials/history-mode.html#html5-history-mode
+    routes: [
+        { path: '/', component: Hello },
+        { path: '/callservice', component: Service },
+        ...
+```
+
+That's nearly everything. BUT only nearly! If one clicks on a link inside our frontend, the user is correctly send to the wished component. 
+
+But if the user enters the URL directly into the Browser, we get a `Whitelabel Error Page` because our Spring Boot backend gives us a __HTTP 404__ - since this URL isn't present in the backend:
+
+![html5-history-mode-whitelabel-error-page-404](screenshots/html5-history-mode-whitelabel-error-page-404.gif)
+
+The solution is to redirect or better forward the user to the frontend (router) again. The [Vue.js docs don't provide an example configuration for Spring Boot](https://router.vuejs.org/guide/essentials/history-mode.html#example-server-configurations), but luckily [there are other resources](https://www.baeldung.com/spring-redirect-and-forward). In essence we have to implement a forwarding controller in our [BackendController](backend/src/main/java/de/jonashackt/springbootvuejs/controller/BackendController.java):
+
+```
+    // Forwards all routes to FrontEnd except: '/', '/index.html', '/api', '/api/**'
+    // Required because of 'mode: history' usage in frontend routing, see README for further details
+    @RequestMapping(value = "{_:^(?!index\\.html|api).$}")
+    public String redirectApi() {
+        LOG.info("URL entered directly into the Browser, so we need to redirect...");
+        return "forward:/";
+    }
+```
+
+This controller will forward every request other then `'/', '/index.html', '/api', '/api/**'` to our Vue.js frontend.
 
 
 ## Bootstrap & Vue.js

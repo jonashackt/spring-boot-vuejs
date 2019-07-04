@@ -20,6 +20,9 @@ target
 *.iml
 *.log
 
+# VSCode
+.vscode
+
 # logback
 logback.out.xml
 

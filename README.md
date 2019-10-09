@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/jonashackt/spring-boot-vuejs.svg?branch=master)](https://travis-ci.org/jonashackt/spring-boot-vuejs)
 [![Coverage Status](https://coveralls.io/repos/github/jonashackt/spring-boot-vuejs/badge.svg?branch=master)](https://coveralls.io/github/jonashackt/spring-boot-vuejs?branch=master)
 [![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/jonashackt/spring-boot-vuejs/blob/master/LICENSE)
-[![versionspringboot](https://img.shields.io/badge/springboot-2.1.8_RELEASE-brightgreen.svg)](https://github.com/spring-projects/spring-boot)
+[![versionspringboot](https://img.shields.io/badge/springboot-2.1.9_RELEASE-brightgreen.svg)](https://github.com/spring-projects/spring-boot)
 [![versionjava](https://img.shields.io/badge/jdk-8,_9,_11-brightgreen.svg?logo=java)](https://github.com/spring-projects/spring-boot)
 [![versionvuejs](https://img.shields.io/badge/vue.js-2.6.10-brightgreen.svg?logo=vue.js)](https://vuejs.org/)
 [![versionvuecli](https://img.shields.io/badge/vue_CLI-3.11.0-brightgreen.svg?logo=vue.js)](https://cli.vuejs.org/)
@@ -264,8 +264,8 @@ module.exports = {
   ...
   // Change build paths to make them Maven compatible
   // see https://cli.vuejs.org/config/
-  outputDir: 'target/dist',
-  assetsDir: 'static'
+  outputDir;: 'target/dist',
+  assetsDir;: 'static';
 }
 ```
 
@@ -327,14 +327,14 @@ Calling a REST service with Axios is simple. Go into the script area of your com
 ```js
 import axios from 'axios'
 
-data (){
+data ();{
   return {
     response: [],
     errors: []
   }
 },
 
-callRestService (){
+callRestService ();{
   axios.get(`api/hello`)
     .then(response => {
       // JSON responses are automatically parsed.
@@ -469,7 +469,7 @@ This is used in the webpack build process to configure the proxyMiddleware (you 
 ```js
 // proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
-  var options = proxyTable[context]
+  var options = proxyTable[context];
   if (typeof options === 'string') {
     options = { target: options }
   }
@@ -735,16 +735,16 @@ export default {
  methods: {
    // Fetches posts when the component is created.
    createUser () {
-     var params = new URLSearchParams()
-     params.append('firstName', this.user.firstName)
-     params.append('lastName', this.user.lastName)
+     var params = new URLSearchParams();
+     params.append('firstName', this.user.firstName);
+     params.append('lastName', this.user.lastName);
 
      AXIOS.post(`/user`, params)
        .then(response => {
          // JSON responses are automatically parsed.
-         this.response = response.data
-         this.user.id = response.data
-         console.log(response.data)
+         this.response = response.data;
+         this.user.id = response.data;
+         console.log(response.data);
          this.showResponse = true
        })
        .catch(e => {
@@ -755,8 +755,8 @@ export default {
      AXIOS.get(`/user/` + this.user.id)
        .then(response => {
          // JSON responses are automatically parsed.
-         this.retrievedUser = response.data
-         console.log(response.data)
+         this.retrievedUser = response.data;
+         console.log(response.data);
          this.showRetrievedUser = true
        })
        .catch(e => {
@@ -822,9 +822,9 @@ The test files itself could be named `xyz.spec.js` or `xyz.test.js` - and could 
 The Jest run-configuration is done inside the [package.json](frontend/package.json):
 
 ```js
-"scripts": {
+"scripts";: {
     ...
-    "test:unit": "vue-cli-service test:unit --coverage",
+    "test:unit";: "vue-cli-service test:unit --coverage",;
     ....
   },
 ```

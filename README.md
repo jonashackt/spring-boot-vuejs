@@ -6,7 +6,7 @@
 [![versionspringboot](https://img.shields.io/badge/springboot-2.1.9_RELEASE-brightgreen.svg)](https://github.com/spring-projects/spring-boot)
 [![versionjava](https://img.shields.io/badge/jdk-8,_9,_11-brightgreen.svg?logo=java)](https://github.com/spring-projects/spring-boot)
 [![versionvuejs](https://img.shields.io/badge/vue.js-2.6.10-brightgreen.svg?logo=vue.js)](https://vuejs.org/)
-[![versionvuecli](https://img.shields.io/badge/vue_CLI-3.12.0-brightgreen.svg?logo=vue.js)](https://cli.vuejs.org/)
+[![versionvuecli](https://img.shields.io/badge/vue_CLI-4.0.0-brightgreen.svg?logo=vue.js)](https://cli.vuejs.org/)
 [![versionnodejs](https://img.shields.io/badge/nodejs-v12.12.0-brightgreen.svg?logo=node.js)](https://nodejs.org/en/)
 [![versionwebpack](https://img.shields.io/badge/webpack-4.41.0-brightgreen.svg?logo=webpack)](https://webpack.js.org/)
 [![versionaxios](https://img.shields.io/badge/axios-0.19.0-brightgreen.svg)](https://github.com/axios/axios)

@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/jonashackt/spring-boot-vuejs.svg?branch=master)](https://travis-ci.org/jonashackt/spring-boot-vuejs)
 [![Coverage Status](https://coveralls.io/repos/github/jonashackt/spring-boot-vuejs/badge.svg?branch=master)](https://coveralls.io/github/jonashackt/spring-boot-vuejs?branch=master)
 [![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/jonashackt/spring-boot-vuejs/blob/master/LICENSE)
-[![versionspringboot](https://img.shields.io/badge/springboot-2.1.9_RELEASE-brightgreen.svg)](https://github.com/spring-projects/spring-boot)
+[![versionspringboot](https://img.shields.io/badge/springboot-2.2.0_RELEASE-brightgreen.svg)](https://github.com/spring-projects/spring-boot)
 [![versionjava](https://img.shields.io/badge/jdk-8,_9,_11-brightgreen.svg?logo=java)](https://github.com/spring-projects/spring-boot)
 [![versionvuejs](https://img.shields.io/badge/vue.js-2.6.10-brightgreen.svg?logo=vue.js)](https://vuejs.org/)
 [![versionvuecli](https://img.shields.io/badge/vue_CLI-4.0.4-brightgreen.svg?logo=vue.js)](https://cli.vuejs.org/)

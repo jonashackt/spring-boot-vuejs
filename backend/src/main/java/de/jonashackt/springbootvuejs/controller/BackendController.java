@@ -22,14 +22,14 @@ public class BackendController {
     private UserRepository userRepository;
 
     @RequestMapping(path = "/hello")
-    public @ResponseBody String sayHello() {
+    public String sayHello() {
         LOG.info("GET called on /hello resource");
         return HELLO_TEXT;
     }
 
     @RequestMapping(path = "/user/{lastName}/{firstName}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody long addNewUser (@PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName) {
+    public long addNewUser (@PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName) {
         User savedUser = userRepository.save(new User(firstName, lastName));
 
         LOG.info(savedUser.toString() + " successfully saved into DB");
@@ -38,7 +38,7 @@ public class BackendController {
     }
 
     @GetMapping(path = "/user/{id}")
-    public @ResponseBody User getUserById(@PathVariable("id") long id) {
+    public User getUserById(@PathVariable("id") long id) {
 
         return userRepository.findById(id).map(user -> {
             LOG.info("Reading user with id " + id + " from database.");

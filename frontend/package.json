@@ -30,7 +30,7 @@
     "@vue/cli-plugin-vuex": "4.0.5",
     "@vue/cli-service": "4.0.5",
     "@vue/test-utils": "1.0.0-beta.29",
-    "chromedriver": "77.0.0",
+    "chromedriver": "78.0.1",
     "geckodriver": "1.19.1",
     "node-sass": "4.13.0",
     "sass-loader": "8.0.0",

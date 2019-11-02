@@ -12,7 +12,8 @@
 [![versionaxios](https://img.shields.io/badge/dynamic/json?color=brightgreen&url=https://raw.githubusercontent.com/jonashackt/spring-boot-vuejs/master/frontend/package.json&query=$.dependencies.axios&label=axios)](https://github.com/axios/axios)
 [![versionjest](https://img.shields.io/badge/dynamic/json?color=brightgreen&url=https://raw.githubusercontent.com/jonashackt/spring-boot-vuejs/master/frontend/package-lock.json&query=$.dependencies.jest.version&label=jest&logo=jest)](https://jestjs.io/)
 [![versionnightwatch](https://img.shields.io/badge/dynamic/json?color=brightgreen&url=https://raw.githubusercontent.com/jonashackt/spring-boot-vuejs/master/frontend/package-lock.json&query=$.dependencies.nightwatch.version&label=nightwatch)](http://nightwatchjs.org/)
-[![Deployed on Heroku](https://img.shields.io/badge/heroku-deployed-blueviolet.svg?logo=heroku&)](https://spring-boot-vuejs.herokuapp.com/)
+[![Deployed on Heroku](https://img.shields.io/badge/heroku-deployed-blueviolet.svg?logo=heroku)](https://spring-boot-vuejs.herokuapp.com/)
+[![Pushed to Docker Hub](https://img.shields.io/badge/docker_hub-jonashackt/spring--boot--vuejs-blue.svg?logo=docker)](https://hub.docker.com/r/jonashackt/spring-boot-vuejs)
     
 > **If you´re a JavaMagazin / blog.codecentric.de / Softwerker reader**, consider switching to [vue-cli-v2-webpack-v3](https://github.com/jonashackt/spring-boot-vuejs/tree/vue-cli-v2-webpack-v3)
 

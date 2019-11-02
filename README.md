@@ -1264,6 +1264,61 @@ Now access your Dockerized Spring Boot powererd Vue.js app inside your Browser a
 If you have played enough with your Dockerized app, don't forget to stop (`docker stop 745e854d7781`) and remove (`docker rm 745e854d7781`) it in the end.
 
 
+#### Autorelease to Docker Hub on hub.docker.com
+
+We also want to have the current version of our code build and released to https://hub.docker.com/. Therefore head to the repositories tab in Docker Hub and click `Create Repository`:
+
+![docker-hub-create-repo](screenshots/docker-hub-create-repo.png)
+
+As the docs state, there are some config options to [setup automated builds](https://docs.docker.com/docker-hub/builds/).
+
+Finally, we should see our Docker images released on https://hub.docker.com/r/jonashackt/spring-boot-vuejs and could run this app simply by executing:
+
+```
+docker run -p 8098:8098 jonashackt/spring-boot-vuejs:latest
+```
+
+This pulls the latest `jonashackt/spring-boot-vuejs` image and runs our app locally:
+
+```
+docker run -p 8098:8098 jonashackt/spring-boot-vuejs:latest
+Unable to find image 'jonashackt/spring-boot-vuejs:latest' locally
+latest: Pulling from jonashackt/spring-boot-vuejs
+9a0b0ce99936: Pull complete
+db3b6004c61a: Pull complete
+f8f075920295: Pull complete
+6ef14aff1139: Pull complete
+962785d3b7f9: Pull complete
+e275e7110d81: Pull complete
+0ce121b6a2ff: Pull complete
+71607a6adeb3: Pull complete
+Digest: sha256:4037576ba5f6c58ed067eeef3ab2870a9de8dd1966a5906cb3d36d0ad98fa541
+Status: Downloaded newer image for jonashackt/spring-boot-vuejs:latest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.2.0.RELEASE)
+
+2019-11-02 16:15:37.967  INFO 7 --- [           main] d.j.s.SpringBootVuejsApplication         : Starting SpringBootVuejsApplication v0.0.1-SNAPSHOT on aa490bc6ddf4 with PID 7 (/app.jar started by root in /)
+2019-11-02 16:15:37.973  INFO 7 --- [           main] d.j.s.SpringBootVuejsApplication         : No active profile set, falling back to default profiles: default
+2019-11-02 16:15:39.166  INFO 7 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-11-02 16:15:39.285  INFO 7 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 99ms. Found 1 repository interfaces.
+2019-11-02 16:15:39.932  INFO 7 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-11-02 16:15:40.400  INFO 7 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8098 (http)
+2019-11-02 16:15:40.418  INFO 7 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+...
+2019-11-02 16:15:54.048  INFO 7 --- [nio-8098-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-11-02 16:15:54.081  INFO 7 --- [nio-8098-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 32 ms
+```
+
+
+Now head over to [http://localhost:8098/](http://localhost:8098/) and see the app live :)
+
+
 # Run with JDK 8, 9 or 11 ff
 
 As with Spring Boot, we can define the desired Java version simply by editing our backend's [pom.xml](backend/pom.xml): 

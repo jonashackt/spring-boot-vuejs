@@ -289,7 +289,7 @@ Run our complete Spring Boot App:
 mvn --projects backend spring-boot:run
 ```
 
-Now go to http://localhost:8088/ and have a look at your first Vue.js Spring Boot App.
+Now go to http://localhost:8098/ and have a look at your first Vue.js Spring Boot App.
 
 
 
@@ -362,7 +362,7 @@ In your template area you can now request a service call via calling `callRestSe
 
 ### The problem with SOP
 
-Single-Origin Policy (SOP) could be a problem if we want to develop our app. Because the webpack-dev-server runs on http://localhost:8080 and our Spring Boot REST backend on http://localhost:8088.
+Single-Origin Policy (SOP) could be a problem if we want to develop our app. Because the webpack-dev-server runs on http://localhost:8080 and our Spring Boot REST backend on http://localhost:8098.
 
 We need to use Cross-Origin Resource Sharing Protocol (CORS) to handle that (read more background info about CORS here https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)
 
@@ -375,14 +375,14 @@ Create a central Axios configuration file called `http-commons.js`:
 import axios from 'axios'
 
 export const AXIOS = axios.create({
-  baseURL: `http://localhost:8088`,
+  baseURL: `http://localhost:8098`,
   headers: {
     'Access-Control-Allow-Origin': 'http://localhost:8080'
   }
 })
 ```
 
-Here we allow requests to the base URL of our Spring Boot App on port 8088 to be accessible from 8080.
+Here we allow requests to the base URL of our Spring Boot App on port 8098 to be accessible from 8080.
 
 Now we could use this configuration inside our Components, e.g. in `Hello.vue`:
 ```js
@@ -452,12 +452,12 @@ According to the [Vue CLI 3 docs](https://cli.vuejs.org/config) the only thing w
 ```js
 module.exports = {
   // proxy all webpack dev-server requests starting with /api
-  // to our Spring Boot backend (localhost:8088) using http-proxy-middleware
+  // to our Spring Boot backend (localhost:8098) using http-proxy-middleware
   // see https://cli.vuejs.org/config/#devserver-proxy
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8088',
+        target: 'http://localhost:8098',
         ws: true,
         changeOrigin: true
       }
@@ -467,7 +467,7 @@ module.exports = {
 }
 ```
 
-With this configuration in place, the webpack dev-server uses the [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware), which is a really handy component, to proxy all frontend-requests from http://localhost:8080 --> http://localhost:8088 - incl. Changing the Origin accordingly.
+With this configuration in place, the webpack dev-server uses the [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware), which is a really handy component, to proxy all frontend-requests from http://localhost:8080 --> http://localhost:8098 - incl. Changing the Origin accordingly.
 
 This is used in the webpack build process to configure the proxyMiddleware (you don't need to change something here!):
 
@@ -1104,12 +1104,12 @@ __But__: How do we configure webpack etc. for CORS handling, the build directori
 ```javascript
 module.exports = {
   // proxy all webpack dev-server requests starting with /api
-  // to our Spring Boot backend (localhost:8088) using http-proxy-middleware
+  // to our Spring Boot backend (localhost:8098) using http-proxy-middleware
   // see https://cli.vuejs.org/config/#devserver-proxy
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8088',
+        target: 'http://localhost:8098',
         ws: true,
         changeOrigin: true
       }
@@ -1210,7 +1210,7 @@ This build can take a while, since all Maven and NPM dependencies need to be dow
 When the build is finished, simply start a Docker container based on the newly build image and prepare the correct port to be bound to the Docker host for easier access later:
 
 ```
-docker run -d -p 8088:8088 --name myspringvuejs spring-boot-vuejs
+docker run -d -p 8098:8098 --name myspringvuejs spring-boot-vuejs
 ```
 
 Have a look into your running Docker containers with `docker ps` and you should see the new container:
@@ -1218,7 +1218,7 @@ Have a look into your running Docker containers with `docker ps` and you should 
 ```
 $ docker ps
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
-745e854d7781        spring-boot-vuejs   "sh -c 'java $JAVA_O…"   12 seconds ago      Up 11 seconds       0.0.0.0:8088->8088/tcp   myspringvuejs
+745e854d7781        spring-boot-vuejs   "sh -c 'java $JAVA_O…"   12 seconds ago      Up 11 seconds       0.0.0.0:8098->8098/tcp   myspringvuejs
 ```
 
 If you want to see the typical Spring Boot startup logs, just use `docker logs 745e854d7781 --follow`:
@@ -1239,7 +1239,7 @@ $ docker logs 745e854d7781 --follow
 2019-01-29 09:42:09.001  INFO 8 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
 2019-01-29 09:42:09.103  INFO 8 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 90ms. Found 1 repository interfaces.
 2019-01-29 09:42:09.899  INFO 8 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$bb072d94] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2019-01-29 09:42:10.715  INFO 8 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8088 (http)
+2019-01-29 09:42:10.715  INFO 8 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8098 (http)
 2019-01-29 09:42:10.765  INFO 8 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
 2019-01-29 09:42:10.765  INFO 8 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.14]
 2019-01-29 09:42:10.783  INFO 8 --- [           main] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [/usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib]
@@ -1260,11 +1260,11 @@ $ docker logs 745e854d7781 --follow
 2019-01-29 09:42:16.903  WARN 8 --- [           main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
 2019-01-29 09:42:17.116  INFO 8 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [public/index.html]
 2019-01-29 09:42:17.604  INFO 8 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
-2019-01-29 09:42:17.740  INFO 8 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8088 (http) with context path ''
+2019-01-29 09:42:17.740  INFO 8 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8098 (http) with context path ''
 2019-01-29 09:42:17.745  INFO 8 --- [           main] d.j.s.SpringBootVuejsApplication         : Started SpringBootVuejsApplication in 10.823 seconds (JVM running for 11.485)
 ```
 
-Now access your Dockerized Spring Boot powererd Vue.js app inside your Browser at [http://localhost:8088](http://localhost:8088). 
+Now access your Dockerized Spring Boot powererd Vue.js app inside your Browser at [http://localhost:8098](http://localhost:8098). 
 
 If you have played enough with your Dockerized app, don't forget to stop (`docker stop 745e854d7781`) and remove (`docker rm 745e854d7781`) it in the end.
 

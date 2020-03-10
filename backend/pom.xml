@@ -19,7 +19,7 @@
 
 		<!-- backend dependencies -->
 		<rest-assured.version>4.2.0</rest-assured.version>
-		<postgresql.version>42.2.10</postgresql.version>
+		<postgresql.version>42.2.11</postgresql.version>
 	</properties>
 
 	<dependencies>

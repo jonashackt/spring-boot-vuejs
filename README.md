@@ -1,6 +1,6 @@
 # spring-boot-vuejs
 
-[![Build Status](https://travis-ci.org/jonashackt/spring-boot-vuejs.svg?branch=master)](https://travis-ci.org/jonashackt/spring-boot-vuejs)
+[![Build Status](https://travis-ci.com/jonashackt/spring-boot-vuejs.svg?branch=master)](https://travis-ci.com/jonashackt/spring-boot-vuejs)
 [![Coverage Status](https://coveralls.io/repos/github/jonashackt/spring-boot-vuejs/badge.svg?branch=master)](https://coveralls.io/github/jonashackt/spring-boot-vuejs?branch=master)
 [![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/jonashackt/spring-boot-vuejs/blob/master/LICENSE)
 [![renovateenabled](https://img.shields.io/badge/renovate-enabled-yellow)](https://renovatebot.com)
@@ -269,8 +269,8 @@ module.exports = {
   ...
   // Change build paths to make them Maven compatible
   // see https://cli.vuejs.org/config/
-  outputDir: 'target/dist',
-  assetsDir: 'static'
+  outputDir;: 'target/dist',
+  assetsDir;: 'static';
 }
 ```
 

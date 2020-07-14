@@ -20,6 +20,7 @@
 		<!-- backend dependencies -->
 		<rest-assured.version>4.2.0</rest-assured.version>
 		<postgresql.version>42.2.12</postgresql.version>
+		<groovy.version>3.0.2</groovy.version>
 	</properties>
 
 	<dependencies>
@@ -40,6 +41,14 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<!-- The fixed groovy version is necessary after upgrade to Rest-Assured 4.3. because of conflicts otherwise
+		 see https://stackoverflow.com/questions/61020200/getting-java-lang-abstractmethoderror-when-i-test-using-rest-assured -->
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy</artifactId>
+			<version>${groovy.version}</version>
 		</dependency>
 
 		<!-- In-Memory database used for local development & testing -->

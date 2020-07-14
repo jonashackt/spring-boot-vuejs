@@ -7,6 +7,6 @@ describe('App component should', () => {
     const wrapper = shallowMount(App, {
       stubs: ['router-link', 'router-view']
     });
-    expect(wrapper.find('hello')).toBeDefined();
+    expect(wrapper.html()).toContain('<div id="nav">')
   });
 });

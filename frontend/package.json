@@ -32,7 +32,7 @@
     "@vue/test-utils": "1.0.3",
     "chromedriver": "80.0.2",
     "geckodriver": "1.19.1",
-    "node-sass": "4.13.1",
+    "node-sass": "4.14.1",
     "sass-loader": "8.0.2",
     "vue-template-compiler": "2.6.11"
   }

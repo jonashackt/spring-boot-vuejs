@@ -36,7 +36,7 @@ This project is used as example in a variety of articles & as eBook:
 * [Backend](#backend)
 * [Frontend](#frontend)
   * [Use frontend-maven-plugin to handle NPM, Node, Bower, Grunt, Gulp, Webpack and so on :)](#use-frontend-maven-plugin-to-handle-npm-node-bower-grunt-gulp-webpack-and-so-on-)
-* [First App run](first-app-run)
+* [First App run](#first-app-run)
 * [Faster feedback with webpack-dev-server](#faster-feedback-with-webpack-dev-server)
 * [Browser developer tools extension](#browser-developer-tools-extension)
 * [HTTP calls from Vue.js to (Spring Boot) REST backend](#http-calls-from-vuejs-to-spring-boot-rest-backend)

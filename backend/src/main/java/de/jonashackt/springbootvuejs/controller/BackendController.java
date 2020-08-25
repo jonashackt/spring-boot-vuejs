@@ -8,8 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
 
-@RestController()
+@Controller
 @RequestMapping("/api")
 public class BackendController {
 
@@ -21,12 +22,14 @@ public class BackendController {
     @Autowired
     private UserRepository userRepository;
 
+    @ResponseBody
     @RequestMapping(path = "/hello")
     public String sayHello() {
         LOG.info("GET called on /hello resource");
         return HELLO_TEXT;
     }
 
+    @ResponseBody
     @RequestMapping(path = "/user/{lastName}/{firstName}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public long addNewUser (@PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName) {
@@ -37,6 +40,7 @@ public class BackendController {
         return savedUser.getId();
     }
 
+    @ResponseBody
     @GetMapping(path = "/user/{id}")
     public User getUserById(@PathVariable("id") long id) {
 
@@ -46,8 +50,9 @@ public class BackendController {
         }).orElseThrow(() -> new UserNotFoundException("The user with the id " + id + " couldn't be found in the database."));
     }
 
+    @ResponseBody
     @RequestMapping(path="/secured", method = RequestMethod.GET)
-    public @ResponseBody String getSecured() {
+    public String getSecured() {
         LOG.info("GET successfully called on /secured resource");
         return SECURED_TEXT;
     }

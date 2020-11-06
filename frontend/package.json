@@ -17,7 +17,7 @@
     "bootstrap": "4.5.3",
     "bootstrap-vue": "2.18.1",
     "jquery": "3.5.1",
-    "core-js": "3.6.5",
+    "core-js": "3.7.0",
     "vue": "2.6.12",
     "vue-router": "3.4.9",
     "vuex": "3.5.1"

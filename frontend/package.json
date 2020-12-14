@@ -29,7 +29,7 @@
     "@vue/cli-plugin-unit-jest": "4.5.9",
     "@vue/cli-plugin-vuex": "4.5.9",
     "@vue/cli-service": "4.5.9",
-    "@vue/test-utils": "1.1.1",
+    "@vue/test-utils": "1.1.2",
     "chromedriver": "87.0.4",
     "geckodriver": "1.21.1",
     "node-sass": "5.0.0",

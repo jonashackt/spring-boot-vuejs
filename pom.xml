@@ -9,7 +9,7 @@
 	<packaging>pom</packaging>
 
 	<name>spring-boot-vuejs</name>
-	<description>Demo project for Spring Boot & Vue.js</description>
+	<description>Demo project for Spring Boot and Vue.js</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

@@ -30,6 +30,7 @@ backend/src/main/resources/public/
 backend/target
 frontend/dist/
 frontend/node/
+frontend/coverage/
 frontend/node_modules/
 frontend/npm-debug.log
 frontend/target

@@ -1,20 +1,17 @@
 package de.jonashackt.springbootvuejs.repository;
 
 import de.jonashackt.springbootvuejs.domain.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.*;
 
-@RunWith(SpringRunner.class)
 @DataJpaTest
 public class UserRepositoryTest {
 
@@ -24,10 +21,10 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository users;
 
-    private User norbertSiegmund = new User("Norbert", "Siegmund");
-    private User jonasHecht = new User("Jonas", "Hecht");
+    private final User norbertSiegmund = new User("Norbert", "Siegmund");
+    private final User jonasHecht = new User("Jonas", "Hecht");
 
-    @Before
+    @BeforeEach
     public void fillSomeDataIntoOurDb() {
         // Add new Users to Database
         entityManager.persist(norbertSiegmund);

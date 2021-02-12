@@ -1,7 +1,7 @@
 # spring-boot-vuejs
 
-[![Build Status](https://travis-ci.com/jonashackt/spring-boot-vuejs.svg?branch=master)](https://travis-ci.com/jonashackt/spring-boot-vuejs)
-[![Coverage Status](https://coveralls.io/repos/github/jonashackt/spring-boot-vuejs/badge.svg?branch=master)](https://coveralls.io/github/jonashackt/spring-boot-vuejs?branch=master)
+[![Build Status](https://github.com/jonashackt/spring-boot-vuejs/workflows/build/badge.svg)](https://github.com/jonashackt/spring-boot-vuejs/actions)
+[![codecov](https://codecov.io/gh/jonashackt/spring-boot-vuejs/branch/master/graph/badge.svg?token=gMQBTyKuKS)](https://codecov.io/gh/jonashackt/spring-boot-vuejs)
 [![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/jonashackt/spring-boot-vuejs/blob/master/LICENSE)
 [![renovateenabled](https://img.shields.io/badge/renovate-enabled-yellow)](https://renovatebot.com)
 [![versionspringboot](https://img.shields.io/badge/dynamic/xml?color=brightgreen&url=https://raw.githubusercontent.com/jonashackt/spring-boot-vuejs/master/pom.xml&query=%2F%2A%5Blocal-name%28%29%3D%27project%27%5D%2F%2A%5Blocal-name%28%29%3D%27parent%27%5D%2F%2A%5Blocal-name%28%29%3D%27version%27%5D&label=springboot)](https://github.com/spring-projects/spring-boot)
@@ -567,7 +567,7 @@ The project makes use of the nice Heroku Pipelines feature, where we do get a fu
 
 ![heroku-pipeline](screenshots/heroku-pipeline.png)
 
-And with the help of super cool `Automatic deploys`, we have our TravisCI build our app after every push to master - and with the checkbox set to `Wait for CI to pass before deploy` - the app gets also automatically deployed to Heroku - but only, if the TravisCI (and Coveralls...) build succeeded:
+And with the help of super cool `Automatic deploys`, we have our GitHub Actions build our app after every push to master - and with the checkbox set to `Wait for CI to pass before deploy` - the app gets also automatically deployed to Heroku - but only, if the GitHub Actions (and Codegov...) build succeeded:
 
 ![heroku-automatic-deploys](screenshots/heroku-automatic-deploys.png)
 
@@ -642,38 +642,38 @@ import static org.junit.Assert.*;
 @DataJpaTest
 public class UserRepositoryTest {
 
-    @Autowired
-    private TestEntityManager entityManager;
+  @Autowired
+  private TestEntityManager entityManager;
 
-    @Autowired
-    private UserRepository users;
+  @Autowired
+  private UserRepository users;
 
-    private User norbertSiegmund = new User("Norbert", "Siegmund");
-    private User jonasHecht = new User("Jonas", "Hecht");
+  private final User norbertSiegmund = new User("Norbert", "Siegmund");
+  private final User jonasHecht = new User("Jonas", "Hecht");
 
-    @Before
-    public void fillSomeDataIntoOurDb() {
-        // Add new Users to Database
-        entityManager.persist(norbertSiegmund);
-        entityManager.persist(jonasHecht);
-    }
+  @Before
+  public void fillSomeDataIntoOurDb() {
+    // Add new Users to Database
+    entityManager.persist(norbertSiegmund);
+    entityManager.persist(jonasHecht);
+  }
 
-    @Test
-    public void testFindByLastName() throws Exception {
-        // Search for specific User in Database according to lastname
-        List<User> usersWithLastNameSiegmund = users.findByLastName("Siegmund");
+  @Test
+  public void testFindByLastName() throws Exception {
+    // Search for specific User in Database according to lastname
+    List<User> usersWithLastNameSiegmund = users.findByLastName("Siegmund");
 
-        assertThat(usersWithLastNameSiegmund, contains(norbertSiegmund));
-    }
+    assertThat(usersWithLastNameSiegmund, contains(norbertSiegmund));
+  }
 
 
-    @Test
-    public void testFindByFirstName() throws Exception {
-        // Search for specific User in Database according to firstname
-        List<User> usersWithFirstNameJonas = users.findByFirstName("Jonas");
+  @Test
+  public void testFindByFirstName() throws Exception {
+    // Search for specific User in Database according to firstname
+    List<User> usersWithFirstNameJonas = users.findByFirstName("Jonas");
 
-        assertThat(usersWithFirstNameJonas, contains(jonasHecht));
-    }
+    assertThat(usersWithFirstNameJonas, contains(jonasHecht));
+  }
 
 }
 ```
@@ -1340,14 +1340,16 @@ Spring Boot handles the needed `maven.compiler.release`, which tell's Java from 
 
 We just set `1.8` as the baseline here, since if we set a newer version as the standard, builds on older versions then 8 will fail (see [this build log for example](https://travis-ci.org/jonashackt/spring-boot-vuejs/builds/547227298).
 
-Additionally, we use TravisCI to run the Maven build on some mayor Java versions - have a look into the [.travis.yml](.travis.yml):
+Additionally, we use GitHub Actions to run the Maven build on some mayor Java versions - have a look into the [build.yml](.github/workflows/build.yml) workflow:
 
-```
-language: java
-jdk:
-  - oraclejdk8
-  - oraclejdk9
-  - oraclejdk11
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        java-version: [ 8, 11, 15 ]
 ```
 
 

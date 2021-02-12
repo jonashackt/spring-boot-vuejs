@@ -1,20 +1,17 @@
-package de.jonashackt.springbootvuejs;
+package de.jonashackt.springbootvuejs.configuration;
 
+import de.jonashackt.springbootvuejs.SpringBootVuejsApplication;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.junit4.SpringRunner;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
 
-@RunWith(SpringRunner.class)
+import static org.hamcrest.Matchers.containsString;
+
 @SpringBootTest(
         classes = SpringBootVuejsApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
@@ -67,6 +64,6 @@ class SpaRedirectTest {
     private void assertNotSpaResponse(ValidatableResponse response) {
         response.statusCode(HttpStatus.SC_NOT_FOUND)
                 .assertThat()
-                .body(containsString("\"status\":404,\"error\":\"Not Found\",\"message\":\"No message available\",\"path\":\"/api\""));
+                .body(containsString("\"status\":404,\"error\":\"Not Found\",\"message\":\"\",\"path\":\"/api\""));
     }
 }

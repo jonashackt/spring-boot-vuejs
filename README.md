@@ -1137,6 +1137,128 @@ npm update
 ```
 
 
+## Upgrade to Vue.js 3.x/4.x next
+
+Let's move from 2.6.x -> 3.x/4.x next here.
+
+> Be aware that [the latest version of vue currently is `2.6.x` and `3.x` is considered `next`](https://www.npmjs.com/package/vue)!
+
+There are some resources:
+
+https://v3.vuejs.org/guide/migration/introduction.html#quickstart
+
+https://johnpapa.net/vue2-to-vue3/
+
+And if we are using 3.x, we can even migrate to 4.x: https://cli.vuejs.org/migrating-from-v3/
+
+
+#### Upgrade from 2.x to 3.x
+
+There's a migration tooling, simply use:
+
+```shell
+vue add vue-next
+```
+
+This took around 3 minutes or more on my MacBook and changed some files:
+
+![vue-js-2.x-to-3.x-next-upgrade](screenshots/vue-js-2.x-to-3.x-next-upgrade.png)
+
+The [package.json](frontend/package.json) got some new or upgraded deps:
+
+![vue-js-2.x-to-3.x-next-upgrade-dependencies](screenshots/vue-js-2.x-to-3.x-next-upgrade-dependencies.png)
+
+[As John stated in his post](https://johnpapa.net/vue2-to-vue3/) it's strange to find `beta` versions with `vue`, `vue-router` and `vuex`. 
+
+So in order to see what a fresh skeleton would produce, let's also create one in another dir ([I assume you have `npm install -g @vue/cli` installed](https://v3.vuejs.org/guide/migration/introduction.html#quickstart):
+
+```shell
+mkdir vue3test && cd vue3test
+vue create hello-vue3
+```
+
+I aligned my project to match the latest skeleton generation much better: So router, store and api got their own directories. The views are now in the correct folder `views` - and I extracted one component to use from the newly introduced `Home.vue` view: the `HelloSpringWorld.vue` component.
+
+
+
+
+I also went over the [package.json](frontend/package.json) and upgraded to the latest release versions instead of alphas (except `@vue/test-utils` which only has a `rc` atm).
+
+All imports were refactored too. Coming from this style:
+
+```javascript
+import Vue from 'vue'
+import Router from 'vue-router'
+```
+
+everything now reads:
+
+```javascript
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router'
+```
+
+Also check your `router.js` or [router/index.js](frontend/src/router/index.js)! Using a path redirect like this leads to a non working routing configuration:
+
+```javascript
+    // otherwise redirect to home
+    { path: '*', redirect: '/' }
+```
+
+The error in the Browser console states:
+
+```shell
+Uncaught Error: Catch all routes ("*") must now be defined using a param with a custom regexp.
+See more at https://next.router.vuejs.org/guide/migration/#removed-star-or-catch-all-routes.
+```
+
+I changed it to the new param with regex syntax like this:
+
+```javascript
+    // otherwise redirect to home
+    { path: '/:pathMatch(.*)*', redirect: '/' }
+```
+
+A crucial point to get jest to work again, was to add the following to the [jest.config.js](frontend/jest.config.js):
+
+```javascript
+  transform: {
+    '^.+\\.vue$': 'vue-jest'
+  }
+```
+
+Otherwise my tests ran into the following error:
+
+```shell
+npm run test:unit
+
+> frontend@4.0.0 test:unit
+> vue-cli-service test:unit --coverage
+
+ FAIL  tests/unit/views/User.spec.js
+  ● Test suite failed to run
+
+    Vue packages version mismatch:
+
+    - vue@3.0.11 (/Users/jonashecht/dev/spring-boot/spring-boot-vuejs/frontend/node_modules/vue/index.js)
+    - vue-template-compiler@2.6.12 (/Users/jonashecht/dev/spring-boot/spring-boot-vuejs/frontend/node_modules/vue-template-compiler/package.json)
+
+    This may cause things to work incorrectly. Make sure to use the same version for both.
+    If you are using vue-loader@>=10.0, simply update vue-template-compiler.
+    If you are using vue-loader@<10.0 or vueify, re-installing vue-loader/vueify should bump vue-template-compiler to the latest.
+
+      at Object.<anonymous> (node_modules/vue-template-compiler/index.js:10:9)
+```
+
+Luckily this so answer helped me out: https://stackoverflow.com/a/65111966/4964553
+
+And finally Bootstrap Vue doesn't support Vue 3.x right now: https://github.com/bootstrap-vue/bootstrap-vue/issues/5196 - So I temporarily commented out the imports.
+
+
+
+
+
+
 ## Build and run with Docker
 
 In the issue [jonashackt/spring-boot-vuejs/issues/25](https://github.com/jonashackt/spring-boot-vuejs/issues/25) the question on how to build and run our spring-boot-vuejs app with Docker. 

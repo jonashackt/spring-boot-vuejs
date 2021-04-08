@@ -1,6 +1,5 @@
 <template>
   <div class="hello">
-    <img src="./../assets/spring-boot-vuejs-logo.png">
     <h1>{{ hellomsg }}</h1>
     <h2>See the sources here: </h2>
     <ul>
@@ -24,14 +23,17 @@
 
 <script>
 export default {
-  name: 'hello',
-  props: { hellomsg: { type: String, required: true } }
+  name: 'HelloSpringWorld',
+  props: {
+    hellomsg: {
+      type: String,
+      required: true }
+  }
 }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
 h1, h2 {
   font-weight: normal;
 }

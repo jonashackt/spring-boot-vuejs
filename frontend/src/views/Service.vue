@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import api from "./backend-api";
+  import api from "../api/backend-api";
 
   export default {
     name: 'service',

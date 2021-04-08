@@ -1,10 +1,7 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import api from './components/backend-api'
+import { createStore } from 'vuex'
+import api from '../api/backend-api'
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
     state: {
         loginSuccess: false,
         loginError: false,
@@ -56,4 +53,4 @@ export default new Vuex.Store({
         getUserName: state => state.userName,
         getUserPass: state => state.userPass
     }
-})
+});

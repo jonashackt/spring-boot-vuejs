@@ -1,12 +1,13 @@
 import { shallowMount } from '@vue/test-utils';
-import Hello from '@/components/Hello'
+import HelloSpringWorld from '@/components/HelloSpringWorld'
 
-describe('Hello.vue', () => {
+describe('HelloSpringWorld.vue', () => {
   it('should render correct hello message', () => {
+    const hellomsg = 'Welcome to your Jest powered Vue.js App'
     // Given
-    const hellowrapped = shallowMount(Hello, {
+    const hellowrapped = shallowMount(HelloSpringWorld, {
       // see https://stackoverflow.com/a/37940045/4964553
-      propsData: { hellomsg: 'Welcome to your Jest powered Vue.js App' },
+      props: { hellomsg },
       // see https://vue-test-utils.vuejs.org/guides/using-with-vue-router.html#testing-components-that-use-router-link-or-router-view
       stubs: ['router-link', 'router-view']
     });

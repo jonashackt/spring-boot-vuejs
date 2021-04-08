@@ -25,7 +25,7 @@
 
           <p v-if="headers && headers.length">
             <li v-for="header of headers">
-            <b-card>Header: {{ header.valueOf() }}</b-card>
+              <b-card>Header: {{ header.valueOf() }}</b-card>
             </li>
           </p>
         </b-collapse>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import api from './backend-api'
+import api from '../api/backend-api'
 
 export default {
   name: 'bootstrap',

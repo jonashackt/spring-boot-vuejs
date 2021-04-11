@@ -1,14 +1,14 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home'
-import Service from '../views/Service'
-import Bootstrap from '../views/Bootstrap'
-import User from '../views/User'
-import Login from '../views/Login'
-import Protected from '../views/Protected'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import Home from '../views/Home.vue'
+import Service from '../views/Service.vue'
+import Bootstrap from '../views/Bootstrap.vue'
+import User from '../views/User.vue'
+import Login from '../views/Login.vue'
+import Protected from '../views/Protected.vue'
 
 import store from '../store'
 
-const routes = [
+const routes: Array<RouteRecordRaw> = [
     { path: '/', component: Home },
     { path: '/callservice', component: Service },
     { path: '/bootstrap', component: Bootstrap },

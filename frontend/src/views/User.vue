@@ -9,63 +9,80 @@
 
     <button @click="createNewUser()">Create User</button>
 
-    <div v-if="showResponse"><h6>User created with Id: {{ response }}</h6></div>
+    <div v-if="showResponse"><h6>User created with Id: {{ user.id }}</h6></div>
 
     <button v-if="showResponse" @click="retrieveUser()">Retrieve user {{user.id}} data from database</button>
 
     <h4 v-if="showRetrievedUser">Retrieved User {{retrievedUser.firstName}} {{retrievedUser.lastName}}</h4>
-
   </div>
 </template>
 
-<script>
-  import api from "../api/backend-api";
+<script lang="ts">
+import { defineComponent } from 'vue';
+import api from "../api/backend-api";
+import {AxiosError} from "axios";
 
-  export default {
-    name: 'user',
+interface State {
+  user: {
+    id: number
+    firstName: string,
+    lastName: string;
+  };
+  retrievedUser: {
+    id: number
+    firstName: string,
+    lastName: string;
+  };
+  showResponse: boolean;
+  showRetrievedUser: boolean;
+  errors: AxiosError[]
+}
 
-    data () {
-      return {
-        response: [],
-        errors: [],
-        user: {
-          lastName: '',
-          firstName: '',
-          id: 0
-        },
-        showResponse: false,
-        retrievedUser: {},
-        showRetrievedUser: false
-      }
-    },
-    methods: {
-      // Fetches posts when the component is created.
-      createNewUser () {
+export default defineComponent({
+  name: 'User',
 
-        api.createUser(this.user.firstName, this.user.lastName).then(response => {
-            // JSON responses are automatically parsed.
-            this.response = response.data;
-            this.user.id = response.data;
-            console.log('Created new User with Id ' + response.data);
-            this.showResponse = true
-          })
-          .catch(e => {
-            this.errors.push(e)
-          })
+  data: (): State => {
+    return {
+      errors: [],
+      user: {
+        id: 0,
+        firstName: '',
+        lastName: ''
       },
-      retrieveUser () {
-        api.getUser(this.user.id).then(response => {
-            // JSON responses are automatically parsed.
-            this.retrievedUser = response.data;
-            this.showRetrievedUser = true
-          })
-          .catch(e => {
-            this.errors.push(e)
-          })
-      }
+      showResponse: false,
+      retrievedUser: {
+        id: 0,
+        firstName: '',
+        lastName: ''
+      },
+      showRetrievedUser: false
+    }
+  },
+  methods: {
+    // Fetches posts when the view is created.
+    createNewUser () {
+      api.createUser(this.user.firstName, this.user.lastName).then(response => {
+          // JSON responses are automatically parsed.
+          this.user.id = response.data;
+          console.log('Created new User with Id ' + response.data);
+          this.showResponse = true
+        })
+        .catch(e => {
+          this.errors.push(e)
+        })
+    },
+    retrieveUser () {
+      api.getUser(this.user.id).then(response => {
+          // JSON responses are automatically parsed.
+          this.retrievedUser = response.data;
+          this.showRetrievedUser = true
+        })
+        .catch((error: AxiosError):void => {
+          this.errors.push(error)
+        })
     }
   }
-
+});
 </script>
 
 

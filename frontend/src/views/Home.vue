@@ -1,18 +1,18 @@
 <template>
   <div class="home">
     <img alt="Vue with Spring logo" src="../assets/spring-boot-vuejs-logo.png">
-    <HelloSpringWorld hellomsg="Welcome to your Vue.js powered Spring Boot App"/>
+    <HelloSpringWorld hellomsg="Welcome to your Vue.js (+ TypeScript) powered Spring Boot App"/>
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloSpringWorld from '@/components/HelloSpringWorld.vue'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import HelloSpringWorld from '@/components/HelloSpringWorld.vue'; // @ is an alias to /src
 
-export default {
+export default defineComponent({
   name: 'Home',
   components: {
-    HelloSpringWorld
-  }
-}
+    HelloSpringWorld,
+  },
+});
 </script>

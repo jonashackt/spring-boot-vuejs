@@ -1179,9 +1179,6 @@ vue create hello-vue3
 
 I aligned my project to match the latest skeleton generation much better: So router, store and api got their own directories. The views are now in the correct folder `views` - and I extracted one component to use from the newly introduced `Home.vue` view: the `HelloSpringWorld.vue` component.
 
-
-
-
 I also went over the [package.json](frontend/package.json) and upgraded to the latest release versions instead of alphas (except `@vue/test-utils` which only has a `rc` atm).
 
 All imports were refactored too. Coming from this style:
@@ -1255,7 +1252,119 @@ Luckily this so answer helped me out: https://stackoverflow.com/a/65111966/49645
 And finally Bootstrap Vue doesn't support Vue 3.x right now: https://github.com/bootstrap-vue/bootstrap-vue/issues/5196 - So I temporarily commented out the imports.
 
 
+#### Add TypeScript
 
+Vue 3.x is now build with TypeScript: https://v3.vuejs.org/guide/typescript-support.html
+
+> A static type system can help prevent many potential runtime errors as applications grow, which is why Vue 3 is written in TypeScript. This means you don't need any additional tooling to use TypeScript with Vue - it has first-class citizen support.
+
+There's also a huge documentation of TypeScript itself at https://www.typescriptlang.org/docs/ I can also recommend https://medium.com/js-dojo/adding-typescript-to-your-existing-vuejs-2-6-app-aaa896c2d40a
+
+To migrate your project there's the command:
+
+```shell
+vue add typescript
+```
+
+The first question arises: `Use class-style component syntax? (Y/n)` whether to use class-style component syntax or not. I didn't use it. I think the interface definitions of components are concise enough without the class-style. But let's see how this will work out.
+
+So this was the output:
+
+```shell
+vue add typescript
+ WARN  There are uncommitted changes in the current repository, it's recommended to commit or stash them first.
+? Still proceed? Yes
+
+📦  Installing @vue/cli-plugin-typescript...
+
+
+added 59 packages, removed 58 packages, and audited 2219 packages in 6s
+
+85 packages are looking for funding
+  run `npm fund` for details
+
+3 low severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+✔  Successfully installed plugin: @vue/cli-plugin-typescript
+
+? Use class-style component syntax? No
+? Use Babel alongside TypeScript (required for modern mode, auto-detected polyfills, transpiling JSX)? Yes
+? Use TSLint? Yes
+? Pick lint features: Lint on save
+? Convert all .js files to .ts? Yes
+? Allow .js files to be compiled? Yes
+? Skip type checking of all declaration files (recommended for apps)? Yes
+
+🚀  Invoking generator for @vue/cli-plugin-typescript...
+📦  Installing additional dependencies...
+
+
+added 2 packages, and audited 2221 packages in 3s
+...
+✔  Successfully invoked generator for plugin: @vue/cli-plugin-typescript
+```
+
+Now I went through all the componentes and views and extended `<script>` to `<script lang="ts">`.
+
+Also I changed
+
+```javascript
+  export default {
+```
+
+to
+
+```javascript
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+```
+
+Now we need to transform our JavaScript code into TypeScript.
+
+A really good introduction could be found here: https://www.vuemastery.com/blog/getting-started-with-typescript-and-vuejs/
+
+> This process will take a while, depending on your code - and mainly on your knowledge about TypeScript. But I think it's a great path to go!
+
+Don't forget to deactivate source control for `.js` and `.map` files in `src`, because these will now be generated (aka transpiled) from TypeScript and [shouldn't be checked in (anymore)](https://stackoverflow.com/a/26464907/4964553).
+
+I enhanced my [frontend/.gitignore](frontend/.gitignore) like this:
+
+```shell
+# TypeScript
+*.map
+src/*.js
+test/*.js
+```
+
+##### Vuex Store with TypeScript
+
+According to https://next.vuex.vuejs.org/guide/typescript-support.html#typing-store-property-in-vue-component in order to use vuex store with TypeScript, we:
+
+> must declare your own module augmentation.
+
+TLDR; we need to create a file [src/vuex.d.ts](frontend/src/vuex.d.ts):
+
+```javascript
+import { ComponentCustomProperties } from 'vue'
+import { Store } from 'vuex'
+
+declare module '@vue/runtime-core' {
+  // declare your own store states
+  interface State {
+    count: number
+  }
+
+  // provide typings for `this.$store`
+  interface ComponentCustomProperties {
+    $store: Store<State>
+  }
+}
+```
 
 
 

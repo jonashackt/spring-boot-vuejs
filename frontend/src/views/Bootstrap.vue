@@ -32,7 +32,7 @@
 
         <b-btn v-b-toggle.collapse3_inner size="sm" variant="danger">Full Request configuration</b-btn>
         <b-collapse id=collapse3_inner class="mt-2">
-          <p class="card-text">Config: {{ fullResponse.config }} </p>
+          <p class="card-text">Config: {{ responseConfig }} </p>
         </b-collapse>
       </b-card>
     </b-collapse>
@@ -43,45 +43,53 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import api from '../api/backend-api'
+import {AxiosError, AxiosRequestConfig} from "axios";
 
-export default {
-  name: 'bootstrap',
+interface State {
+  msg: string;
+  showResponse: boolean;
+  backendResponse: string;
+  responseConfig: any;
+  httpStatusCode: number;
+  httpStatusText: string;
+  headers: string[];
+  errors: AxiosError[]
+}
 
-  data () {
+export default defineComponent({
+  name: 'Bootstrap',
+
+  data: (): State => {
     return {
       msg: 'Nice Bootstrap candy!',
       showResponse: false,
       backendResponse: '',
-      fullResponse: {
-        config: {
-          foo: '',
-          bar: ''
-        }
-      },
-      httpStatusCode: '',
+      responseConfig: '',
+      httpStatusCode: 0,
       httpStatusText: '',
       headers: ['Noting here atm. Did you call the Service?'],
       errors: []
     }
   },
   methods: {
-    callHelloApi () {
+    callHelloApi (): any {
         api.hello().then(response => {
           this.backendResponse = response.data;
           this.httpStatusCode = response.status;
           this.httpStatusText = response.statusText;
           this.headers = response.headers;
-          this.fullResponse = response;
+          this.responseConfig = response.config;
           this.showResponse=true
         })
-        .catch(e => {
-          this.errors.push(e)
+        .catch((error: AxiosError) => {
+          this.errors.push(error)
         })
     }
   }
-}
+});
 
 </script>
 

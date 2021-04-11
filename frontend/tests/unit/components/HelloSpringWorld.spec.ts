@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import HelloSpringWorld from '@/components/HelloSpringWorld'
+import HelloSpringWorld from '@/components/HelloSpringWorld.vue'
 
 describe('HelloSpringWorld.vue', () => {
   it('should render correct hello message', () => {

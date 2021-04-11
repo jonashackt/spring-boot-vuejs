@@ -16,35 +16,42 @@
 
 </template>
 
-<script>
-  import api from '../api/backend-api'
-  import store from '../store'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import api from '../api/backend-api'
+import store from '../store'
+import {AxiosError} from "axios";
 
-export default {
-  name: 'protected',
+interface State {
+  backendResponse: string;
+  securedApiCallSuccess: boolean,
+  errors: AxiosError[]
+}
 
-  data () {
+export default defineComponent({
+  name: 'Protected',
+
+  data: (): State => {
     return {
       backendResponse: '',
       securedApiCallSuccess: false,
-      errors: null
+      errors: []
     }
   },
   methods: {
     getSecuredTextFromBackend() {
       api.getSecured(store.getters.getUserName, store.getters.getUserPass)
-              .then(response => {
-                console.log("Response: '" + response.data + "' with Statuscode " + response.status);
-                this.securedApiCallSuccess = true;
-                this.backendResponse = response.data;
-              })
-              .catch(error => {
-                console.log("Error: " + error);
-                this.errors = error;
-              })
+          .then(response => {
+            console.log("Response: '" + response.data + "' with Statuscode " + response.status);
+            this.securedApiCallSuccess = true;
+            this.backendResponse = response.data;
+          })
+          .catch((error: AxiosError) => {
+            console.log("Error: " + error);
+            this.errors.push(error);
+          })
     }
   }
-}
-
+});
 </script>
 

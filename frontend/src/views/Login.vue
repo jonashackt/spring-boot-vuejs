@@ -1,7 +1,7 @@
 <template>
   <div class="unprotected" v-if="loginError">
     <h1><b-badge variant="danger">You don't have rights here, mate :D</b-badge></h1>
-    <h5>Seams that you don't have access rights... </h5>
+    <h5>Seems that you don't have access rights... </h5>
   </div>
   <div class="unprotected" v-else>
     <h1><b-badge variant="info">Please login to get access!</b-badge></h1>
@@ -17,11 +17,22 @@
 
 </template>
 
-<script>
-export default {
-  name: 'login',
+<script lang="ts">
+import { defineComponent } from 'vue';
+import {AxiosError} from "axios";
 
-  data () {
+interface State {
+  loginError: boolean;
+  user: string;
+  password: string;
+  error: boolean;
+  errors: AxiosError[]
+}
+
+export default defineComponent({
+  name: 'Login',
+
+  data: (): State => {
     return {
       loginError: false,
       user: '',
@@ -37,12 +48,12 @@ export default {
         .then(() => {
           this.$router.push('/Protected')
         })
-        .catch(error => {
+        .catch((error: AxiosError) => {
           this.loginError = true;
           this.errors.push(error);
           this.error = true
         })
     }
   }
-}
+});
 </script>

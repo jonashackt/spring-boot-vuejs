@@ -10,33 +10,40 @@
   </div>
 </template>
 
-<script>
-  import api from "../api/backend-api";
+<script lang="ts">
+import { defineComponent } from 'vue';
+import api from "../api/backend-api";
+import {AxiosError} from "axios";
 
-  export default {
-    name: 'service',
+interface State {
+  msg: string;
+  backendResponse: string;
+  errors: AxiosError[]
+}
 
-    data () {
-      return {
-        msg: 'HowTo call REST-Services:',
-        backendResponse: [],
-        errors: []
-      }
-    },
-    methods: {
-      // Fetches posts when the component is created.
-      callHelloApi () {
-        api.hello().then(response => {
-            this.backendResponse = response.data;
-            console.log(response.data)
-        })
-        .catch(error => {
-          this.errors.push(error)
-        })
-      }
+export default defineComponent({
+  name: 'Service',
+
+  data: (): State => {
+    return {
+      msg: 'HowTo call REST-Services:',
+      backendResponse: '',
+      errors: []
+    }
+  },
+  methods: {
+    // Fetches posts when the component is created.
+    callHelloApi () {
+      api.hello().then(response => {
+          this.backendResponse = response.data;
+          console.log(response.data)
+      })
+      .catch((error: AxiosError) => {
+        this.errors.push(error)
+      })
     }
   }
-
+});
 </script>
 
 

@@ -1,7 +1,5 @@
 # TypeScript
 *.map
-src/*.js
-test/*.js
 
 .DS_Store
 node_modules/

@@ -1137,6 +1137,271 @@ npm update
 ```
 
 
+## Upgrade to Vue.js 3.x/4.x next
+
+Let's move from 2.6.x -> 3.x/4.x next here.
+
+> Be aware that [the latest version of vue currently is `2.6.x` and `3.x` is considered `next`](https://www.npmjs.com/package/vue)!
+
+There are some resources:
+
+https://v3.vuejs.org/guide/migration/introduction.html#quickstart
+
+https://johnpapa.net/vue2-to-vue3/
+
+And if we are using 3.x, we can even migrate to 4.x: https://cli.vuejs.org/migrating-from-v3/
+
+
+#### Upgrade from 2.x to 3.x
+
+There's a migration tooling, simply use:
+
+```shell
+vue add vue-next
+```
+
+This took around 3 minutes or more on my MacBook and changed some files:
+
+![vue-js-2.x-to-3.x-next-upgrade](screenshots/vue-js-2.x-to-3.x-next-upgrade.png)
+
+The [package.json](frontend/package.json) got some new or upgraded deps:
+
+![vue-js-2.x-to-3.x-next-upgrade-dependencies](screenshots/vue-js-2.x-to-3.x-next-upgrade-dependencies.png)
+
+[As John stated in his post](https://johnpapa.net/vue2-to-vue3/) it's strange to find `beta` versions with `vue`, `vue-router` and `vuex`. 
+
+So in order to see what a fresh skeleton would produce, let's also create one in another dir ([I assume you have `npm install -g @vue/cli` installed](https://v3.vuejs.org/guide/migration/introduction.html#quickstart):
+
+```shell
+mkdir vue3test && cd vue3test
+vue create hello-vue3
+```
+
+I aligned my project to match the latest skeleton generation much better: So router, store and api got their own directories. The views are now in the correct folder `views` - and I extracted one component to use from the newly introduced `Home.vue` view: the `HelloSpringWorld.vue` component.
+
+I also went over the [package.json](frontend/package.json) and upgraded to the latest release versions instead of alphas (except `@vue/test-utils` which only has a `rc` atm).
+
+All imports were refactored too. Coming from this style:
+
+```javascript
+import Vue from 'vue'
+import Router from 'vue-router'
+```
+
+everything now reads:
+
+```javascript
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router'
+```
+
+Also check your `router.js` or [router/index.js](frontend/src/router/index.js)! Using a path redirect like this leads to a non working routing configuration:
+
+```javascript
+    // otherwise redirect to home
+    { path: '*', redirect: '/' }
+```
+
+The error in the Browser console states:
+
+```shell
+Uncaught Error: Catch all routes ("*") must now be defined using a param with a custom regexp.
+See more at https://next.router.vuejs.org/guide/migration/#removed-star-or-catch-all-routes.
+```
+
+I changed it to the new param with regex syntax like this:
+
+```javascript
+    // otherwise redirect to home
+    { path: '/:pathMatch(.*)*', redirect: '/' }
+```
+
+A crucial point to get jest to work again, was to add the following to the [jest.config.js](frontend/jest.config.js):
+
+```javascript
+  transform: {
+    '^.+\\.vue$': 'vue-jest'
+  }
+```
+
+Otherwise my tests ran into the following error:
+
+```shell
+npm run test:unit
+
+> frontend@4.0.0 test:unit
+> vue-cli-service test:unit --coverage
+
+ FAIL  tests/unit/views/User.spec.js
+  ● Test suite failed to run
+
+    Vue packages version mismatch:
+
+    - vue@3.0.11 (/Users/jonashecht/dev/spring-boot/spring-boot-vuejs/frontend/node_modules/vue/index.js)
+    - vue-template-compiler@2.6.12 (/Users/jonashecht/dev/spring-boot/spring-boot-vuejs/frontend/node_modules/vue-template-compiler/package.json)
+
+    This may cause things to work incorrectly. Make sure to use the same version for both.
+    If you are using vue-loader@>=10.0, simply update vue-template-compiler.
+    If you are using vue-loader@<10.0 or vueify, re-installing vue-loader/vueify should bump vue-template-compiler to the latest.
+
+      at Object.<anonymous> (node_modules/vue-template-compiler/index.js:10:9)
+```
+
+Luckily this so answer helped me out: https://stackoverflow.com/a/65111966/4964553
+
+And finally Bootstrap Vue doesn't support Vue 3.x right now: https://github.com/bootstrap-vue/bootstrap-vue/issues/5196 - So I temporarily commented out the imports.
+
+
+#### Add TypeScript
+
+Vue 3.x is now build with TypeScript: https://v3.vuejs.org/guide/typescript-support.html
+
+> A static type system can help prevent many potential runtime errors as applications grow, which is why Vue 3 is written in TypeScript. This means you don't need any additional tooling to use TypeScript with Vue - it has first-class citizen support.
+
+There's also a huge documentation of TypeScript itself at https://www.typescriptlang.org/docs/ I can also recommend https://medium.com/js-dojo/adding-typescript-to-your-existing-vuejs-2-6-app-aaa896c2d40a
+
+To migrate your project there's the command:
+
+```shell
+vue add typescript
+```
+
+The first question arises: `Use class-style component syntax? (Y/n)` whether to use class-style component syntax or not. I didn't use it. I think the interface definitions of components are concise enough without the class-style. But let's see how this will work out.
+
+So this was the output:
+
+```shell
+vue add typescript
+ WARN  There are uncommitted changes in the current repository, it's recommended to commit or stash them first.
+? Still proceed? Yes
+
+📦  Installing @vue/cli-plugin-typescript...
+
+
+added 59 packages, removed 58 packages, and audited 2219 packages in 6s
+
+85 packages are looking for funding
+  run `npm fund` for details
+
+3 low severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+✔  Successfully installed plugin: @vue/cli-plugin-typescript
+
+? Use class-style component syntax? No
+? Use Babel alongside TypeScript (required for modern mode, auto-detected polyfills, transpiling JSX)? Yes
+? Use TSLint? Yes
+? Pick lint features: Lint on save
+? Convert all .js files to .ts? Yes
+? Allow .js files to be compiled? Yes
+? Skip type checking of all declaration files (recommended for apps)? Yes
+
+🚀  Invoking generator for @vue/cli-plugin-typescript...
+📦  Installing additional dependencies...
+
+
+added 2 packages, and audited 2221 packages in 3s
+...
+✔  Successfully invoked generator for plugin: @vue/cli-plugin-typescript
+```
+
+Now I went through all the componentes and views and extended `<script>` to `<script lang="ts">`.
+
+Also I changed
+
+```javascript
+  export default {
+```
+
+to
+
+```javascript
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+```
+
+Now we need to transform our JavaScript code into TypeScript.
+
+A really good introduction could be found here: https://www.vuemastery.com/blog/getting-started-with-typescript-and-vuejs/
+
+> This process will take a while, depending on your code - and mainly on your knowledge about TypeScript. But I think it's a great path to go!
+
+Don't forget to deactivate source control for `.js` and `.map` files in `src`, because these will now be generated (aka transpiled) from TypeScript and [shouldn't be checked in (anymore)](https://stackoverflow.com/a/26464907/4964553).
+
+I enhanced my [frontend/.gitignore](frontend/.gitignore) like this:
+
+```shell
+# TypeScript
+*.map
+src/*.js
+test/*.js
+```
+
+##### Vuex Store with TypeScript
+
+According to https://next.vuex.vuejs.org/guide/typescript-support.html#typing-store-property-in-vue-component in order to use vuex store with TypeScript, we:
+
+> must declare your own module augmentation.
+
+TLDR; we need to create a file [src/vuex.d.ts](frontend/src/vuex.d.ts):
+
+```javascript
+import { ComponentCustomProperties } from 'vue'
+import { Store } from 'vuex'
+
+declare module '@vue/runtime-core' {
+  // declare your own store states
+  interface State {
+    count: number
+  }
+
+  // provide typings for `this.$store`
+  interface ComponentCustomProperties {
+    $store: Store<State>
+  }
+}
+```
+
+
+#### Bootstrap support for Vue.js 3/Next
+
+Our View [Bootstrap.vue](frontend/src/views/Bootstrap.vue) is based on the library `bootstrap-vue`, which brings in some nice Bootstrap CSS stylings & components.
+
+But bootstrap-vue isn't compatible with Vue.js 3/Next: https://github.com/bootstrap-vue/bootstrap-vue/issues/5196 and it's unclear, when it's going to support it - or even if at all.
+
+With the upgrade to Vue.js 3.x our `bootstrap-vue` based component view stopped working.
+
+There's also another change: [Bootstrap 5.x is here to be the next evolutionary step - and it even dropped the need for JQuery](https://blog.getbootstrap.com/2020/06/16/bootstrap-5-alpha/).
+
+But also Bootstrap 5.x isn't supported by `bootstrap-vue` right now. So let's try to use Bootstrap without it?!
+
+Therefore install bootstrap next (which - as like Vue.js - stands for the new version 5):
+
+```shell
+npm i bootstrap@next
+npm i @popperjs/core
+```
+
+Since Bootstrap 5 depends on `popperjs` for tooltips (see https://getbootstrap.com/docs/5.0/getting-started/introduction/#js), we also need to include it.
+
+We can remove `"bootstrap-vue": "2.21.2"` and `"jquery": "3.6.0",` from our `package.json`.
+
+We also need to import Bootstrap inside our [main.ts](frontend/src/main.ts):
+
+```javascript
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
+```
+
+Let's try to use Bootstrap 5 inside our [Bootstrap.vue](frontend/src/views/Bootstrap.vue).
+
+And also inside the `Login.vue` and the `Protected.vue`. Using Bootstrap 5.x components without `bootstrap-vue` seems to be no problem (see docs how to use here: https://getbootstrap.com/docs/5.0/components/badge/).
+
+
 ## Build and run with Docker
 
 In the issue [jonashackt/spring-boot-vuejs/issues/25](https://github.com/jonashackt/spring-boot-vuejs/issues/25) the question on how to build and run our spring-boot-vuejs app with Docker. 

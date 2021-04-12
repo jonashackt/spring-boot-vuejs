@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import User from '@/components/User'
+import User from '@/views/User.vue'
 
 describe('User.vue', () => {
   it('should render Create User Button', () => {

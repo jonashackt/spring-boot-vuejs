@@ -4,7 +4,7 @@
  *
  * Example usage:
  *   browser.customExecute(function() {
- *     console.log('Hello from the browser window')
+ *     console.log('HelloSpringWorld from the browser window')
  *   });
  *
  * For more information on writing custom commands see:

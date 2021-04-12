@@ -39,6 +39,7 @@ frontend/tests/e2e/reports
 frontend/tests/unit/coverage
 frontend/yarn-error.log
 frontend/yarn.lock
+
 security/target/
 selenium-debug.log
 

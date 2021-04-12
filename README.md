@@ -1367,6 +1367,40 @@ declare module '@vue/runtime-core' {
 ```
 
 
+#### Bootstrap support for Vue.js 3/Next
+
+Our View [Bootstrap.vue](frontend/src/views/Bootstrap.vue) is based on the library `bootstrap-vue`, which brings in some nice Bootstrap CSS stylings & components.
+
+But bootstrap-vue isn't compatible with Vue.js 3/Next: https://github.com/bootstrap-vue/bootstrap-vue/issues/5196 and it's unclear, when it's going to support it - or even if at all.
+
+With the upgrade to Vue.js 3.x our `bootstrap-vue` based component view stopped working.
+
+There's also another change: [Bootstrap 5.x is here to be the next evolutionary step - and it even dropped the need for JQuery](https://blog.getbootstrap.com/2020/06/16/bootstrap-5-alpha/).
+
+But also Bootstrap 5.x isn't supported by `bootstrap-vue` right now. So let's try to use Bootstrap without it?!
+
+Therefore install bootstrap next (which - as like Vue.js - stands for the new version 5):
+
+```shell
+npm i bootstrap@next
+npm i @popperjs/core
+```
+
+Since Bootstrap 5 depends on `popperjs` for tooltips (see https://getbootstrap.com/docs/5.0/getting-started/introduction/#js), we also need to include it.
+
+We can remove `"bootstrap-vue": "2.21.2"` and `"jquery": "3.6.0",` from our `package.json`.
+
+We also need to import Bootstrap inside our [main.ts](frontend/src/main.ts):
+
+```javascript
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
+```
+
+Let's try to use Bootstrap 5 inside our [Bootstrap.vue](frontend/src/views/Bootstrap.vue).
+
+And also inside the `Login.vue` and the `Protected.vue`. Using Bootstrap 5.x components without `bootstrap-vue` seems to be no problem (see docs how to use here: https://getbootstrap.com/docs/5.0/components/badge/).
+
 
 ## Build and run with Docker
 

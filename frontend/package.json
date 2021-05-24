@@ -19,7 +19,7 @@
     "core-js": "3.12.1",
     "vue": "3.0.11",
     "vue-router": "4.0.8",
-    "vuex": "4.0.0"
+    "vuex": "4.0.1"
   },
   "devDependencies": {
     "@types/jest": "26.0.23",

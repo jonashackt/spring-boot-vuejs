@@ -16,7 +16,7 @@
   "dependencies": {
     "axios": "0.21.1",
     "bootstrap": "5.0.1",
-    "core-js": "3.12.1",
+    "core-js": "3.13.0",
     "vue": "3.0.11",
     "vue-router": "4.0.8",
     "vuex": "4.0.1"

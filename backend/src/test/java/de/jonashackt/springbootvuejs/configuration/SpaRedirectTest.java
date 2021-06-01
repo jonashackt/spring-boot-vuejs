@@ -66,6 +66,6 @@ class SpaRedirectTest {
     private void assertNotSpaResponse(ValidatableResponse response) {
         response.statusCode(HttpStatus.SC_NOT_FOUND)
                 .assertThat()
-                .body(containsString("\"status\":404,\"error\":\"Not Found\",\"message\":\"\",\"path\":\"/api\""));
+                .body(containsString("\"status\":404,\"error\":\"Not Found\",\"path\":\"/api\""));
     }
 }

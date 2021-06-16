@@ -43,7 +43,7 @@
     "geckodriver": "2.0.0",
     "node-sass": "6.0.0",
     "sass-loader": "10.2.0",
-    "typescript": "4.3.2",
+    "typescript": "4.3.3",
     "vue-jest": "5.0.0-alpha.10"
   }
 }

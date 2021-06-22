@@ -6,5 +6,16 @@
   "automergeType": "branch",
   "major": {
     "automerge": false
-  }
+  },
+  "packageRules": [
+    {
+      "packagePatterns": ["eslint"],
+      "groupName": "eslint",
+      "automerge": true,
+      "automergeType": "branch",
+      "major": {
+        "automerge": false
+      }
+    }
+  ]
 }

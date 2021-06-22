@@ -31,57 +31,23 @@ This project is used as example in a variety of articles & as eBook:
 
 [blog.codecentric.de/en/2018/04/spring-boot-vuejs](https://blog.codecentric.de/en/2018/04/spring-boot-vuejs) | [JavaMagazin 8.2018](https://jaxenter.de/ausgaben/java-magazin-8-18) | [entwickler.press shortcuts 229](https://www.amazon.com/Vue-js-f%C3%BCr-alle-Wissenswertes-Einsteiger-ebook/dp/B07HQF9VX4/ref=sr_1_1?ie=UTF8&qid=1538484852&sr=8-1&keywords=Vue-js-f%C3%BCr-alle-Wissenswertes-Einsteiger-ebook) | [softwerker Vol.12](https://info.codecentric.de/softwerker-vol-12)
 
-## Table of Contents  
-* [In Search of a new Web Frontend-Framework after 2 Years of absence...](#in-search-of-a-new-web-frontend-framework-after-2-years-of-absence)
-* [Setup Vue.js & Spring Boot](#setup-vuejs--spring-boot)
-* [Project setup](#project-setup)
-* [Backend](#backend)
-* [Frontend](#frontend)
-  * [Use frontend-maven-plugin to handle NPM, Node, Bower, Grunt, Gulp, Webpack and so on :)](#use-frontend-maven-plugin-to-handle-npm-node-bower-grunt-gulp-webpack-and-so-on-)
-* [First App run](#first-app-run)
-* [Faster feedback with webpack-dev-server](#faster-feedback-with-webpack-dev-server)
-* [Browser developer tools extension](#browser-developer-tools-extension)
-* [HTTP calls from Vue.js to (Spring Boot) REST backend](#http-calls-from-vuejs-to-spring-boot-rest-backend)
-  * [The problem with SOP](#the-problem-with-sop)
-  * [Enabling Axios CORS support](#enabling-axios-cors-support)
-  * [Enabling Spring Boot CORS support](#enabling-spring-boot-cors-support)
-  * [But STOP! Webpack & Vue have something much smarter for us to help us with SOP!](#but-stop-webpack--vue-have-something-much-smarter-for-us-to-help-us-with-sop)
-* [Using history mode for nicer URLs](#using-history-mode-for-nicer-urls)
-* [Bootstrap & Vue.js](#bootstrap--vuejs)
-* [Heroku Deployment](#heroku-deployment)
-  * [Using Heroku's Postgres as Database for Spring Boot backend and Vue.js frontend](#using-herokus-postgres-as-database-for-spring-boot-backend-and-vuejs-frontend)
-* [Testing](#testing)
-* [Jest](#jest)
-  * [Jest Configuration](#jest-configuration)
-  * [Integration in Maven build (via frontend-maven-plugin)](#integration-in-maven-build-via-frontend-maven-plugin)
-  * [Run Jest tests inside IntelliJ](#run-jest-tests-inside-intellij)
-* [End-2-End (E2E) tests with Nightwatch](#end-2-end-e2e-tests-with-nightwatch)
-  * [Write Nightwatch tests](#write-nightwatch-tests)
-* [NPM Security](#npm-security)
-* [Shift from templates to plugin-based architecture in Vue Cli 3](#shift-from-templates-to-plugin-based-architecture-in-vue-cli-3)
-  * [OMG! My package.json is so small - Vue CLI 3 Plugins](#omg-my-packagejson-is-so-small---vue-cli-3-plugins)
-  * [The vue.config.js file](#the-vueconfigjs-file)
-* [Build and run with Docker](#build-and-run-with-docker)
-  * [Autorelease to Docker Hub on hub.docker.com](#autorelease-to-docker-hub-on-hubdockercom)
-* [Run with JDK 8, 9 or 11ff](#run-with-jdk-8-9-or-11-ff)
-* [Secure Spring Boot backend and protect Vue.js frontend](#secure-spring-boot-backend-and-protect-vuejs-frontend)
-  * [Secure the backend API with Spring Security](#secure-the-backend-api-with-spring-security)
-  * [Configure Spring Security](#configure-spring-security)
-  * [Be aware of CSRF!](#be-aware-of-csrf)
-  * [Testing the secured Backend](#testing-the-secured-backend)
-  * [Configure credentials inside application.properties and environment variables](#configure-credentials-inside-applicationproperties-and-environment-variables)
-  * [Protect parts of Vue.js frontend](#protect-parts-of-vuejs-frontend)
-  * [Create a new Vue Login component](#create-a-new-vue-login-component)
-  * [Protect multiple Vue.js components](#protect-multiple-vuejs-components)
-  * [Store login information with vuex](#store-login-information-with-vuex)
-  * [Define the vuex state](#define-the-vuex-state)
-  * [Define a vuex action login() and the mutations login_success & login_error](#define-a-vuex-action-login-and-the-mutations-login_success--login_error)
-  * [Last but not least: define getters for the vuex state](#last-but-not-least-define-getters-for-the-vuex-state)
-  * [Use vuex Store inside the Login component and forward to Protected.vue, if Login succeeded](#use-vuex-store-inside-the-login-component-and-forward-to-protectedvue-if-login-succeeded)
-  * [Redirect user from Protected.vue to Login.vue, if not authenticated before](#redirect-user-from-protectedvue-to-loginvue-if-not-authenticated-before)
-  * [Check auth state at secured backend endpoints](#check-auth-state-at-secured-backend-endpoints)
+## Upgrade procedure
 
+Get newest node & npm:
+```shell
+brew upgrade node
+npm install -g npm@latest
+```
 
+Update vue-cli
+```shell
+npm install -g @vue/cli
+```
+
+Update Vue components/plugins (see https://cli.vuejs.org/migrating-from-v3/#upgrade-all-plugins-at-once)
+```shell
+vue upgrade
+```
 
 ## In Search of a new Web Frontend-Framework after 2 Years of absence...
 

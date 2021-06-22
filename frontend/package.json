@@ -17,9 +17,9 @@
     "axios": "0.21.1",
     "bootstrap": "5.0.1",
     "core-js": "3.15.0",
-    "vue": "3.0.11",
-    "vue-router": "4.0.8",
-    "vuex": "4.0.1"
+    "vue": "3.1.1",
+    "vue-router": "4.0.10",
+    "vuex": "4.0.2"
   },
   "devDependencies": {
     "@types/jest": "26.0.23",
@@ -33,7 +33,7 @@
     "@vue/cli-plugin-unit-jest": "5.0.0-beta.2",
     "@vue/cli-plugin-vuex": "4.5.13",
     "@vue/cli-service": "4.5.13",
-    "@vue/compiler-sfc": "3.0.11",
+    "@vue/compiler-sfc": "3.1.1",
     "@vue/eslint-config-typescript": "7.0.0",
     "@vue/test-utils": "2.0.0-rc.8",
     "babel-jest": "26.6.3",

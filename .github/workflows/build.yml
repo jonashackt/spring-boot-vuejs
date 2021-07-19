@@ -30,7 +30,7 @@ jobs:
           java-version: 16
       - run: mvn -B verify --no-transfer-progress
 
-      - uses: codecov/codecov-action@v1
+      - uses: codecov/codecov-action@v2
         with:
           file: ./**/target/site/jacoco/jacoco.xml
           name: codecov

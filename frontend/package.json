@@ -23,8 +23,8 @@
   },
   "devDependencies": {
     "@types/jest": "26.0.24",
-    "@typescript-eslint/eslint-plugin": "4.28.5",
-    "@typescript-eslint/parser": "4.28.5",
+    "@typescript-eslint/eslint-plugin": "4.29.0",
+    "@typescript-eslint/parser": "4.29.0",
     "@vue/cli-plugin-babel": "4.5.13",
     "@vue/cli-plugin-e2e-nightwatch": "4.5.13",
     "@vue/cli-plugin-eslint": "4.5.13",

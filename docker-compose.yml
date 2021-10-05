@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  frontend:
+    image: "jonashackt/frontend-docker-image:latest"
+    ports:
+      - "80:80"
+    links:
+      - "backend:backend"
+  backend:
+    image: "jonashackt/backend-docker-image:latest"
+    ports:
+      - "8080:8080"

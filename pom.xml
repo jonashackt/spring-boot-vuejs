@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.jonashackt</groupId>
@@ -15,47 +16,111 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.5.5</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
-    <properties>
-        <main.basedir>${project.basedir}</main.basedir>
+	<properties>
+		<main.basedir>${project.basedir}</main.basedir>
 
 		<!-- Analysis Tools for CI -->
 		<build-plugin.jacoco.version>0.8.7</build-plugin.jacoco.version>
-    </properties>
-	
+	</properties>
+
 	<modules>
-        <module>frontend</module>
-        <module>backend</module>
-    </modules>
+		<module>frontend</module>
+		<module>backend</module>
+		<module>backend-docker-image</module>
+		<module>frontend-docker-image</module>
+	</modules>
 
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>io.fabric8</groupId>
+					<artifactId>docker-maven-plugin</artifactId>
+					<version>0.37.0</version>
+					<executions>
+						<execution>
+							<id>docker-clean</id>
+							<phase>install</phase>
+							<goals>
+								<goal>remove</goal>
+							</goals>
+							<configuration>
+								<executable>docker</executable>
+								<workingDirectory>${project.basedir}</workingDirectory>
+								<arguments>
+									<argument>rmi</argument>
+									<argument>${project.groupId}/${project.artifactId}:${project.version}</argument>
+								</arguments>
+							</configuration>
+						</execution>
+						<execution>
+							<id>docker-build</id>
+							<phase>install</phase>
+							<goals>
+								<goal>build</goal>
+							</goals>
+							<configuration>
+								<executable>docker</executable>
+								<workingDirectory>${project.basedir}</workingDirectory>
+								<arguments>
+									<argument>build</argument>
+									<argument>-t</argument>
+									<argument>${project.groupId}/${project.artifactId}:${project.version}</argument>
+									<argument>.</argument>
+									<argument>--no-cache</argument>
+								</arguments>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>${build-plugin.jacoco.version}</version>
+					<executions>
+						<!-- Prepares the property pointing to the JaCoCo runtime agent which 
+							is passed as VM argument when Maven the Surefire plugin is executed. -->
+						<execution>
+							<id>pre-unit-test</id>
+							<goals>
+								<goal>prepare-agent</goal>
+							</goals>
+						</execution>
+						<!-- Ensures that the code coverage report for unit tests is created 
+							after unit tests have been run. -->
+						<execution>
+							<id>post-unit-test</id>
+							<goals>
+								<goal>report</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
 		<plugins>
+		<!-- 
 			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${build-plugin.jacoco.version}</version>
+				<groupId>com.dkanejs.maven.plugins</groupId>
+				<artifactId>docker-compose-maven-plugin</artifactId>
+				<version>4.0.0</version>
 				<executions>
-					<!-- Prepares the property pointing to the JaCoCo
-                    runtime agent which is passed as VM argument when Maven the Surefire plugin
-                    is executed. -->
 					<execution>
-						<id>pre-unit-test</id>
 						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<!-- Ensures that the code coverage report for
-                    unit tests is created after unit tests have been run. -->
-					<execution>
-						<id>post-unit-test</id>
-						<goals>
-							<goal>report</goal>
+							<goal>start</goal>
+							<goal>stop</goal>
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+				<configuration>
+					<apiVersion>3.2</apiVersion>
+					<
+				</configuration>
+			</plugin> -->
 		</plugins>
 	</build>
 

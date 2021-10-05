@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "axios": "0.21.4",
-    "bootstrap": "5.1.1",
+    "bootstrap": "5.1.2",
     "core-js": "3.18.1",
     "vue": "3.2.11",
     "vue-router": "4.0.11",

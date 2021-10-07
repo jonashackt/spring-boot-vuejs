@@ -26,16 +26,19 @@
 		<build-plugin.jacoco.version>0.8.7</build-plugin.jacoco.version>
 	</properties>
 
-	<modules>
-		<module>frontend</module>
-		<module>backend</module>
-		<module>backend-docker-image</module>
-		<module>frontend-docker-image</module>
-	</modules>
-
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M5</version><!--$NO-MVN-MAN-VER$ -->
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>3.0.0-M5</version><!--$NO-MVN-MAN-VER$ -->
+				</plugin>
 				<plugin>
 					<groupId>io.fabric8</groupId>
 					<artifactId>docker-maven-plugin</artifactId>
@@ -101,27 +104,28 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-
 		<plugins>
-		<!-- 
 			<plugin>
-				<groupId>com.dkanejs.maven.plugins</groupId>
-				<artifactId>docker-compose-maven-plugin</artifactId>
-				<version>4.0.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>start</goal>
-							<goal>stop</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<apiVersion>3.2</apiVersion>
-					<
-				</configuration>
-			</plugin> -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+			</plugin>
 		</plugins>
 	</build>
+
+	<modules>
+		<module>frontend</module>
+		<module>backend</module>
+		<module>backend-docker-image</module>
+		<module>frontend-docker-image</module>
+		<module>e2e-test</module>
+	</modules>
 
 </project>

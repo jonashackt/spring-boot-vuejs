@@ -12,9 +12,11 @@ prerrequisites
 
 build
 * run mvn clean install
-* run docker-compose up
-* browse to http://localhost
-* click on everything
+* integration tests should run and pass
+
+run
+* to run the applications, after a full build of the project, 
+* cd e2e-test/src/test/resources/ && docker-compose up
 
 
 
@@ -24,4 +26,5 @@ refactor to follow a pipeline and have independent projects
 - removed the helper copy thing from the backend
 - front is packaged as a war so it may be threated as a dependency and used in the pipeline
 - added a docker-compose file that may be removed later whenever I introduce the use of docker-compose-maven-plugin before and after integration or e2e tests. Those should be run in separated maven artifacts or later on in the reactor run
--removed all the heroku and readme manual stuff--- maybe another maven artifact or a terraform thing... donno, have to read whatever those do
+- removed all the heroku and readme manual stuff--- maybe another maven artifact or a terraform thing... donno, have to read whatever those do
+- added e2e tests after deploying everything using docker compose

@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM adoptopenjdk/openjdk11
 
 ADD target/lib .
 WORKDIR /

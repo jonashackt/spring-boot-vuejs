@@ -13,7 +13,10 @@ public class ControllerConfiguration {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://localhost");
+				registry.addMapping("/**").allowedOrigins(
+						"http://localhost",
+						"http://eduyayo.sytes.net",
+						"http://eduyayo.sytes.net:8080");
 			}
 		};
 	}

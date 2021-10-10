@@ -57,6 +57,9 @@
 						</goals>
 						<configuration>
 							<arguments>run build</arguments>
+							<environmentVariables>
+								<backendApiUrl>${backendApiUrl}</backendApiUrl>
+							</environmentVariables>
 						</configuration>
 					</execution>
 					<!-- Run Unit tests with Jest -->
@@ -87,6 +90,44 @@
 					</webResources>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resource-one</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>/profiles/${envName}</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
+
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+			</properties>
+		</profile>
+		<profile>
+			<id>rpi</id>
+			<properties>
+			</properties>
+		</profile>
+	</profiles>
 </project>

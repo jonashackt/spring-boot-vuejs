@@ -128,4 +128,23 @@
 		<module>e2e-test</module>
 	</modules>
 
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<envName>dev</envName>
+			</properties>
+		</profile>
+		<profile>
+			<id>rpi</id>
+			<properties>
+				<envName>rpi</envName>
+				<docker.host>http://192.168.1.10:2375</docker.host>
+			</properties>
+		</profile>
+	</profiles>
+
 </project>

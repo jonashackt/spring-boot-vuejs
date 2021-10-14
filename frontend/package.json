@@ -27,7 +27,7 @@
     "@typescript-eslint/parser": "4.33.0",
     "@vue/cli-plugin-babel": "4.5.13",
     "@vue/cli-plugin-e2e-nightwatch": "4.5.13",
-    "@vue/cli-plugin-eslint": "4.5.13",
+    "@vue/cli-plugin-eslint": "4.5.14",
     "@vue/cli-plugin-router": "4.5.13",
     "@vue/cli-plugin-typescript": "4.5.13",
     "@vue/cli-plugin-unit-jest": "5.0.0-beta.3",

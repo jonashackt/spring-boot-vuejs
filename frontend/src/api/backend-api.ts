@@ -1,7 +1,8 @@
 import axios, {AxiosResponse} from 'axios'
+import backendConfig from './backend-configuration'
 
 const axiosApi = axios.create({
-    baseURL: `/api`,
+    baseURL: backendConfig.backendBaseUrl,//`http://localhost:8080/api/`,
     timeout: 1000,
     headers: { 'Content-Type': 'application/json' }
 });

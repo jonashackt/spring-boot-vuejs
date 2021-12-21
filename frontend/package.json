@@ -40,7 +40,7 @@
     "chromedriver": "96.0.0",
     "eslint": "6.8.0",
     "eslint-plugin-vue": "7.20.0",
-    "geckodriver": "2.0.4",
+    "geckodriver": "3.0.1",
     "node-sass": "6.0.1",
     "sass-loader": "10.2.0",
     "typescript": "4.5.4",

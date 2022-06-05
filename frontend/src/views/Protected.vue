@@ -9,7 +9,7 @@
     <div v-if="securedApiCallSuccess">
       <span class="badge bg-success">API call</span> Full response: {{ backendResponse }} <span class="badge bg-success">successful</span>
     </div>
-    <div v-if="errors">
+    <div v-if="errors.length">
       <span class="badge bg-warning">API call</span> {{ errors }} <span class="badge bg-warning">NOT successful</span>
     </div>
   </div>

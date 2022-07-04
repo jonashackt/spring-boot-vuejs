@@ -22,7 +22,7 @@
         <main.basedir>${project.basedir}</main.basedir>
 
 		<!-- Analysis Tools for CI -->
-		<build-plugin.jacoco.version>0.8.7</build-plugin.jacoco.version>
+		<build-plugin.jacoco.version>0.8.8</build-plugin.jacoco.version>
     </properties>
 	
 	<modules>

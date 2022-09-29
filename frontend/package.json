@@ -35,7 +35,7 @@
     "@vue/cli-service": "4.5.13",
     "@vue/compiler-sfc": "3.2.40",
     "@vue/eslint-config-typescript": "7.0.0",
-    "@vue/test-utils": "2.0.2",
+    "@vue/test-utils": "2.1.0",
     "babel-jest": "26.6.3",
     "chromedriver": "96.0.0",
     "eslint": "6.8.0",

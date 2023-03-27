@@ -20,7 +20,7 @@
 		<!-- backend dependencies -->
 		<rest-assured.version>5.3.0</rest-assured.version>
 		<postgresql.version>42.5.1</postgresql.version>
-		<groovy.version>3.0.13</groovy.version>
+		<groovy.version>3.0.16</groovy.version>
 	</properties>
 
 	<dependencies>

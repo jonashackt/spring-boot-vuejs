@@ -1596,6 +1596,8 @@ https://developer.okta.com/blog/2018/11/20/build-crud-spring-and-vue
 
 https://auth0.com/blog/vuejs2-authentication-tutorial/
 
+https://www.loginradius.com/docs/developer/tutorial/vue/
+
 https://medium.com/@zitko/structuring-a-vue-project-authentication-87032e5bfe16
 
 

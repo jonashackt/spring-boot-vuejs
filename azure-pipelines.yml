@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: '1a082f41-08de-470a-9c82-3822b1fb153d'
   imageRepository: 'dagreatjhspringbootvuejs'
   containerRegistry: 'igmcr.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile.txt'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name

@@ -14,7 +14,7 @@
     "test": "vue-cli-service test:unit && vue-cli-service test:e2e"
   },
   "dependencies": {
-    "axios": "0.21.4",
+    "axios": "1.6.7",
     "bootstrap": "5.3.2",
     "core-js": "3.35.0",
     "vue": "3.2.47",

@@ -14,10 +14,10 @@
     "test": "vue-cli-service test:unit && vue-cli-service test:e2e"
   },
   "dependencies": {
-    "axios": "0.21.4",
+    "axios": "1.6.8",
     "bootstrap": "5.3.3",
     "core-js": "3.36.0",
-    "vue": "3.2.47",
+    "vue": "3.3.5",
     "vue-router": "4.2.5",
     "vuex": "4.1.0"
   },

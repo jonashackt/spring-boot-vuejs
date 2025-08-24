@@ -22,7 +22,7 @@
     "vuex": "4.1.0"
   },
   "devDependencies": {
-    "@types/jest": "27.5.2",
+    "@types/jest": "30.0.0",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
     "@vue/cli-plugin-babel": "4.5.13",
@@ -36,7 +36,7 @@
     "@vue/compiler-sfc": "3.5.19",
     "@vue/eslint-config-typescript": "7.0.0",
     "@vue/test-utils": "2.4.6",
-    "babel-jest": "26.6.3",
+    "babel-jest": "30.0.5",
     "chromedriver": "111.0.0",
     "eslint": "6.8.0",
     "eslint-plugin-vue": "7.20.0",

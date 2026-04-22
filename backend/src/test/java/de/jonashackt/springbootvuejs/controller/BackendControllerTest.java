@@ -95,13 +95,35 @@ public class BackendControllerTest {
 	public void secured_api_should_give_http_200_when_authorized() {
 
 		given()
-			.auth().basic("sina", "miller")
+			.auth().basic("admin", "admin")
 		.when()
 			.get("/api/secured")
 		.then()
 			.statusCode(HttpStatus.SC_OK)
 			.assertThat()
 				.body(is(equalTo(BackendController.SECURED_TEXT)));
+	}
+
+	@Test
+	public void secured_api_should_react_with_unauthorized_when_using_wrong_password() {
+
+		given()
+			.auth().basic("admin", "wrongpassword")
+		.when()
+			.get("/api/secured")
+		.then()
+			.statusCode(HttpStatus.SC_UNAUTHORIZED);
+	}
+
+	@Test
+	public void secured_api_should_react_with_unauthorized_when_using_non_existing_user() {
+
+		given()
+			.auth().basic("nonuser", "anypassword")
+		.when()
+			.get("/api/secured")
+		.then()
+			.statusCode(HttpStatus.SC_UNAUTHORIZED);
 	}
 
 }

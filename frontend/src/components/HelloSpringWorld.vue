@@ -1,6 +1,11 @@
 <template>
   <div class="hello">
-    <h1>{{ hellomsg }}</h1>
+    <h1>{{ internalMsg }}</h1>
+    <div class="refresh-section">
+      <button class="btn btn-primary" @click="refreshData" :disabled="loading">
+        {{ loading ? '加载中...' : '刷新数据' }}
+      </button>
+    </div>
     <h2>See the sources here: </h2>
     <ul>
       <li><a href="https://github.com/jonashackt/spring-boot-vuejs" target="_blank">github.com/jonashackt/spring-boot-vuejs</a></li>
@@ -21,15 +26,49 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+import api from '@/api/backend-api';
+
+export default defineComponent({
   name: 'HelloSpringWorld',
   props: {
     hellomsg: {
       type: String,
-      required: true }
+      default: 'Welcome to your Vue.js (+ TypeScript) powered Spring Boot App'
+    }
+  },
+  data() {
+    return {
+      internalMsg: this.hellomsg,
+      loading: false
+    };
+  },
+  watch: {
+    hellomsg(newVal) {
+      this.internalMsg = newVal;
+    }
+  },
+  mounted() {
+    this.refreshData();
+  },
+  methods: {
+    async refreshData() {
+      if (this.loading) return;
+      
+      this.loading = true;
+      try {
+        const response = await api.hello();
+        this.internalMsg = response.data;
+      } catch (error) {
+        console.error('Failed to refresh data:', error);
+        this.internalMsg = '获取数据失败，请稍后重试';
+      } finally {
+        this.loading = false;
+      }
+    }
   }
-}
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -50,5 +89,9 @@ li {
 
 a {
   color: #42b983;
+}
+
+.refresh-section {
+  margin-bottom: 20px;
 }
 </style>
